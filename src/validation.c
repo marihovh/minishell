@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/12 21:17:03 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:05:05 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,54 +64,50 @@ void open_field(char *str)
 // 	}
 // }
  
-t_command *new_com(t_token *stream)
+t_command *new_com(char *command)
 {
 	t_command	*new_com;
 
 	new_com = malloc(sizeof(t_command));
 	if (!new_com)
 		return (NULL);
-	new_com->command = stream;
+	new_com->command = command;
 	new_com->next = NULL;
 	return (new_com);
 }
 
-void	tpel(t_token *stream)
+int ft_com_len(t_token *stream)
 {
-	while(stream != NULL)
-	{
-		printf("stream value: %s\n", stream->value);
-		stream = stream->next;
-	}
-}
-
-void esiminch(t_token **tmp)
-{
-	printf("aaaaa: %s\n", (*tmp)->value);
-}
-
-void to_commands(t_command **com_stream, t_token *stream)
-{
-	// tpel((*com_stream)->command);
-
-	(void)com_stream;
-	t_token *tmp2 = stream;
-	t_token **tmp = &tmp2;
-	(*tmp) = stream;
-	while (stream != NULL)
+	int i = 0;
+	while (stream)
 	{
 		if (stream->type == PIPE)
-			{
-				esiminch(tmp);
-				// (*tmp)->next = NULL;
-				// (*com_stream) = new_com((*tmp));
-				// com_stream = &(*com_stream)->next;
-				// (*tmp) = stream->next;
-				// tpel((*com_stream)->command);
-			}
-		tmp = &(*tmp)->next;
+			i++;
 		stream = stream->next;
 	}
+	return (i);
+}
+
+
+void to_commands(t_data *data)
+{
+	int com_len;
+
+	com_len = ft_com_len(data->stream);
+	data->command = malloc(sizeof(char *) * (com_len + 1));
+	int i = 0;
+	while (data->stream)
+	{
+		if (data->stream->type == PIPE)
+		{
+			printf(":data->command: %s\n", data->command[i]);
+			i++;
+			data->stream = data->stream->next;
+		}
+		data->command[i] = ft_strjoin(data->command[i], data->stream->value);
+		data->stream = data->stream->next;
+	}
+	printf(":data->command: %s\n", data->command[i]);
 }
 
 /*          cd validation

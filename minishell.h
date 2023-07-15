@@ -25,7 +25,7 @@ typedef struct s_data		t_data;
 typedef struct s_token		t_token;
 typedef struct s_streams	t_streams;
 typedef struct s_command	t_command;
-
+typedef struct s_envies		t_envies;
 
 struct s_token
 {
@@ -41,24 +41,33 @@ struct s_token
 
 struct s_command
 {
-	t_token *command;
+	char *command;
+	char *args;
 	t_command *next;
 };
 
+struct s_envies
+{
+	char *key;
+	char *value;
+	t_envies *next;
+};
 
 struct s_data // my all data here
 {
+	t_envies	*envies;
 	t_token		*stream;
-	t_command 	*com_stream;
 	int			exit_status;
-	char		*command;
+	char		**command;
+	t_command	*com_stream;
 };
 
-void	init_line(t_data *data); // readline function in while
+void init_line(t_data *data, char **environ); // readline function in while
 int		parse(t_data *data, char *str);
 void tokenize(t_token **stream, char *str);
 t_token *new_token(int type, char *str, int op);
 int ft_isspace(int ch);
+void *ashxatel(t_data *data);
 int ft_strcmp(char *str, char *chm);
 void valid_word(t_data *data, t_token *token);
 t_token *token_1(char **str);
@@ -76,7 +85,7 @@ void ft_echo(t_data *data, t_token *token);
 void ft_cd(t_data *data, t_token *token);
 void ft_pwd(t_data *data, t_token *token);
 t_token *to_pipe(t_token *stream);
-void to_commands(t_command **com_stream, t_token *stream);
-t_command *new_com(t_token *stream);
+void to_commands(t_data *data);
+t_command *new_com(char *command);
 
 #endif
