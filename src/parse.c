@@ -6,24 +6,11 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/14 22:17:27 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/16 09:59:51 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-t_envies *new_node(char *key, char *value)
-{
-	t_envies	*new_node;
-
-	new_node = malloc(sizeof(t_envies));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	new_node->value = value;
-	new_node->next = NULL;
-	return (new_node);
-}
 
 void init_env(t_envies **envp, char **environ)
 {
@@ -56,7 +43,6 @@ void init_line(t_data *data, char **environ)
 		{
 			add_history(str);
 			parse(data, str);
-			// ashxatel(data);
 		}
 	}
 }
@@ -106,10 +92,15 @@ void tokenize(t_token **stream, char *str)
 
 int parse(t_data *data, char *str)
 {
-	// if pipe split with pipe and create a array of lists of commands and while execution fork as many times there
-	// where pipe and have the struct where will be list of comman line and exit status of it
 	tokenize(&data->stream, str);
-	to_commands(data);
+	validation(data->stream);
+	// to_commands(data);
+	// to_struct(data->command, &data->com_stream);
+	// while (data->com_stream)
+	// {
+	// 	printf("command:%s args:%s\n", data->com_stream->command[0], data->com_stream->command[1]);
+	// 	data->com_stream = data->com_stream->next;
+	// }
 	return (0);
 }
 

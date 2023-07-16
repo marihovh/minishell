@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/11 15:03:56 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/16 10:58:19 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_token	*token_2(char **str)
 	return (new_token(WORD, chunk, 0));
 }
 
-
 t_token	*token_3(char **str)
 {
 	char *chunk;
@@ -50,7 +49,7 @@ t_token	*token_3(char **str)
 		error_msg("Token error\n");
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
-	return (new_token(EXP_FIELD, chunk, 0));
+	return (new_token(FIELD, chunk, 0));
 }
 
 t_token	*token_4(char **str)

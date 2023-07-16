@@ -27,7 +27,7 @@ typedef struct s_streams	t_streams;
 typedef struct s_command	t_command;
 typedef struct s_envies		t_envies;
 
-struct s_token
+struct s_token   //done
 {
 	int type;
 	char *value;
@@ -41,12 +41,13 @@ struct s_token
 
 struct s_command
 {
-	char *command;
-	char *args;
+	char **command;
+	int fd;
+	int exit_status;
 	t_command *next;
 };
 
-struct s_envies
+struct s_envies       // done
 {
 	char *key;
 	char *value;
@@ -78,14 +79,16 @@ t_token	*token_5(char **str);
 t_token	*token_6(char **str);
 t_token	*token_9(char **str);
 char  *ft_ispipe(char *str);
-void validation(t_data data);
+void validation(t_token *stream);
 int rec_pipe(char *str);
 void error_msg(char *str);
 void ft_echo(t_data *data, t_token *token);
 void ft_cd(t_data *data, t_token *token);
 void ft_pwd(t_data *data, t_token *token);
 t_token *to_pipe(t_token *stream);
+void to_struct(char **command, t_command **stream);
+t_command *new_com(char *command, char *args);
 void to_commands(t_data *data);
-t_command *new_com(char *command);
-
+int ft_com_len(t_token *stream);
+t_envies *new_node(char *key, char *value);
 #endif

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/15 16:42:53 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:04:46 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,3 +23,13 @@ int main(int argc, char **argv, char **environ)
 	init_line(data, environ);
 	return (0);
 }
+
+// int main() {
+//     char *const argv[] = {"ls  ", "-l", NULL};
+//     char *const envp[] = {NULL};
+//     execve("/bin/ls", argv, envp);
+    
+//     // Execve only returns if there was an error
+//     perror("execve"); 
+//     return 1;
+// }
