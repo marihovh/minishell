@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/17 16:07:38 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:03:23 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ void init_line(t_data *data, char **environ)
 		{
 			add_history(str);
 			parse(data, str);
-			free_data(data);
+			execve("/bin/ls", data->command, NULL);
+			// printf("\n\nesiminch\n\n\n");
+			// free_data(data);
 		}
 	}
 }
@@ -115,11 +117,12 @@ void tokenize(t_token **stream, char *str)
 void parse(t_data *data, char *str)
 {
 	tokenize(&data->stream, str);
-	validation(data->stream);
-	// to_commands(data);
-	// printf("data->command: %s\n", data->command[0]);
-	// to_struct(data->command, &data->com_stream);
-	// while (data->com_stream)
+	if (!validation(data->stream))
+		return ;
+	// open_fields(data->stream);
+	to_commands(data);
+	to_struct(data->command, &data->com_stream);
+	// while (data->com_stream != NULL)
 	// {
 	// 	printf("command:%s args:%s\n", data->com_stream->command[0], data->com_stream->command[1]);
 	// 	data->com_stream = data->com_stream->next;

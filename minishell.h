@@ -81,7 +81,7 @@ t_token	*token_5(char **str);
 t_token	*token_6(char **str);
 t_token	*token_9(char **str);
 char  *ft_ispipe(char *str);
-void validation(t_token *stream);
+int validation(t_token *stream);
 int rec_pipe(char *str);
 void error_msg(char *str);
 void ft_echo(t_data *data, t_token *token);

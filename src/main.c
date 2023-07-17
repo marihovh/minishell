@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 19:36:27 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/17 21:05:31 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int main(int argc, char **argv, char **environ)
 	// data = malloc(sizeof(t_data));
 	// printf("\n%s\n", getenv("PWD"));
 	init_line(data, environ);
+	printf("esiminch\n");
 	return (0);
 }
 
@@ -31,5 +32,6 @@ int main(int argc, char **argv, char **environ)
     
 //     // Execve only returns if there was an error
 //     perror("execve"); 
+// 	// printf("yppppp\n");
 //     return 1;
 // }

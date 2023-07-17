@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 16:11:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/17 19:53:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ t_command *new_com(char *com, char *args)
 	t_command	*new_com;
 
 	new_com = malloc(sizeof(t_command));
-	new_com->command = malloc(sizeof(char *) * 2);
+	new_com->command = malloc(sizeof(char *) * 3);
 	if (!new_com)
 		return (NULL);
 	new_com->command[0] = com;
 	new_com->command[1] = args;
+	if (new_com->command[1] != NULL)
+		new_com->command[2] = NULL;
 	new_com->next = NULL;
 	return (new_com);
 }

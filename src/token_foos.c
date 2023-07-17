@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 14:50:20 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/17 17:12:50 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_token	*token_2(char **str)
 
 	i = 0;
 	chunk = *str;
-	while(*str && ft_isprint(*str[0]) && *str[0] != '|' && *str[0] != '>' && *str[0] != '<')
+	while(*str && ft_isprint(*str[0]) && *str[0] != '|' && *str[0] != '>' && *str[0] != '<' && *str[0] != 39 && *str[0] != 34)
 		(*str)++;
 	chunk = ft_substr(chunk, 0, *str - chunk);
 	return (new_token(WORD, chunk, 0));
