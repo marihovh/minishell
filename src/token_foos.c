@@ -6,12 +6,11 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 10:58:19 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/16 14:50:20 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 t_token	*token_1(char **str)
 {
@@ -33,7 +32,7 @@ t_token	*token_2(char **str)
 
 	i = 0;
 	chunk = *str;
-	while(*str && ft_isprint(*str[0]))
+	while(*str && ft_isprint(*str[0]) && *str[0] != '|' && *str[0] != '>' && *str[0] != '<')
 		(*str)++;
 	chunk = ft_substr(chunk, 0, *str - chunk);
 	return (new_token(WORD, chunk, 0));

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 09:47:58 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:48:38 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void to_struct(char **command, t_command **stream)   //done
 			command[i]++;
 		str = ft_substr(str, 0, j);
 		(*stream) = new_com(str, command[i]);
+		printf("command:%s args:%s\n", (*stream)->command[0], (*stream)->command[1]);
 		free(str);
 		stream = &(*stream)->next;
 	}
@@ -41,20 +42,29 @@ void to_struct(char **command, t_command **stream)   //done
 void to_commands(t_data *data)    // done
 {
 	int com_len;
+	char *str = NULL;
 
 	com_len = ft_com_len(data->stream);
-	data->command = malloc(sizeof(char *) * (com_len + 1));
+	data->command = malloc(sizeof(char *) * (com_len + 2));
 	int i = 0;
 	while (data->stream)
 	{
 		if (data->stream->type == PIPE)
 		{
+			printf("str: %s\n", str);
+			ft_strlcpy(data->command[i], str, ft_strlen(str));
+			// free(str);
 			i++;
 			data->stream = data->stream->next;
 		}
-		data->command[i] = ft_strjoin(data->command[i], data->stream->value);
+		str = ft_strjoin(str, data->stream->value);
+		printf("data->command: %s\n", data->command[i]);   
+		// printf("str: %s\n", str);
+		// printf("command:%s args:%s\n", (*stream)->comman
 		data->stream = data->stream->next;
 	}
+	printf("data->command: %s\n", data->command[1]);
+		printf("yooo man\n");
 }
 
 

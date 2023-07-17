@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/16 10:09:09 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/16 19:51:15 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,25 @@ void validation(t_token *stream)
 	{
 		if (stream->type == PIPE)
 		{
-			if (!stream->next)
-				printf("hyre-doc\n");
-			if (stream->next->type != SP || stream->prev->type != SP)
+			if (stream->prev == NULL || stream->next == NULL)
 			{
-				printf("this is error axpers\n");
-				exit (1);
+				printf("pipe error broo\n");
+				exit(1);
+			}else if (stream->prev->type == SP && (stream->prev->prev == NULL || stream->prev->prev->type != WORD))
+			{
+				printf("pipe error yooo\n");
+				exit(1);
+			}
+		}else if (stream->type == REDIR_OUT || stream->type == REDIR_IN || stream->type == REDIR_AP || stream->type == REDIR_SO)
+		{
+			if (stream->prev == NULL || stream->next == NULL)
+			{
+				printf("redirection error broo\n");
+				exit(1);
+			}else if (stream->prev->type == SP && (stream->prev->prev == NULL || stream->prev->prev->type != WORD))
+			{
+				printf("redirection error yooo\n");
+				exit(1);
 			}
 		}
 		stream = stream->next;

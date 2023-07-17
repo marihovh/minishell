@@ -14,6 +14,7 @@
 // libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <string.h>
@@ -42,7 +43,8 @@ struct s_token   //done
 struct s_command
 {
 	char **command;
-	int fd;
+	int out;
+	int in;
 	int exit_status;
 	t_command *next;
 };
@@ -64,7 +66,7 @@ struct s_data // my all data here
 };
 
 void init_line(t_data *data, char **environ); // readline function in while
-int		parse(t_data *data, char *str);
+void parse(t_data *data, char *str);
 void tokenize(t_token **stream, char *str);
 t_token *new_token(int type, char *str, int op);
 int ft_isspace(int ch);
