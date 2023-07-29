@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 12:46:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/15 18:01:27 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/24 14:27:19 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,4 @@ char  *ft_ispipe(char *str)
 void error_msg(char *str)
 {
 	printf("%s\n", str);
-	exit (1);
 }

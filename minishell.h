@@ -59,6 +59,7 @@ struct s_envies       // done
 struct s_data // my all data here
 {
 	t_envies	*envies;
+	char		*paths[6];
 	t_token		*stream;
 	int			exit_status;
 	char		**command;
@@ -67,6 +68,14 @@ struct s_data // my all data here
 
 void init_line(t_data *data, char **environ); // readline function in while
 void parse(t_data *data, char *str);
+int	ft_lstcnt(t_envies *lst);
+void signal_hend(int signum);
+void init_env(t_envies **envp, char **environ);
+// void parse(t_data *data, char *str,  char **environ);
+char *find_rep(char *str, int exs, t_envies *env);
+// char *if_env(char *str, t_envies *env);
+void open_fields(t_token *stream, t_envies *env, int exs);
+char *if_env(char *str, t_envies *env, int exs);
 void tokenize(t_token **stream, char *str);
 t_token *new_token(int type, char *str, int op);
 int ft_isspace(int ch);
@@ -83,14 +92,17 @@ t_token	*token_9(char **str);
 char  *ft_ispipe(char *str);
 int validation(t_token *stream);
 int rec_pipe(char *str);
+char	*env_name(char **str);
 void error_msg(char *str);
 void ft_echo(t_data *data, t_token *token);
 void ft_cd(t_data *data, t_token *token);
 void ft_pwd(t_data *data, t_token *token);
 t_token *to_pipe(t_token *stream);
 void to_struct(char **command, t_command **stream);
-t_command *new_com(char *command, char *args);
+t_command *new_com(char **args);
 void to_commands(t_data *data);
 int ft_com_len(t_token *stream);
+void	init_path(t_data *data);
+void execute(t_data *data);
 t_envies *new_node(char *key, char *value);
 #endif

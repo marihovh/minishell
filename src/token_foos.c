@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/17 17:12:50 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/24 14:30:29 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ t_token	*token_3(char **str)
 	chunk = (*str);
 	(*str) = ft_strchr(++chunk, 39);
 	if (!(*str))
+	{
 		error_msg("Token error\n");
+		return (NULL);
+	}
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
 	return (new_token(FIELD, chunk, 0));
@@ -58,7 +61,10 @@ t_token	*token_4(char **str)
 	chunk = (*str);
 	(*str) = ft_strchr(++chunk, 34);
 	if (!(*str))
+	{
 		error_msg("Token error\n");
+		return (NULL);
+	}
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
 	return (new_token(EXP_FIELD, chunk, 0));
@@ -74,7 +80,7 @@ t_token	*token_5(char **str)
 	else
 		return (new_token(REDIR_OUT, ">", 1));
 	error_msg("Token error\n");
-	return (0);
+	return (NULL);
 }
 
 t_token	*token_6(char **str)
@@ -88,7 +94,6 @@ t_token	*token_6(char **str)
 		return (new_token(REDIR_SO, "<", 1));
 	error_msg("Token error\n");
 	return (0);
-	
 }
 
 t_token	*token_9(char **str)

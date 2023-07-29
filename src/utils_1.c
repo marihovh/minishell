@@ -6,37 +6,35 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/17 19:53:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/27 16:36:55 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_envies *new_node(char *key, char *value)
+int split_len(char **str)
 {
-	t_envies	*new_node;
-
-	new_node = malloc(sizeof(t_envies));
-	if (!new_node)
-		return (NULL);
-	new_node->key = key;
-	new_node->value = value;
-	new_node->next = NULL;
-	return (new_node);
+	int i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-t_command *new_com(char *com, char *args)
+t_command *new_com(char **args)
 {
 	t_command	*new_com;
+	int i;
+	int len;
 
+	i = -1;
 	new_com = malloc(sizeof(t_command));
-	new_com->command = malloc(sizeof(char *) * 3);
+	len = split_len(args);
+	new_com->command = malloc(sizeof(char *) * (len + 1));
 	if (!new_com)
 		return (NULL);
-	new_com->command[0] = com;
-	new_com->command[1] = args;
-	if (new_com->command[1] != NULL)
-		new_com->command[2] = NULL;
+	while (++i < len)
+		new_com->command[i] = args[i];
+	new_com->command[i] = NULL;
 	new_com->next = NULL;
 	return (new_com);
 }
@@ -51,4 +49,49 @@ int ft_com_len(t_token *stream)
 		stream = stream->next;
 	}
 	return (i);
+}
+
+char *one_dol(char **str)
+{
+	char *chunk;
+
+	if (!(**str))
+	{
+		chunk = (char *)malloc(sizeof(char) * 1);
+		chunk[0] = '\0';
+		return (chunk);
+	}
+	return (NULL);
+}
+
+char	*env_name(char **str)
+{
+	char *chunk;
+	int i;
+
+	i = 0;
+	(*str)++;
+	chunk = one_dol(str);
+	if (!(**str))
+	{
+		chunk = (char *)malloc(sizeof(char) * 1);
+		chunk[0] = '\0';
+		return (chunk);
+	}
+	chunk = malloc(sizeof(char) * ft_strlen(*str) + 1);
+	while (**str)
+	{
+		chunk[i++] = **str;
+		if (**str == '$' || **str == '?')
+		{
+			if (i != 1)
+				i--;
+			else
+				(*str)++;
+			break ;
+		}
+		(*str)++;
+	}
+	chunk[i] = '\0';
+	return (chunk);
 }

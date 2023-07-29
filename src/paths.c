@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/28 19:59:56 by marihovh         ###   ########.fr       */
+/*   Created: 2023/07/25 18:24:39 by marihovh          #+#    #+#             */
+/*   Updated: 2023/07/27 17:34:58 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void signal_hend(int signum)
+void	init_path(t_data *data)
 {
-	if (signum == SIGINT)
+	int i;
+	char **splited;
+	while (data->envies)
 	{
-		printf("ctrl+c\n");
-		exit (1);
+		if (data->envies->key && !ft_strncmp(data->envies->key, "PATH", 4))
+			break ;
+		data->envies = data->envies->next;
 	}
-}
-
-int main(int argc, char **argv, char **environ)
-{
-	(void)argc;
-	(void)argv;
-	t_data *data = NULL;
-	
-	init_line(data, environ); 
-	return (0);
+	if (!data->envies)
+		printf("there is no paths\n");
+	splited = ft_split(data->envies->value, ':');
+	i = -1;
+	while (splited[++i])
+		data->paths[i] = splited[i];
 }
