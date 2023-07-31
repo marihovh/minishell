@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/28 20:01:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/31 15:51:16 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void init_line(t_data *data, char **environ)
 			add_history(str);
 			parse(data, str);
 			execute(data);
-			signal(SIGINT, signal_hend);
 		}
 	}
 }

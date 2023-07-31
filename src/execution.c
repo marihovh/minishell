@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/29 15:35:47 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/07/31 15:54:53 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void execute(t_data *data)
 		if (f == 0)
 		{
 			execve(path, data->com_stream->command, env);
+			// update_env();
 			exit(0);
 		}
 		data->com_stream = data->com_stream->next;
