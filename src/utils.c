@@ -41,6 +41,14 @@ t_token *new_token(int type, char *str, int op)
 	return (new_token);
 }
 
+
+void	esim(void)
+{
+	printf("errrrror\n");
+	exit(1);
+}
+
+
 int ft_isspace(int ch)
 {
 	return (ch == '\t' || ch == ' ');
