@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/27 16:36:55 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/01 19:45:06 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_command *new_com(char **args)
 	while (++i < len)
 		new_com->command[i] = args[i];
 	new_com->command[i] = NULL;
+	new_com->out = STDOUT;
+	new_com->in = STDIN;
 	new_com->next = NULL;
 	return (new_com);
 }

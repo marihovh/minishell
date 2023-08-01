@@ -56,7 +56,7 @@ struct s_envies       // done
 	t_envies *next;
 };
 
-struct s_data // my all data here
+struct s_data // my all data here 
 {
 	t_envies	*envies;
 	char		*paths[6];
