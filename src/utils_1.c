@@ -6,25 +6,27 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/01 19:45:06 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:21:41 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int split_len(char **str)
+int	split_len(char **str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (str[i])
 		i++;
 	return (i);
 }
 
-t_command *new_com(char **args)
+t_command	*new_com(char **args)
 {
 	t_command	*new_com;
-	int i;
-	int len;
+	int			i;
+	int			len;
 
 	i = -1;
 	new_com = malloc(sizeof(t_command));
@@ -41,9 +43,11 @@ t_command *new_com(char **args)
 	return (new_com);
 }
 
-int ft_com_len(t_token *stream)
+int	ft_com_len(t_token *stream)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (stream)
 	{
 		if (stream->type == PIPE)
@@ -53,9 +57,9 @@ int ft_com_len(t_token *stream)
 	return (i);
 }
 
-char *one_dol(char **str)
+char	*one_dol(char **str)
 {
-	char *chunk;
+	char	*chunk;
 
 	if (!(**str))
 	{
@@ -68,18 +72,12 @@ char *one_dol(char **str)
 
 char	*env_name(char **str)
 {
-	char *chunk;
-	int i;
+	char	*chunk;
+	int		i;
 
 	i = 0;
 	(*str)++;
 	chunk = one_dol(str);
-	if (!(**str))
-	{
-		chunk = (char *)malloc(sizeof(char) * 1);
-		chunk[0] = '\0';
-		return (chunk);
-	}
 	chunk = malloc(sizeof(char) * ft_strlen(*str) + 1);
 	while (**str)
 	{
