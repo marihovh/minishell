@@ -66,6 +66,11 @@ void execute(t_data *data)
 {
 	char **env;
 	char *path;
+	// skzbic fd-nery 
+	// cmdnery lcnum enq u heto dup enq anum
+	//hanum enq <  << >> > kam fd-neri het 
+	//bultiner stugum enq ete chen uremn execeve
+	//pipe-i qanakov fork enq anum
 	while (data->com_stream)
 	{
 		init_path(data);

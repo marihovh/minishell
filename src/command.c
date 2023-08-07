@@ -31,6 +31,7 @@ void to_struct(char **command, t_command **stream)   //done
 void to_commands(t_data *data)    // done
 {
 	char *str = NULL;
+	t_token *ptr = data->stream;
 	int pip_cnt = ft_com_len(data->stream);
 	int i = 0;
 
@@ -47,6 +48,7 @@ void to_commands(t_data *data)    // done
 		str = ft_strjoin(str, data->stream->value);
 		data->stream = data->stream->next;
 	}
+	data->stream = ptr;
 	data->command[i] = str;
 	data->command[i + 1] = NULL;
 }

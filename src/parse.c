@@ -119,24 +119,28 @@ int	in_and_out(t_token *stream)
 		{
 			filename = araj_gna(&stream);
 			fd = open(filename, O_RDONLY);
+			init_and_check_fd(fd);
 			stream->in = fd;
 		}
 		else if (stream->type == REDIR_OUT && stream->next)
 		{
-			araj_gna(&stream);
+			filename = araj_gna(&stream);
 			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			init_and_check_fd(fd);
 			stream->out = fd;
 		}
 		else if (stream->type == REDIR_AP && stream->next)
 		{
 			filename = araj_gna(&stream);
 			fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			stream->out = fd;
+			init_and_check_fd(fd);
+			stream->out = fd;			
 		}
 		else if (stream->type == REDIR_SO && stream->next)
 		{
 			filename = araj_gna(&stream);
-			fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd = open(filename, O_RDONLY);
+			init_and_check_fd(fd);
 			stream->in = fd;
 		}
 		stream = stream->next;		
@@ -144,11 +148,41 @@ int	in_and_out(t_token *stream)
 	return (0);
 }
 
-
-
-
+//ctrl+d ev filename 
 //heredoc
 
+
+int	delete_files_rrr(t_data *data)
+{
+	int fd;
+	t_token *tmp;
+	t_token *a = data->stream;
+
+	tmp = a;
+	fd = 0;
+	while(a)
+	{
+		if (a->type == REDIR_IN && a->next)
+		{
+			if(a->next->type == SP && a->next->next)
+			{
+				a = a->next;
+				tmp = a->next;
+				free(a->next);
+				tmp = a->next->next;
+			}
+			else if (a->next->type != SP && a->next)
+			{
+				a = a->next;
+				tmp = a->next;
+				free(a->next);
+				tmp = a->next->next;
+			}
+		}
+		a = a->next;
+	}
+	return (0);
+}
 
 void parse(t_data *data, char *str)
 {
@@ -157,21 +191,14 @@ void parse(t_data *data, char *str)
 		return ;
 	open_fields(data->stream, data->envies, data->exit_status);
 	in_and_out(data->stream);
-	to_commands(data);
-	while (data->stream != NULL)
-	{
-		printf("value:%s\n", data->stream->value);
-		data->stream = data->stream->next;
-	}
-	to_struct(data->command, &data->com_stream);
-	// int i;
-	// while (data->com_stream != NULL)
+	delete_files_rrr(data);
+	// while (data->stream != NULL)
 	// {
-	// 	i = -1;
-	// 	while (data->com_stream->command[++i] != NULL)
-	// 		printf("stream:%s\n", data->com_stream->command[i]);
-	// 	data->com_stream = data->com_stream->next;
+	// 	// printf("value:%s\n", data->stream->value);
+	// 	data->stream = data->stream->next;
 	// }
+	to_commands(data);
+	to_struct(data->command, &data->com_stream);
 }
 
 
