@@ -33,6 +33,8 @@ struct s_token   //done
 	int type;
 	char *value;
 	int command;
+	int out;
+	int in;
 	int op;
 	t_token *prev;
 	t_token *next;
