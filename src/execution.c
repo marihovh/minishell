@@ -74,6 +74,7 @@ void execute(t_data *data)
 		pid_t f = fork();
 		if (f == 0)
 		{
+			
 			execve(path, data->com_stream->command, env);
 			// update_env();
 			exit(0);

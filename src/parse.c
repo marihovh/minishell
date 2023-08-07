@@ -147,28 +147,7 @@ int	in_and_out(t_token *stream)
 
 
 
-// void parse(t_data *data, char *str)
-// {
-// 	tokenize(&data->stream, str);
-// 	if (!validation(data->stream))
-// 		return ;
-// 	open_fields(data->stream, data->envies, data->exit_status);
-// 	to_commands(data);
-// 	to_struct(data->command, &data->com_stream);
-// 	// while (data->envies != NULL)
-// 	// {
-// 	// 	printf("key:%s\n", data->envies->key);
-// 	// 	data->envies = data->envies->next;
-// 	// }
-// 	// int i;
-// 	// while (data->com_stream != NULL)
-// 	// {
-// 	// 	i = -1;
-// 	// 	while (data->com_stream->command[++i] != NULL)
-// 	// 		printf("stream:%s\n", data->com_stream->command[i]);
-// 	// 	data->com_stream = data->com_stream->next;
-// 	// }
-// }
+//heredoc
 
 
 void parse(t_data *data, char *str)
@@ -179,8 +158,33 @@ void parse(t_data *data, char *str)
 	open_fields(data->stream, data->envies, data->exit_status);
 	in_and_out(data->stream);
 	to_commands(data);
+	while (data->stream != NULL)
+	{
+		printf("value:%s\n", data->stream->value);
+		data->stream = data->stream->next;
+	}
 	to_struct(data->command, &data->com_stream);
+	// int i;
+	// while (data->com_stream != NULL)
+	// {
+	// 	i = -1;
+	// 	while (data->com_stream->command[++i] != NULL)
+	// 		printf("stream:%s\n", data->com_stream->command[i]);
+	// 	data->com_stream = data->com_stream->next;
+	// }
 }
+
+
+// void parse(t_data *data, char *str)
+// {
+// 	tokenize(&data->stream, str);
+// 	if (!validation(data->stream))
+// 		return ;
+// 	open_fields(data->stream, data->envies, data->exit_status);
+// 	in_and_out(data->stream);
+// 	to_commands(data);
+// 	to_struct(data->command, &data->com_stream);
+// }
 
 // the syntax of rediraction
 // 		command [arguments] < input_file > output_file
