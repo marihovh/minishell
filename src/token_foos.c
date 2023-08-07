@@ -74,11 +74,14 @@ t_token	*token_5(char **str)
 {
 	if (**str == 62)
 	{
+		(*str) += 1;
+		return (new_token(REDIR_OUT, ">", 1));
+	}
+	else
+	{
 		(*str) += 2;
 		return (new_token(REDIR_AP, ">>", 1));
 	}
-	else
-		return (new_token(REDIR_OUT, ">", 1));
 	error_msg("Token error\n");
 	return (NULL);
 }
@@ -87,15 +90,17 @@ t_token	*token_6(char **str)
 {
 	if (**str == 60)
 	{
-		(*str) += 2;
-		return (new_token(REDIR_IN, "<<", 1));
+		(*str) += 1;
+		return (new_token(REDIR_IN, "<", 1));
 	}
 	else
-		return (new_token(REDIR_SO, "<", 1));
+	{
+		(*str) += 2;
+		return (new_token(REDIR_SO, "<<", 1));
+	}
 	error_msg("Token error\n");
 	return (0);
 }
-
 t_token	*token_9(char **str)
 {
 	(*str)++;

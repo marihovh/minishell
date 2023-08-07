@@ -90,27 +90,93 @@ void tokenize(t_token **stream, char *str)
 	}
 }
 
+int init_and_check_fd(int fd)
+{
+	if (fd == -1)
+		printf("that file doesn't exist\n");
+	return(-1);
+}
+
+char *araj_gna(t_token **stream)
+{
+	while (*stream && (*stream)->type != WORD)
+	{
+		*stream = (*stream)->next;
+	}
+	if (!(*stream))
+		return (NULL);
+	return ((*stream)->value);
+}
+
+int	in_and_out(t_token *stream)
+{
+	int		fd;
+	char	*filename;
+
+	while (stream)
+	{
+		if (stream->type == REDIR_IN && stream->next)
+		{
+			filename = araj_gna(&stream);
+			fd = open(filename, O_RDONLY);
+			stream->in = fd;
+		}
+		else if (stream->type == REDIR_OUT && stream->next)
+		{
+			araj_gna(&stream);
+			fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			stream->out = fd;
+		}
+		else if (stream->type == REDIR_AP && stream->next)
+		{
+			filename = araj_gna(&stream);
+			fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			stream->out = fd;
+		}
+		else if (stream->type == REDIR_SO && stream->next)
+		{
+			filename = araj_gna(&stream);
+			fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			stream->in = fd;
+		}
+		stream = stream->next;		
+	}
+	return (0);
+}
+
+// void parse(t_data *data, char *str)
+// {
+// 	tokenize(&data->stream, str);
+// 	if (!validation(data->stream))
+// 		return ;
+// 	open_fields(data->stream, data->envies, data->exit_status);
+// 	to_commands(data);
+// 	to_struct(data->command, &data->com_stream);
+// 	// while (data->envies != NULL)
+// 	// {
+// 	// 	printf("key:%s\n", data->envies->key);
+// 	// 	data->envies = data->envies->next;
+// 	// }
+// 	// int i;
+// 	// while (data->com_stream != NULL)
+// 	// {
+// 	// 	i = -1;
+// 	// 	while (data->com_stream->command[++i] != NULL)
+// 	// 		printf("stream:%s\n", data->com_stream->command[i]);
+// 	// 	data->com_stream = data->com_stream->next;
+// 	// }
+// }
+
+
 void parse(t_data *data, char *str)
 {
 	tokenize(&data->stream, str);
 	if (!validation(data->stream))
 		return ;
 	open_fields(data->stream, data->envies, data->exit_status);
+	in_and_out(data->stream);
 	to_commands(data);
 	to_struct(data->command, &data->com_stream);
-	// while (data->envies != NULL)
-	// {
-	// 	printf("key:%s\n", data->envies->key);
-	// 	data->envies = data->envies->next;
-	// }
-	// int i;
-	// while (data->com_stream != NULL)
-	// {
-	// 	i = -1;
-	// 	while (data->com_stream->command[++i] != NULL)
-	// 		printf("stream:%s\n", data->com_stream->command[i]);
-	// 	data->com_stream = data->com_stream->next;
-	// }
 }
 
 // the syntax of rediraction
