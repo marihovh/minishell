@@ -11,6 +11,9 @@
 #define REDIR_AP 7 // >>
 #define REDIR_SO 8 // <<
 #define PIPE 9 // |
+#define STDOUT 1
+#define STDIN 0
+
 // libraries
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,6 +36,8 @@ struct s_token   //done
 	int type;
 	char *value;
 	int command;
+	int in;
+	int out;
 	int op;
 	t_token *prev;
 	t_token *next;
@@ -43,8 +48,8 @@ struct s_token   //done
 struct s_command
 {
 	char **command;
-	int out;
 	int in;
+	int out;
 	int exit_status;
 	t_command *next;
 };
