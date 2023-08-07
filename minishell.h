@@ -45,8 +45,6 @@ struct s_token   //done
 struct s_command
 {
 	char **command;
-	int out;
-	int in;
 	int exit_status;
 	t_command *next;
 };
