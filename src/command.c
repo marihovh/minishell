@@ -14,7 +14,6 @@
 
 void to_struct(char **command, t_command **stream)   //done
 {
-	// char *joined;  
 	char **splited;
 	int i;
 	int j;

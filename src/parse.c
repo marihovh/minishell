@@ -144,6 +144,9 @@ int	in_and_out(t_token *stream)
 	return (0);
 }
 
+
+
+
 // void parse(t_data *data, char *str)
 // {
 // 	tokenize(&data->stream, str);
