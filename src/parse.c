@@ -108,6 +108,25 @@ char *araj_gna(t_token **stream)
 	return ((*stream)->value);
 }
 
+
+//function for heredoc
+//function for dup2
+void	for_heredoc(char *filename, int fd)
+{
+	char *line;
+
+	line = readline("here_doc");
+	printf(":%s\n",line);
+	while(!(ft_strncmp(filename, line, ft_strlen(filename))))
+	{
+		write(fd ,line, ft_strlen(line));
+		free(line);
+		line = readline("here_doc");
+	}
+}
+
+//nayel tuylatreli cahrery filenameri hamar
+
 int	in_and_out(t_token *stream)
 {
 	int		fd;
@@ -115,7 +134,7 @@ int	in_and_out(t_token *stream)
 
 	while (stream)
 	{
-		if ((stream->type == REDIR_IN || stream->type == REDIR_SO) && stream->next)
+		if (stream->type == REDIR_IN && stream->next)
 		{
 			filename = araj_gna(&stream);
 			fd = open(filename, O_RDONLY);
@@ -135,6 +154,15 @@ int	in_and_out(t_token *stream)
 			fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			init_and_check_fd(fd);
 			stream->out = fd;			
+		}
+		else if (stream->type == REDIR_SO && stream->next)
+		{
+			filename = araj_gna(&stream);
+			fd = open(filename, O_RDWR);
+			init_and_check_fd(fd);
+			for_heredoc(filename , fd);
+			stream->in = fd;
+
 		}
 		stream = stream->next;		
 	}
@@ -177,11 +205,11 @@ void parse(t_data *data, char *str)
 	open_fields(data->stream, data->envies, data->exit_status);
 	in_and_out(data->stream);
 	delete_files(data->stream);
-	while (data->stream != NULL)
-	{
-		printf("value:%s  op:%i\n", data->stream->value, data->stream->op);
-		data->stream = data->stream->next;
-	}
+	// while (data->stream != NULL)
+	// {
+	// 	printf("value:%s  op:%i\n", data->stream->value, data->stream->op);
+	// 	data->stream = data->stream->next;
+	// }
 	to_commands(data);
 	to_struct(data->command, &data->com_stream);
 }
