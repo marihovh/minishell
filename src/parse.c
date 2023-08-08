@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/31 15:51:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/07 20:30:29 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	in_and_out(t_token *stream)
 
 	while (stream)
 	{
-		if (stream->type == REDIR_IN && stream->next)
+		if ((stream->type == REDIR_IN || stream->type == REDIR_SO) && stream->next)
 		{
 			filename = araj_gna(&stream);
 			fd = open(filename, O_RDONLY);
@@ -136,13 +136,6 @@ int	in_and_out(t_token *stream)
 			init_and_check_fd(fd);
 			stream->out = fd;			
 		}
-		else if (stream->type == REDIR_SO && stream->next)
-		{
-			filename = araj_gna(&stream);
-			fd = open(filename, O_RDONLY);
-			init_and_check_fd(fd);
-			stream->in = fd;
-		}
 		stream = stream->next;		
 	}
 	return (0);
@@ -151,37 +144,29 @@ int	in_and_out(t_token *stream)
 //ctrl+d ev filename 
 //heredoc
 
-
-int	delete_files_rrr(t_data *data)
+t_token *cut_red(t_token *stream)
 {
-	int fd;
-	t_token *tmp;
-	t_token *a = data->stream;
-
-	tmp = a;
-	fd = 0;
-	while(a)
+	while (stream)
 	{
-		if (a->type == REDIR_IN && a->next)
-		{
-			if(a->next->type == SP && a->next->next)
-			{
-				a = a->next;
-				tmp = a->next;
-				free(a->next);
-				tmp = a->next->next;
-			}
-			else if (a->next->type != SP && a->next)
-			{
-				a = a->next;
-				tmp = a->next;
-				free(a->next);
-				tmp = a->next->next;
-			}
-		}
-		a = a->next;
+		if (stream->type == WORD)
+			return (stream->next);
+		stream = stream->next;
 	}
 	return (0);
+}
+
+
+void	delete_files(t_token *stream)
+{
+	while (stream)
+	{
+		if (stream->op == 1)
+		{
+			stream->prev->next = cut_red(stream);
+			free(stream);
+		}
+		stream = stream->next;
+	}
 }
 
 void parse(t_data *data, char *str)
@@ -191,12 +176,12 @@ void parse(t_data *data, char *str)
 		return ;
 	open_fields(data->stream, data->envies, data->exit_status);
 	in_and_out(data->stream);
-	delete_files_rrr(data);
-	// while (data->stream != NULL)
-	// {
-	// 	// printf("value:%s\n", data->stream->value);
-	// 	data->stream = data->stream->next;
-	// }
+	delete_files(data->stream);
+	while (data->stream != NULL)
+	{
+		printf("value:%s  op:%i\n", data->stream->value, data->stream->op);
+		data->stream = data->stream->next;
+	}
 	to_commands(data);
 	to_struct(data->command, &data->com_stream);
 }

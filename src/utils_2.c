@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 16:24:27 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/07 16:25:50 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/07 20:27:07 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,5 @@ t_token	*token_6(char **str)
 t_token	*token_9(char **str)
 {
 	(*str)++;
-	return (new_token(PIPE, "|", 1));
+	return (new_token(PIPE, "|", 0));
 }

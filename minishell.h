@@ -48,6 +48,8 @@ struct s_token   //done
 struct s_command
 {
 	char **command;
+	int in;
+	int out;
 	int exit_status;
 	t_command *next;
 };
@@ -83,6 +85,7 @@ t_token	*token_5(char **str);
 t_token	*token_6(char **str);
 t_token	*token_9(char **str);
 int validation(t_token *stream);
+void	delete_files(t_token *stream);
 int ft_strcmp(char *str, char *chm);
 void parse(t_data *data, char *str);
 void tokenize(t_token **stream, char *str);
@@ -100,6 +103,8 @@ void ft_echo(t_data *data, t_token *token);
 void ft_cd(t_data *data, t_token *token);
 void ft_pwd(t_data *data, t_token *token);
 t_token *to_pipe(t_token *stream);
+t_token	*token_9(char **str);
+t_token	*token_6(char **str);
 t_command *new_com(char **args);
 void to_commands(t_data *data);
 int ft_com_len(t_token *stream);
