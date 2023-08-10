@@ -117,7 +117,7 @@ void	for_heredoc(char *filename, int fd)
 
 	line = readline("here_doc");
 	printf(":%s\n",line);
-	while(!(ft_strncmp(filename, line, ft_strlen(filename))))
+	while( (ft_strncmp(filename, line, ft_strlen(filename))) != 0)
 	{
 		write(fd ,line, ft_strlen(line));
 		free(line);
@@ -158,7 +158,7 @@ int	in_and_out(t_token *stream)
 		else if (stream->type == REDIR_SO && stream->next)
 		{
 			filename = araj_gna(&stream);
-			fd = open(filename, O_RDWR);
+			fd = open(filename, O_RDWR); 
 			init_and_check_fd(fd);
 			for_heredoc(filename , fd);
 			stream->in = fd;
