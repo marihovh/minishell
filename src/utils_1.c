@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/07 16:21:41 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/09 14:29:32 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	split_len(char **str)
 	return (i);
 }
 
-t_command	*new_com(char **args)
+t_command	*new_com(char **args, int in, int out)
 {
 	t_command	*new_com;
 	int			i;
@@ -37,8 +37,8 @@ t_command	*new_com(char **args)
 	while (++i < len)
 		new_com->command[i] = args[i];
 	new_com->command[i] = NULL;
-	new_com->out = STDOUT;
-	new_com->in = STDIN;
+	new_com->out = out;
+	new_com->in = in;
 	new_com->next = NULL;
 	return (new_com);
 }

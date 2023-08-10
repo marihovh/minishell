@@ -6,13 +6,13 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/26 20:08:29 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/09 14:36:57 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void to_struct(char **command, t_command **stream)   //done
+void to_struct(char **command, t_command **com_stream, t_token *stream)   //done
 {
 	char **splited;
 	int i;
@@ -23,8 +23,10 @@ void to_struct(char **command, t_command **stream)   //done
 	{
 		j = 0;
 		splited = ft_split(command[i], ' ');
-		(*stream) = new_com(splited);
-		stream = &(*stream)->next;
+		(*com_stream) = new_com(splited, stream->in, stream->out);
+		// (*com_stream) = new_com(splited);
+		com_stream = &(*com_stream)->next;
+		stream = stream->next;
 	}
 }
 

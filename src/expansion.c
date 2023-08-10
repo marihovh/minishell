@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/28 19:33:10 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/09 19:57:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *if_env(char *str, t_envies *env, int exs)
 	if (*str == '$')
 		return (ft_itoa(pid));
 	if (*str == '?')
-		return (ft_itoa(888));
+		return (ft_itoa(exs));
 	while (env)
 	{
 		if (!ft_strcmp(str, env->key))
