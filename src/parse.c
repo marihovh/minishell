@@ -95,6 +95,9 @@ char *araj_gna(t_token **stream)
 
 //function for heredoc
 //function for dup2
+
+
+
 void	for_heredoc(char *filename, int fd)
 {
 	char *line;
@@ -202,6 +205,9 @@ int parse(t_data *data, char *str)
 	to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }
+
+
+
 
 
 // void parse(t_data *data, char *str)

@@ -12,40 +12,81 @@
 
 #include "../minishell.h"
 
-void ft_echo(t_data *data, t_token *token)
+int ft_echo(t_command *node);
+int ft_cd(t_command *node);
+int ft_pwd(t_command *node);
+int ft_unset(t_command *node);
+int ft_export(t_command *node);
+int ft_env(t_command *node);
+int ft_exit(t_command *node);
+
+
+
+
+int	built_one(t_command *node)
 {
-	if (!token->next || !token->next->next)
+	int i;
+
+	i = 0;
+	while(node->command[i])
 	{
-		// printf("OK echo\n");
-		data->exit_status = 0;
-		return ;
+		printf(":%s:\n" , node->command[i]);
+		if(!(ft_strncmp("echo", node->command[i]), 5))
+			ft_echo(node);
+		if(!(ft_strncmp("pwd", node->command[i]), 4))
+			ft_pwd(node);
+		if(!(ft_strncmp("cd", node->command[i]), 3))
+			ft_cd(node);
+		if(!(ft_strncmp("env", node->command[i]), 4))
+			ft_env(node);
+		if(!(ft_strncmp("exit", node->command[i]), 5))
+			ft_exit(node);
+		if(!(ft_strncmp("export", node->command[i]), 7))
+			ft_export(node);
+		if(!(ft_strncmp("unset", node->command[i]), 6))
+			ft_unset(node);
+		i++;
 	}
-	token = token->next->next;
-	if (token->type == WORD && !ft_strcmp(token->value, "-n"))
-	{
-		printf("echo with option\n");
-		if (!token->next || !token->next->next)
-		{
-			data->exit_status = 0;
-			return ; 
-		}
-		token = token->next->next;
-	}
-	if (token->type == FIELD)
-		printf("echo with field\n");
-	else if (token->type == EXP_FIELD)
-		printf("echo with exp_field\n");
 }
 
-void ft_cd(t_data *data, t_token *token)
+int ft_echo(t_command *node)
 {
-	(void)data;
-	(void)token;
+	(void)node;
+	return (0);
 }
 
-void ft_pwd(t_data *data, t_token *token)
+int ft_cd(t_command *node)
 {
-	printf("%s\n", getenv("PWD"));
-	(void)data;
-	(void)token;
+	(void)node;
+	return (0);
+}
+
+int ft_pwd(t_command *node)
+{
+	(void)node;
+	return (0);
+}
+
+int ft_export(t_command *node)
+{
+	(void)node;
+	return (0);
+}
+
+int ft_unset(t_command *node)
+{
+	(void)node;
+	return (0);
+}
+
+int ft_env(t_command *node)
+{
+	(void)node;
+	return (0);
+}
+
+int ft_exit(t_command *node)
+{
+	(void)node;
+	return (0);
 }
