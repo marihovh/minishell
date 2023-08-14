@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/31 15:54:53 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:44:49 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*what_path(char **paths, char *command)
 		if (access(res, F_OK) == 0)
 			return (res);
 	}
-	printf("error!\n");
+	printf("shyshell: %s: command not found\n", command);
 	return (0);
 }
 int	ft_lstcnt(t_envies *lst)
@@ -42,6 +42,14 @@ int	ft_lstcnt(t_envies *lst)
 	}
 	return (cnt);
 }
+void dups(t_command *command)
+{
+	// (void)command;
+	if (command->in != STDIN)
+		dup2(command->in, STDIN_FILENO);
+	if (command->out != STDOUT)
+		dup2(command->out, STDOUT_FILENO);	
+}
 
 char **to_matrix(t_envies *envies)
 {
@@ -55,17 +63,24 @@ char **to_matrix(t_envies *envies)
 	{
 		matrix[++i] = ft_strjoin(envies->key, "=");
 		matrix[i] = ft_strjoin(matrix[i], envies->value);
+		free(envies);
 		envies = envies->next;
 	}
 	matrix[i] = NULL;
 	return (matrix);
-	// return (0);
+}
+
+void print_env(char **env)
+{
+	int i = -1;
+	while (env[++i])
+		printf("%s\n", env[i]);
 }
 
 void execute(t_data *data)
 {
-	char **env;
-	char *path;
+	// char **env;
+	// char *path;
 	// skzbic fd-nery 
 	// cmdnery lcnum enq u heto dup enq anum
 	//hanum enq <  << >> > kam fd-neri het 
@@ -74,16 +89,19 @@ void execute(t_data *data)
 	while (data->com_stream)
 	{
 		init_path(data);
-		path = what_path(data->paths, data->com_stream->command[0]);
-		env = to_matrix(data->envies);
-		pid_t f = fork();
-		if (f == 0)
-		{
-			
-			execve(path, data->com_stream->command, env);
-			// update_env();
-			exit(0);
-		}
+		// path = what_path(data->paths, data->com_stream->command[0]);
+		// env = to_matrix(data->envies);
+		// pid_t f = fork();
+		// if (f == 0)
+		// {
+		// 	if (data->com_stream->in != STDIN)
+		// 		dup2(data->com_stream->in, STDIN_FILENO);
+		// 	if (data->com_stream->out != STDOUT)
+		// 		dup2(data->com_stream->out, STDOUT_FILENO);
+		// 	execve(path, data->com_stream->command, env);
+		// 	// update_env();
+		// 	exit(0);
+		// }
 		data->com_stream = data->com_stream->next;
 	}
 	waitpid(-1, 0, 0);

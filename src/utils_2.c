@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 16:24:27 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/07 20:27:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/08 17:55:41 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 t_token	*token_6(char **str)
 {
+	(*str)++;
 	if (**str == 60)
 	{
 		(*str) += 1;
-		return (new_token(REDIR_IN, "<", 1));
-	}
-	else
-	{
-		(*str) += 2;
 		return (new_token(REDIR_SO, "<<", 1));
 	}
+	else
+		return (new_token(REDIR_IN, "<", 1));
 	error_msg("Token error\n");
 	return (0);
 }

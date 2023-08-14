@@ -6,27 +6,11 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/07 20:30:29 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:36:23 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void free_data(t_data *data)
-{
-	while (data->envies)
-	{
-		free(data->envies);
-		data->envies = data->envies->next;
-	}
-	while (data->stream)
-	{
-		free (data->stream);
-		data->stream = data->stream->next;
-	}
-	free (data);
-}
-
 
 void init_line(t_data *data, char **environ)
 {
@@ -41,8 +25,8 @@ void init_line(t_data *data, char **environ)
 		{
 			init_env(&data->envies, environ);
 			add_history(str);
-			parse(data, str);
-			execute(data);
+			if (!parse(data, str))
+				execute(data);
 		}
 	}
 }
@@ -117,7 +101,7 @@ void	for_heredoc(char *filename, int fd)
 
 	line = readline("here_doc");
 	printf(":%s\n",line);
-	while( (ft_strncmp(filename, line, ft_strlen(filename))) != 0)
+	while(!(ft_strncmp(filename, line, ft_strlen(filename))))
 	{
 		write(fd ,line, ft_strlen(line));
 		free(line);
@@ -129,12 +113,13 @@ void	for_heredoc(char *filename, int fd)
 
 int	in_and_out(t_token *stream)
 {
-	int		fd;
-	char	*filename;
-
+	int fd;
+	int fd2;
+	char *filename;
+	
 	while (stream)
 	{
-		if (stream->type == REDIR_IN && stream->next)
+		if (stream->op == 1)
 		{
 			filename = araj_gna(&stream);
 			fd = open(filename, O_RDONLY);
@@ -158,16 +143,18 @@ int	in_and_out(t_token *stream)
 		else if (stream->type == REDIR_SO && stream->next)
 		{
 			filename = araj_gna(&stream);
-			fd = open(filename, O_RDWR); 
+			fd = open(filename, O_RDWR);
 			init_and_check_fd(fd);
 			for_heredoc(filename , fd);
 			stream->in = fd;
 
 		}
-		stream = stream->next;		
+		stream = stream->next;
 	}
 	return (0);
 }
+
+//nayel tuylatreli cahrery filenameri hamar
 
 //ctrl+d ev filename 
 //heredoc
@@ -183,7 +170,6 @@ t_token *cut_red(t_token *stream)
 	return (0);
 }
 
-
 void	delete_files(t_token *stream)
 {
 	while (stream)
@@ -197,21 +183,24 @@ void	delete_files(t_token *stream)
 	}
 }
 
-void parse(t_data *data, char *str)
+int parse(t_data *data, char *str)
 {
 	tokenize(&data->stream, str);
 	if (!validation(data->stream))
-		return ;
+	{
+		data->exit_status = 1;
+		return (1);
+	}
 	open_fields(data->stream, data->envies, data->exit_status);
-	in_and_out(data->stream);
+	if (in_and_out(data->stream))
+	{
+		data->exit_status = 1;
+		return (1);
+	}
 	delete_files(data->stream);
-	// while (data->stream != NULL)
-	// {
-	// 	printf("value:%s  op:%i\n", data->stream->value, data->stream->op);
-	// 	data->stream = data->stream->next;
-	// }
 	to_commands(data);
-	to_struct(data->command, &data->com_stream);
+	to_struct(data->command, &data->com_stream, data->stream);
+	return (0);
 }
 
 

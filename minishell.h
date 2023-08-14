@@ -15,6 +15,8 @@
 #define STDIN 0
 
 // libraries
+
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -64,51 +66,69 @@ struct s_envies       // done
 struct s_data // my all data here 
 {
 	t_envies	*envies;
-	char		*paths[6];
+	char		**paths;
 	t_token		*stream;
 	int			exit_status;
 	char		**command;
 	t_command	*com_stream;
 };
 
-int ft_isspace(int ch);
-int rec_pipe(char *str);
-char  *ft_ispipe(char *str);
+void to_struct(char **command, t_command **com_stream, t_token *stream);   //done
+void to_commands(t_data *data);    // done
+t_envies *new_node(char *key, char *value);
+void init_env(t_envies **envp, char **environ);
+char	*what_path(char **paths, char *command);
 int	ft_lstcnt(t_envies *lst);
-void *ashxatel(t_data *data);
+void dups(t_command *command);
+char **to_matrix(t_envies *envies);
+void print_env(char **env);
+void execute(t_data *data);
+char *if_env(char *str, t_envies *env, int exs);
+void open_fields(t_token *stream, t_envies *env, int exs);
+void ft_echo(t_data *data, t_token *token);
+void ft_cd(t_data *data, t_token *token);
+void ft_pwd(t_data *data, t_token *token);
 void signal_hend(int signum);
-t_token *token_1(char **str);
+void init_line(t_data *data, char **environ);
+int	in_and_out(t_token *stream);
+t_token *cut_red(t_token *stream);
+void	delete_files(t_token *stream);
+int parse(t_data *data, char *str);
+void	init_path(t_data *data);
+int init_and_check_fd(int fd);
+void	for_heredoc(char *filename, int fd);
+char *file_name(t_token *stream);
+void find_com(t_token **stream, int in, int out);
+t_token	*token_1(char **str);
 t_token	*token_2(char **str);
 t_token	*token_3(char **str);
 t_token	*token_4(char **str);
 t_token	*token_5(char **str);
-t_token	*token_6(char **str);
-t_token	*token_9(char **str);
-int validation(t_token *stream);
-void	delete_files(t_token *stream);
-int ft_strcmp(char *str, char *chm);
-void parse(t_data *data, char *str);
+t_token *which_token(char **str);
 void tokenize(t_token **stream, char *str);
-void init_line(t_data *data, char **environ); // readline function in while
-void valid_word(t_data *data, t_token *token);
-void init_env(t_envies **envp, char **environ);
-char *if_env(char *str, t_envies *env, int exs);
-t_token *new_token(int type, char *str, int op);
-char *find_rep(char *str, int exs, t_envies *env);
-void to_struct(char **command, t_command **stream);
-void open_fields(t_token *stream, t_envies *env, int exs);
+int	redir_error(void);
+void	open_eror(void);
+int validation(t_token *stream);
+
+
+void prin(t_token *stream, t_command *com_stream);
+void pri(t_command *com_stream);
+void print_en(t_envies *envies);
+int	split_len(char **str);
+t_command	*new_com(char **args, int in, int out);
+int	ft_com_len(t_token *stream);
+char	*one_dol(char **str);
 char	*env_name(char **str);
-void error_msg(char *str);
-void ft_echo(t_data *data, t_token *token);
-void ft_cd(t_data *data, t_token *token);
-void ft_pwd(t_data *data, t_token *token);
-t_token *to_pipe(t_token *stream);
-t_token	*token_9(char **str);
 t_token	*token_6(char **str);
-t_command *new_com(char **args);
-void to_commands(t_data *data);
-int ft_com_len(t_token *stream);
-void	init_path(t_data *data);
-void execute(t_data *data);
-t_envies *new_node(char *key, char *value);
+t_token	*token_9(char **str);
+void free_data(t_data *data);
+char *file_join(char *buffer, char *stat);
+int ft_strcmp(char *str, char *chm);
+t_token *new_token(int type, char *str, int op);
+void	esim(void);
+int ft_isspace(int ch);
+int correct_pipe(char *tmp, char *str);
+char  *ft_ispipe(char *str);
+void error_msg(char *str);
+
 #endif
