@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 21:36:23 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/10 20:51:57 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void init_line(t_data *data, char **environ)
 		{
 			init_env(&data->envies, environ);
 			add_history(str);
-			if (!parse(data, str))
-				execute(data);
+			parse(data, str);
+			// execute(data);
 		}
 	}
 }
@@ -34,7 +34,6 @@ void init_line(t_data *data, char **environ)
 int	in_and_out(t_token *stream)
 {
 	int fd;
-	int fd2;
 	char *filename;
 	
 	while (stream)
@@ -43,43 +42,19 @@ int	in_and_out(t_token *stream)
 		{
 			filename = file_name(stream);
 			if (stream->type == REDIR_IN)
-			{
 				fd = open(filename, O_RDONLY);
-				if (init_and_check_fd(fd))
-					return (1);
-				find_com(&stream, fd, STDOUT);
-			}
 			else if (stream->type == REDIR_OUT && stream->next)
-			{
 				fd = open(filename,O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (init_and_check_fd(fd))
-					return (1);
-				printf("%i\n", fd);
-				find_com(&stream, STDIN, fd);
-			}
 			else if (stream->type == REDIR_AP && stream->next)
-			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
-				if (init_and_check_fd(fd))
-					return (1);
-				find_com(&stream, STDIN, fd);
-			}
 			else if (stream->type == REDIR_SO && stream->next)
 			{
 				filename = file_join(filename, "tmp/");
-				fd2 = open(filename, O_RDWR);
-				if(fd2 > 0)
-				{
-					for_heredoc(filename , fd2);
-					find_com(&stream, fd, STDOUT);
-				}
-				else
-				{
-					fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
-					for_heredoc(filename , fd);
-					find_com(&stream, fd, STDOUT);
-				}
+				fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
+				for_heredoc(filename , fd);
 			}
+			if (init_and_check_fd(fd))
+				return (1);
 		}
 		stream = stream->next;
 	}
@@ -91,15 +66,18 @@ int	in_and_out(t_token *stream)
 //ctrl+d ev filename 
 //heredoc
 
-t_token *cut_red(t_token *stream)
+void	cut_red(t_token **stream)
 {
-	while (stream)
+	while (*stream)
 	{
-		if (stream->type == WORD)
-			return (stream->next);
-		stream = stream->next;
+		if ((*stream)->type == WORD)
+		{
+			// free(*stream);
+			return ;
+		}
+		free(*stream);
+		(*stream) = (*stream)->next;
 	}
-	return (0);
 }
 
 void	delete_files(t_token *stream)
@@ -108,8 +86,9 @@ void	delete_files(t_token *stream)
 	{
 		if (stream->op == 1)
 		{
-			stream->prev->next = cut_red(stream);
-			free(stream);
+			cut_red(&stream);
+			if (!stream)
+				return ;
 		}
 		stream = stream->next;
 	}
@@ -130,8 +109,12 @@ int parse(t_data *data, char *str)
 		return (1);
 	}
 	delete_files(data->stream);
+	printf("data->stream:%s\n", data->stream->value);
+	// if (!data->stream)
+	// 	printf("chee axper jan command chunes\n");
+	// // printf("yoo\n");	
 	to_commands(data);
-	to_struct(data->command, &data->com_stream, data->stream);
+	// to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }
 

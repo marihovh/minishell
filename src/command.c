@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 14:36:57 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/10 21:07:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,17 @@ void to_struct(char **command, t_command **com_stream, t_token *stream)   //done
 void to_commands(t_data *data)    // done
 {
 	char *str = NULL;
-	t_token *ptr = data->stream;
-	int pip_cnt = ft_com_len(data->stream);
+	t_token *ptr;
+	int pip_cnt;
 	int i = 0;
 
+	if (!data->stream)
+		return ;
+	ptr = data->stream;
+	pip_cnt = ft_com_len(data->stream);
+	exit(0);
+		printf("ttt\n");
+		exit (0);
 	data->command = malloc(sizeof(char *) * (pip_cnt + 2));
 	while (data->stream)
 	{

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 14:29:32 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/10 21:07:14 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,12 @@ int	ft_com_len(t_token *stream)
 	int	i;
 
 	i = 0;
-	while (stream)
+	t_token	*tmp = stream;
+	while (tmp)
 	{
-		if (stream->type == PIPE)
+		if (tmp->type == PIPE)
 			i++;
-		stream = stream->next;
+		tmp = tmp->next;
 	}
 	return (i);
 }
