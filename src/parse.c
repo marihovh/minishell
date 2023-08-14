@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/14 19:42:36 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 19:47:26 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,66 +31,14 @@ void init_line(t_data *data, char **environ)
 	}
 }
 
-t_token *which_token(char **str)
-{
-	t_token *token;
-	
-	token = NULL;
-	if (*str[0] == '|')
-		token = token_9(str);
-	else if (*str[0] == 39)
-		token = token_3(str);
-	else if (*str[0] == '>')
-		token = token_5(str);
-	else if (*str[0] == '<')
-		token = token_6(str);
-	else if (*str[0] == 34)
-		token = token_4(str);
-	else if (ft_isprint(*str[0]))
-		token = token_2(str);
-	else if (ft_isspace(*str[0]))
-		token = token_1(str);
-	else
-		error_msg("Token error\n");
-	return (token);
-}
 
 
-void tokenize(t_token **stream, char *str)
-{
-	t_token *tmp;
-	
-	tmp = NULL;
-	while (*str)
-	{
-		(*stream) = which_token(&str);
-		if (!(*stream))
-			break ;
-		if (tmp)
-			(*stream)->prev = tmp;
-		tmp = (*stream);
-		// printf("<%s>\n", (*stream)->value);
-		stream = &(*stream)->next;
-	}
-}
 
-int init_and_check_fd(int fd)
-{
-	if (fd == -1)
-		printf("that file doesn't exist\n");
-	return(-1);
-}
 
-char *araj_gna(t_token **stream)
-{
-	while (*stream && (*stream)->type != WORD)
-	{
-		*stream = (*stream)->next;
-	}
-	if (!(*stream))
-		return (NULL);
-	return ((*stream)->value);
-}
+
+
+
+
 
 
 //function for heredoc
@@ -98,19 +46,7 @@ char *araj_gna(t_token **stream)
 
 
 
-void	for_heredoc(char *filename, int fd)
-{
-	char *line;
 
-	line = readline("here_doc");
-	printf(":%s\n",line);
-	while(!(ft_strncmp(filename, line, ft_strlen(filename))))
-	{
-		write(fd ,line, ft_strlen(line));
-		free(line);
-		line = readline("here_doc");
-	}
-}
 
 //nayel tuylatreli cahrery filenameri hamar
 
