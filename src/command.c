@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 21:07:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 17:39:51 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,8 @@ void to_commands(t_data *data)    // done
 	int pip_cnt;
 	int i = 0;
 
-	if (!data->stream)
-		return ;
 	ptr = data->stream;
 	pip_cnt = ft_com_len(data->stream);
-	exit(0);
-		printf("ttt\n");
-		exit (0);
 	data->command = malloc(sizeof(char *) * (pip_cnt + 2));
 	while (data->stream)
 	{

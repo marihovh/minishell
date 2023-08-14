@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 20:51:57 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 17:40:00 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void init_line(t_data *data, char **environ)
 			init_env(&data->envies, environ);
 			add_history(str);
 			parse(data, str);
-			// execute(data);
+			execute(data);
 		}
 	}
 }
@@ -66,19 +66,32 @@ int	in_and_out(t_token *stream)
 //ctrl+d ev filename 
 //heredoc
 
-void	cut_red(t_token **stream)
+// void	cut_red(t_token **stream)
+// {
+// 	while (*stream)
+// 	{
+// 		if ((*stream)->type == WORD)
+// 		{
+// 			// free(*stream);
+// 			return ;
+// 		}
+// 		free(*stream);
+// 		(*stream) = (*stream)->next;
+// 	}
+// }
+
+t_token *cut_red(t_token *stream)
 {
-	while (*stream)
+	while (stream)
 	{
-		if ((*stream)->type == WORD)
-		{
-			// free(*stream);
-			return ;
-		}
-		free(*stream);
-		(*stream) = (*stream)->next;
+		if (stream->type == WORD)
+			return (stream->next);
+		stream = stream->next;
 	}
+	printf("ban el chak");
+	return (0);
 }
+
 
 void	delete_files(t_token *stream)
 {
@@ -86,9 +99,19 @@ void	delete_files(t_token *stream)
 	{
 		if (stream->op == 1)
 		{
-			cut_red(&stream);
-			if (!stream)
-				return ;
+			if (stream->prev)
+			{
+				printf("yooo man\n");
+				stream->prev->next = cut_red(stream);
+				// free(stream);
+			}else
+			{
+				printf("ehh bales\n");
+				printf("prev:%s\n", stream->value);
+				
+				stream = cut_red(stream);
+				free(stream);
+			}
 		}
 		stream = stream->next;
 	}
@@ -108,13 +131,17 @@ int parse(t_data *data, char *str)
 		data->exit_status = 1;
 		return (1);
 	}
-	delete_files(data->stream);
-	printf("data->stream:%s\n", data->stream->value);
+	// delete_files(data->stream);
 	// if (!data->stream)
 	// 	printf("chee axper jan command chunes\n");
 	// // printf("yoo\n");	
 	to_commands(data);
-	// to_struct(data->command, &data->com_stream, data->stream);
+	// while (data->stream)
+	// {
+	// 	printf("data->stream:%s\n", data->stream->value);
+	// 	data->stream = data->stream->next;
+	// }
+	to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }
 

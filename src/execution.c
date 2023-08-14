@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 17:13:10 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 17:40:19 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void execute(t_data *data)
 		pid_t f = fork();
 		if (f == 0)
 		{
-			printf("yoo man  fd:%i\n", data->com_stream->in);
 			if (data->com_stream->in != STDIN)
 				dup2(data->com_stream->in, STDIN_FILENO);
 			if (data->com_stream->out != STDOUT)

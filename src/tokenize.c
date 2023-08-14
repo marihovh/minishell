@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 21:11:28 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 17:40:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void tokenize(t_token **stream, char *str)
 			break ;
 		if (tmp)
 			(*stream)->prev = tmp;
+		else
+			(*stream)->prev = NULL;
 		tmp = (*stream);
 		// printf("<%s>\n", (*stream)->value);
 		stream = &(*stream)->next;

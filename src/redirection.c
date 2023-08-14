@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 17:34:49 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/14 14:25:56 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	for_heredoc(char *filename, int fd)
 
 	filename += 4;
 	line = readline("> ");
-	while(ft_strcmp(line, filename)) // chgitem vocn signal dnenq vor ete signal ekav eli gre u durs ga
+	while(line && ft_strcmp(line, filename)) // chgitem vocn signal dnenq vor ete signal ekav eli gre u durs ga
 	{
-		line = readline("> ");
 		write(fd , line, ft_strlen(line));
-		// write(fd , "\n", 1);
+		write(fd , "\n", 1);
+		line = readline("> ");
 	}
 }
 

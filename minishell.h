@@ -91,7 +91,7 @@ void ft_pwd(t_data *data, t_token *token);
 void signal_hend(int signum);
 void init_line(t_data *data, char **environ);
 int	in_and_out(t_token *stream);
-void	cut_red(t_token **stream);
+t_token	*cut_red(t_token *stream);
 void	delete_files(t_token *stream);
 int parse(t_data *data, char *str);
 void	init_path(t_data *data);
