@@ -42,7 +42,6 @@ int	ft_lstcnt(t_envies *lst)
 	}
 	return (cnt);
 }
-
 void dups(t_command *command)
 {
 	// (void)command;

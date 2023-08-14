@@ -73,6 +73,8 @@ struct s_data // my all data here
 	t_command	*com_stream;
 };
 
+
+
 void to_struct(char **command, t_command **com_stream, t_token *stream);   //done
 void to_commands(t_data *data);    // done
 t_envies *new_node(char *key, char *value);
