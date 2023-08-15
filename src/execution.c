@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/14 17:40:19 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/15 13:23:25 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,23 @@ void execute(t_data *data)
 		pid_t f = fork();
 		if (f == 0)
 		{
+			printf("data->com_stream->in:%d\n", data->com_stream->in);
+			printf("data->com_stream->out:%d\n", data->com_stream->out);
+			// if() ..stugum enq in-y tabervuma 0-ic uremn dup enq anum STd_In i het ete , 1-ic uremn OUTi het
 			if (data->com_stream->in != STDIN)
-				dup2(data->com_stream->in, STDIN_FILENO);
-			if (data->com_stream->out != STDOUT)
-				dup2(data->com_stream->out, STDOUT_FILENO);
-			execve(path, data->com_stream->command, env);
+			{
+				dup2(data->com_stream->in, STDIN);
+				execve(path, data->com_stream->command, env);
+				close(data->com_stream->in);
+			}
+			else if((data->com_stream->out != STDOUT))
+			{
+				dup2(data->com_stream->out, STDOUT);
+				execve(path, data->com_stream->command, env);
+				close(data->com_stream->out);
+			}
+			else
+				execve(path, data->com_stream->command, env);
 			// update_env();
 			exit(0);
 		}
