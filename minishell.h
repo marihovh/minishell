@@ -87,21 +87,23 @@ void print_env(char **env);
 void execute(t_data *data);
 char *if_env(char *str, t_envies *env, int exs);
 void open_fields(t_token *stream, t_envies *env, int exs);
-void ft_echo(t_data *data, t_token *token);
-void ft_cd(t_data *data, t_token *token);
-void ft_pwd(t_data *data, t_token *token);
+// void ft_echo(t_data *data, t_token *token);
+// void ft_cd(t_data *data, t_token *token);
+// void ft_pwd(t_data *data, t_token *token);
 void signal_hend(int signum);
 void init_line(t_data *data, char **environ);
 int	in_and_out(t_token *stream);
 t_token	*cut_red(t_token *stream);
 // void	cut_red(t_token **stream);
-int	delete_files(t_token *stream);
+// int	delete_files(t_token *stream);
+void	delete_files(t_token **stream);
 int parse(t_data *data, char *str);
 void	init_path(t_data *data);
 int init_and_check_fd(int fd);
 void	for_heredoc(char *filename, int fd);
 char *file_name(t_token *stream);
-void find_com(t_token **stream, int in, int out);
+// void find_com(t_token **stream, int in, int out);
+void find_com(t_token **stream, int fd , int fedo);
 t_token	*token_1(char **str);
 t_token	*token_2(char **str);
 t_token	*token_3(char **str);
@@ -111,7 +113,7 @@ t_token *which_token(char **str);
 void tokenize(t_token **stream, char *str);
 int	redir_error(void);
 void	open_eror(void);
-int validation(t_token *stream);
+int validation(t_token *stream, int *exit_status);
 
 
 void prin(t_token *stream, t_command *com_stream);
@@ -133,5 +135,5 @@ int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
 void error_msg(char *str);
-
+int	built_in(t_command *node, int *exit_status);
 #endif

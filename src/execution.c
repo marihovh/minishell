@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/15 13:23:25 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:33:47 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*what_path(char **paths, char *command)
 	int i;
 	
 	i = -1;
+	if (access(command, F_OK) == 0)
+		return (command);
 	while (paths[++i])
 	{
 		res = ft_strjoin(paths[i], "/");
@@ -25,7 +27,6 @@ char	*what_path(char **paths, char *command)
 		if (access(res, F_OK) == 0)
 			return (res);
 	}
-	printf("shyshell: %s: command not found\n", command);
 	return (0);
 }
 int	ft_lstcnt(t_envies *lst)
@@ -86,6 +87,7 @@ void execute(t_data *data)
 	//hanum enq <  << >> > kam fd-neri het 
 	//bultiner stugum enq ete chen uremn execeve
 	//pipe-i qanakov fork enq anum
+	
 	while (data->com_stream)
 	{
 		init_path(data);
@@ -94,26 +96,21 @@ void execute(t_data *data)
 		pid_t f = fork();
 		if (f == 0)
 		{
-			printf("data->com_stream->in:%d\n", data->com_stream->in);
-			printf("data->com_stream->out:%d\n", data->com_stream->out);
-			// if() ..stugum enq in-y tabervuma 0-ic uremn dup enq anum STd_In i het ete , 1-ic uremn OUTi het
+			// printf("data->com_stream->in:%i\n", data->com_stream->in);
 			if (data->com_stream->in != STDIN)
-			{
 				dup2(data->com_stream->in, STDIN);
-				execve(path, data->com_stream->command, env);
-				close(data->com_stream->in);
-			}
-			else if((data->com_stream->out != STDOUT))
-			{
+			if((data->com_stream->out != STDOUT))
 				dup2(data->com_stream->out, STDOUT);
+			if (!built_in(data->com_stream, &data->exit_status) && path)
 				execve(path, data->com_stream->command, env);
-				close(data->com_stream->out);
-			}
-			else
-				execve(path, data->com_stream->command, env);
-			// update_env();
+			else 
+				printf("shyshell: %s: command not found\n", data->com_stream->command[0]);
+			close(data->com_stream->in);
+			close(data->com_stream->out);
 			exit(0);
 		}
+		if (data->exit_status == 888)
+			exit (0);
 		data->com_stream = data->com_stream->next;
 	}
 	waitpid(-1, 0, 0);

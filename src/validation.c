@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/07/17 19:57:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/16 11:02:16 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,63 @@ void	open_eror(void)
 	exit(1);
 }
 
-int validation(t_token *stream)
+int pipe_parse(t_token *stream, int *exit_status)
 {
-	(void)stream;
-	// while (stream)
-	// {
-	// 	if (stream->type == PIPE)
-	// 	{
-	// 		if (stream->prev == NULL || stream->next == NULL)
-	// 		{
-	// 			printf("pipe error broo\n");
-	// 			return (0);
-	// 		}else if (stream->prev->type == SP && (stream->prev->prev == NULL || stream->prev->prev->type != WORD))
-	// 		{
-	// 			printf("pipe error yooo\n");
-	// 			return (0);
-	// 		}
-	// 	}else if (stream->type == REDIR_OUT || stream->type == REDIR_IN || stream->type == REDIR_AP || stream->type == REDIR_SO)
-	// 	{
-	// 		if (stream->next == NULL)
-	// 			redir_error();
-	// 		// else if(stream->prev->type == SP && (stream->prev->prev == NULL || stream->prev->prev->type != WORD))
-	// 			// redir_error();
-	// 	}
-	// 	stream = stream->next;
-	// }
-	return (1);
+	if ((stream->prev == NULL || stream->next == NULL) \
+		|| (stream->next->type == PIPE) \
+		|| (stream->prev->type == SP && (stream->prev->prev == NULL || stream->prev->prev->type != WORD)) \
+		|| (stream->next->type == SP && (stream->next->next == NULL || stream->next->next->type != WORD)))
+	{
+		*exit_status = 1;
+		return (1);
+	}
+	else
+		*exit_status = 0;
+	return (0);
+}
+
+int red_parse(t_token *stream, int *exit_status)
+{
+	if (stream->next == NULL || (stream->next->type == SP && stream->next->next->type != WORD))
+	{
+		*exit_status = 1;
+		return (1);
+	}
+	else
+		*exit_status = 0;
+	return (0);
+}
+
+int validation(t_token *stream, int *exit_status)
+{
+	// if (here_doc_cnt() > 16 || pipe_cnt() > 5)
+		
+	while (stream)
+	{
+		if (stream->type == SP)
+		{
+			if (stream->prev == NULL && stream->next == NULL)
+			{
+				*exit_status = 0;
+				return (1);
+			}
+		}
+		else if (stream->type == PIPE)
+		{
+			if (pipe_parse(stream, exit_status))
+			{
+				printf("syntax error near unexpected token `|'\n");
+				return (1);
+			}
+		}else if (stream->type == REDIR_OUT || stream->type == REDIR_IN || stream->type == REDIR_AP || stream->type == REDIR_SO)
+		{
+			if (red_parse(stream, exit_status))
+			{
+				printf("syntax error near unexpected token `newline'\n");
+				return (1);
+			}
+		}
+		stream = stream->next;
+	}
+	return (0);
 }

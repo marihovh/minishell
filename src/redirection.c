@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/14 14:25:56 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/16 11:45:44 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,44 @@ char *file_name(t_token *stream)
 	return (stream->value);
 }
 
-void find_com(t_token **stream, int in, int out)
+// void find_com(t_token **stream, int fd , int fedo)
+// {
+// 	if (!(*stream)->prev)
+// 		return ;
+// 	while (*stream && (*stream)->type != WORD)
+// 		stream = &(*stream)->prev;
+// 	if (!(stream))
+// 		return ;
+// 	printf("ss:%s\n", (*stream)->value);
+// 	if (fedo == 1)
+// 		(*stream)->in = fd;
+// 	else
+// 		(*stream)->out = fd;
+// }
+
+void find_com(t_token **stream, int fd , int fedo)
 {
-	if (!(*stream)->prev)
+	(void)fd;
+	(void)fedo;
+	t_token *com;
+	t_token *tmp;
+
+	com = (*stream);
+	tmp = (*stream);
+	if (!(com)->prev)
 		return ;
-	while (*stream && (*stream)->type != WORD)
-		stream = &(*stream)->prev;
-	if (!(stream))
-		return ;
-	(*stream)->in = in;
-	(*stream)->out = out;
+	while (com && com->type != WORD)
+		com = com->prev;
+	while (tmp && tmp->type != WORD)
+		tmp = tmp->next;
+	com->next = tmp->next;
+	if (tmp->next != NULL)
+		tmp->next->prev = com;
+	else 
+		com->next = NULL;
+	(*stream) = com;
+	if (fedo == 1)
+		(*stream)->in = fd;
+	else
+		(*stream)->out = fd;
 }

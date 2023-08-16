@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 19:57:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/15 20:59:40 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void open_fields(t_token *stream, t_envies *env, int exs)
 	char *name;
 	char *dol;
 	char *chunk;
-
+	
 	while (stream)
 	{
 		if (stream->type == WORD || stream->type == EXP_FIELD)

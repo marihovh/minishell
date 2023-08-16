@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/14 17:39:51 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/15 20:13:57 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ void to_struct(char **command, t_command **com_stream, t_token *stream)   //done
 	char **splited;
 	int i;
 	int j;
+	int len;
 
 	i = -1;
 	while (command[++i])
 	{
 		j = 0;
 		splited = ft_split(command[i], ' ');
+		len = split_len(splited) * 2 - 2;
+		while (len--)
+			stream = stream->next;
 		(*com_stream) = new_com(splited, stream->in, stream->out);
-		// (*com_stream) = new_com(splited);
 		com_stream = &(*com_stream)->next;
-		stream = stream->next;
 	}
 }
 
@@ -56,8 +58,6 @@ void to_commands(t_data *data)    // done
 	data->command[i] = str;
 	data->command[i + 1] = NULL;
 }
-
-
 
 
 /*          cd validation
