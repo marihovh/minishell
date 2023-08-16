@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/16 14:33:47 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/16 17:40:08 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,25 +92,25 @@ void execute(t_data *data)
 	{
 		init_path(data);
 		path = what_path(data->paths, data->com_stream->command[0]);
-		env = to_matrix(data->envies);
-		pid_t f = fork();
-		if (f == 0)
-		{
-			// printf("data->com_stream->in:%i\n", data->com_stream->in);
-			if (data->com_stream->in != STDIN)
-				dup2(data->com_stream->in, STDIN);
-			if((data->com_stream->out != STDOUT))
-				dup2(data->com_stream->out, STDOUT);
-			if (!built_in(data->com_stream, &data->exit_status) && path)
+		if (!path && is_built_in(data->com_stream))
+			built_in(data->com_stream);
+		else if (!path)
+			printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
+		else
+		{	
+			env = to_matrix(data->envies);
+			pid_t f = fork();
+			if (f == 0)
+			{
+				if (data->com_stream->in != STDIN)
+					dup2(data->com_stream->in, STDIN);
+				if((data->com_stream->out != STDOUT))
+					dup2(data->com_stream->out, STDOUT);
 				execve(path, data->com_stream->command, env);
-			else 
-				printf("shyshell: %s: command not found\n", data->com_stream->command[0]);
-			close(data->com_stream->in);
-			close(data->com_stream->out);
-			exit(0);
+				close(data->com_stream->in);
+				close(data->com_stream->out);
+			}
 		}
-		if (data->exit_status == 888)
-			exit (0);
 		data->com_stream = data->com_stream->next;
 	}
 	waitpid(-1, 0, 0);

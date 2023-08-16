@@ -22,7 +22,7 @@ obj/%.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME):$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -I readline/readline.h -lreadline $(LIBFT)
+	$(CC) $(CFLAGS) -I readline/readline.h -lreadline $(OBJ) $(LIBFT) -o $(NAME)
 
 clean:
 	@make -C libft clean

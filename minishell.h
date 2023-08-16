@@ -15,7 +15,9 @@
 #define STDIN 0
 
 // libraries
-
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +27,6 @@
 #include <string.h>
 #include <errno.h>
 #include "./libft/libft.h"
-#include <readline/readline.h>
 
 typedef struct s_data		t_data;
 typedef struct s_token		t_token;
@@ -135,5 +136,7 @@ int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
 void error_msg(char *str);
-int	built_in(t_command *node, int *exit_status);
+int	built_in(t_command *node);
+int is_built_in(t_command *node);
+
 #endif
