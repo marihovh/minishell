@@ -21,7 +21,7 @@ RL_LIBRARY_VERSION = 8.2
 SHELL = /bin/sh
 RM = rm -f
 
-prefix = /usr/local
+prefix = /Users/leyeghia/Desktop/AAA/readlian
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share
@@ -32,7 +32,7 @@ datadir = ${datarootdir}
 
 top_srcdir = ..
 #BUILD_DIR = .
-BUILD_DIR = /Users/marihovh/Desktop/g_min/readline
+BUILD_DIR = /Users/leyeghia/Desktop/AAA/readline-master
 installdir = $(datadir)/readline
 
 INSTALL = /usr/bin/install -c

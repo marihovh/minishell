@@ -31,7 +31,7 @@ PACKAGE_TARNAME = readline
 srcdir = .
 
 top_srcdir = .
-BUILD_DIR = /Users/marihovh/Desktop/g_min/readline
+BUILD_DIR = /Users/leyeghia/Desktop/AAA/readline-master
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -48,7 +48,7 @@ MV = mv
 
 SHELL = /bin/sh
 
-prefix = /usr/local
+prefix = /Users/leyeghia/Desktop/AAA/readlian
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share

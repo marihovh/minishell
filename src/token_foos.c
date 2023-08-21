@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 21:20:44 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 16:59:24 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ t_token	*token_3(char **str)
 	(*str) = ft_strchr(++chunk, 39);
 	if (!(*str))
 	{
+		
 		error_msg("Token error\n");
 		return (NULL);
 	}

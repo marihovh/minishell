@@ -6,21 +6,25 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/18 16:56:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 20:03:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+
 void signal_hend(int signum)
 {
 	(void)signum;
-	write(1, "\n", 11);
-	rl_on_new_line();
-	rl_redisplay();
-	// write(STDIN_FILENO, "\n\n", 2);
-	// rl_replace_line("", 0);
-	
+	if (signum == SIGINT)
+	{
+		rl_on_new_line();
+		write(STDOUT_FILENO, "\n", 1);
+		rl_redisplay();
+		// write(STDIN_FILENO, "\n\n", 2);
+		rl_replace_line("", 0);
+	}
+	return ;
 }
 
 void sig_hend(int num)
@@ -30,7 +34,7 @@ void sig_hend(int num)
 	exit(0);
 }
 
-void signals (void)
+int signals (void)
 {
 	struct termios term_attr;
 
@@ -38,8 +42,26 @@ void signals (void)
 	term_attr.c_lflag &= ~ECHOCTL;
 	tcsetattr(0, TCSADRAIN, &term_attr);
 	signal(SIGINT, signal_hend);
-	signal(SIGQUIT, sig_hend);
+	// signal(SIGQUIT, sig_hend);
+	return (0);
 }
+
+// int main(int argc, char **argv, char **environ)
+// {
+// 	(void)argc;
+// 	(void)argv;
+// 	t_data *data = NULL;
+// 	char *str;
+	
+// 	(void)environ;
+// 	str = NULL;
+// 	signal(SIGINT, signal_hend);
+// 	// ft_signal(1);
+// 	data = malloc(sizeof(t_data));
+// 	init_line(data, environ); 
+// 	return (0);
+// }
+
 
 int main(int argc, char **argv, char **environ)
 {
@@ -47,12 +69,25 @@ int main(int argc, char **argv, char **environ)
 	(void)argv;
 	t_data *data = NULL;
 	char *str;
-	
-	(void)environ;
+
 	str = NULL;
-	// signal(SIGINT, signal_hend);
-	// signals();
+	(void)environ;
 	data = malloc(sizeof(t_data));
-	init_line(data, environ); 
+	while(1)
+	{
+		signals();
+		str = readline("shyshell$ ");
+		if (!str[0])
+			continue ;
+		else
+		{
+			init_env(&data->envies, environ);
+			add_history(str);
+			if (parse(data, str) == 0)
+				execute(data);
+			printf("exit_stat:%i\n", data->exit_status);
+			data->exit_status = 0;
+		}
+	}
 	return (0);
 }

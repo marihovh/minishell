@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/18 20:13:12 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 19:48:14 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ void init_line(t_data *data, char **environ)
 		{
 			init_env(&data->envies, environ);
 			add_history(str);
-			// printf("data->exit_status:%i\n", data->exit_status);
 			if (parse(data, str) == 0)
 				execute(data);
+			printf("exit_stat:%i\n", data->exit_status);
+			data->exit_status = 0;
 		}
 	}
 }
@@ -116,7 +117,7 @@ void print_stream(t_token *stream)
 
 int parse(t_data *data, char *str)
 {
-	tokenize(&data->stream, str);
+	tokenize(&data->stream, str, &data->exit_status);
 	if (!data->stream)
 	{
 		data->exit_status = 0;
@@ -125,7 +126,6 @@ int parse(t_data *data, char *str)
 	if (validation(data->stream, &data->exit_status))
 		return (1);
 	open_fields(data->stream, data->envies, data->exit_status);
-	printf("exit_status:%i\n", data->exit_status);
 	if (in_and_out(data->stream))
 	{
 		data->exit_status = 1;
@@ -140,6 +140,3 @@ int parse(t_data *data, char *str)
 	to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }
-
-// the syntax of pipe
-// 			command1 | command2 | command3 ...

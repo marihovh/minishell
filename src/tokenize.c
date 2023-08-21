@@ -6,16 +6,16 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/18 20:13:27 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 17:05:03 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token *which_token(char **str)
+t_token	*which_token(char **str, int *exit_status)
 {
-	t_token *token;
-	
+	t_token	*token;
+	(void)exit_status;
 	token = NULL;
 	if (*str[0] == '|')
 		token = token_9(str);
@@ -33,22 +33,27 @@ t_token *which_token(char **str)
 		token = token_1(str);
 	else
 		error_msg("Token error\n");
+	if (token == NULL)
+		*exit_status = 1;
 	return (token);
 }
 
-void tokenize(t_token **stream, char *str)
+void	tokenize(t_token **stream, char *str, int *exit_status)
 {
-	t_token *tmp;
+	t_token	*tmp;
 	
 	tmp = NULL;
 	while (*str)
 	{
-		(*stream) = which_token(&str);
+		(*stream) = which_token(&str, exit_status);
 		if (!(*stream))
+		{
+			if (*exit_status != 1)
+				*exit_status = 0;
 			break ;
+		}
 		(*stream)->prev = tmp;
 		tmp = (*stream);
-		// printf("<%s>\n", (*stream)->value);
 		stream = &(*stream)->next;
 	}
 }
