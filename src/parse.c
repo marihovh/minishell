@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 19:48:14 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 21:20:01 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void init_line(t_data *data, char **environ)
 	while(1)
 	{
 		str = readline("shyshell$ ");
+		if (!str)
+			exit(0);
 		if (str[0])
 		{
 			init_env(&data->envies, environ);

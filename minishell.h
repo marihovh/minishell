@@ -15,8 +15,10 @@
 #define STDIN 0
 
 // libraries
-#include "readline/readline.h"
-#include "readline/history.h"
+// #include "readline_Mariam/readline.h"
+// #include "readline_Mariam/history.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>

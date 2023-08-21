@@ -1,5 +1,5 @@
 NAME=minishell
-SRC=src/main.c src/parse.c src/token_foos.c src/validation.c src/impliment.c \
+SRC = src/main.c src/parse.c src/token_foos.c src/validation.c src/impliment.c \
 	src/command.c  src/expansion.c src/signal.c src/tokenize.c \
 	src/paths.c src/execution.c src/envies.c src/redirection.c \
 	src/utils.c src/utils_1.c src/utils_2.c src/utils_3.c src/del_ut.c 
@@ -8,8 +8,15 @@ CC=cc
 LIBFT=libft/libft.a
 CFLAGS=-Wall -Werror -Wextra
 RM=rm -rf
+INCLUDES = -I./readline-marihovh/include
 
-all: libcomp creat_dir $(NAME)
+LINKERS	= -L./readline-marihovh/lib -lreadline
+PREFIX = $(shell pwd)/readline-marihovh
+
+# test :
+# 	@echo $(OBJ)
+
+all: libcomp creat_dir $(NAME) $(OBJ)
 
 libcomp:
 	@make -C libft
@@ -19,10 +26,11 @@ creat_dir:
 	mkdir -p tmp
 
 obj/%.o : src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(NAME):$(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) -I readline/readline.h -lreadline $(OBJ) $(LIBFT)
+
+$(NAME) : $(OBJ)
+	$(CC) $(CFLAGS) $(LIBFT) $(INCLUDES) $(LINKERS) $(OBJ) -o $(NAME)
 
 clean:
 	@make -C libft clean
@@ -32,5 +40,9 @@ fclean: clean
 	$(RM) $(NAME)
 	@make -C libft fclean
 	$(RM) tmp
+
+readline:
+		cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
+
 
 re: fclean all
