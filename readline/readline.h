@@ -32,10 +32,10 @@ extern "C" {
 #  include "keymaps.h"
 #  include "tilde.h"
 #else
-#  include <readline/rlstdc.h>
-#  include <readline/rltypedefs.h>
-#  include <readline/keymaps.h>
-#  include <readline/tilde.h>
+#  include "rlstdc.h"
+#  include "rltypedefs.h"
+#  include "keymaps.h"
+#  include "tilde.h"
 #endif
 
 /* Hex-encoded Readline version number. */
@@ -447,7 +447,7 @@ extern int rl_stuff_char (int);
 extern int rl_execute_next (int);
 extern int rl_clear_pending_input (void);
 extern int rl_read_key (void);
-extern int rl_getc (FILE *);
+// extern int rl_getc (FILE *);
 extern int rl_set_keyboard_input_timeout (int);
 
 /* Functions to set and reset timeouts. */
@@ -588,8 +588,8 @@ extern rl_command_func_t *rl_last_func;
 extern const char *rl_terminal_name;
 
 /* The input and output streams. */
-extern FILE *rl_instream;
-extern FILE *rl_outstream;
+// extern FILE *rl_instream;
+// extern FILE *rl_outstream;
 
 /* If non-zero, Readline gives values of LINES and COLUMNS from the environment
    greater precedence than values fetched from the kernel when computing the
@@ -620,7 +620,7 @@ extern rl_hook_func_t *rl_input_available_hook;
 
 /* The address of the function to call to fetch a character from the current
    Readline input stream */
-extern rl_getc_func_t *rl_getc_function;
+// extern rl_getc_func_t *rl_getc_function;
 
 extern rl_voidfunc_t *rl_redisplay_function;
 
@@ -951,8 +951,8 @@ struct readline_state {
   int kseqlen;
 
   int pendingin;
-  FILE *inf;
-  FILE *outf;
+//   FILE *inf;
+//   FILE *outf;
   char *macro;
 
   /* signal state */

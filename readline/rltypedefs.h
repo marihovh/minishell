@@ -68,7 +68,7 @@ typedef void rl_compdisp_func_t (char **, int, int);
 typedef int rl_hook_func_t (void);
 
 /* Input function type */
-typedef int rl_getc_func_t (FILE *);
+// typedef int rl_getc_func_t (FILE *);
 
 /* Generic function that takes a character buffer (which could be the readline
    line buffer) and an index into it (which could be rl_point) and returns

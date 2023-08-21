@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/16 19:49:24 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/18 16:56:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,20 @@
 
 void signal_hend(int signum)
 {
-	if (signum == SIGINT)
-	{
-		// write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+	(void)signum;
+	write(1, "\n", 11);
+	rl_on_new_line();
+	rl_redisplay();
+	// write(STDIN_FILENO, "\n\n", 2);
+	// rl_replace_line("", 0);
+	
 }
 
-void sigquit_handler (int signum)
+void sig_hend(int num)
 {
-	if (signum == SIGQUIT)
-	{
-		// free ()
-		printf("printf\n");
-	}
+	(void)num;
+	
+	exit(0);
 }
 
 void signals (void)
@@ -38,9 +36,9 @@ void signals (void)
 
 	tcgetattr(STDIN_FILENO, &term_attr);
 	term_attr.c_lflag &= ~ECHOCTL;
-	tcsetattr(0, TCSANOW, &term_attr);
-	signal(SIGQUIT, sigquit_handler);
+	tcsetattr(0, TCSADRAIN, &term_attr);
 	signal(SIGINT, signal_hend);
+	signal(SIGQUIT, sig_hend);
 }
 
 int main(int argc, char **argv, char **environ)
@@ -52,10 +50,9 @@ int main(int argc, char **argv, char **environ)
 	
 	(void)environ;
 	str = NULL;
+	// signal(SIGINT, signal_hend);
+	// signals();
 	data = malloc(sizeof(t_data));
-	signals();
-	// printf("yoo\n");
-	// rl_redisplay();
 	init_line(data, environ); 
 	return (0);
 }

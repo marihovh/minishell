@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/16 17:40:08 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:03:13 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,15 @@ void execute(t_data *data)
 		init_path(data);
 		path = what_path(data->paths, data->com_stream->command[0]);
 		if (!path && is_built_in(data->com_stream))
-			built_in(data->com_stream);
+		{
+			built_in(data->com_stream, &data->exit_status);
+		}
 		else if (!path)
 			printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
 		else
-		{	
+		{
+			printf("data->com_stream->out:%i\n", data->com_stream->out);
+			printf("data->com_stream->in:%i\n", data->com_stream->in);
 			env = to_matrix(data->envies);
 			pid_t f = fork();
 			if (f == 0)

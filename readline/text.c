@@ -208,8 +208,7 @@ _rl_replace_text (const char *text, int start, int end)
 
 /* Replace the current line buffer contents with TEXT.  If CLEAR_UNDO is
    non-zero, we free the current undo list. */
-void
-rl_replace_line (const char *text, int clear_undo)
+extern void	rl_replace_line (const char *text, int clear_undo)
 {
   int len;
 

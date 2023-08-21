@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/16 14:09:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:13:12 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void init_line(t_data *data, char **environ)
 	char *str;
 
 	str = NULL;
+	(void)environ;
 	data = malloc(sizeof(t_data));
 	while(1)
 	{
@@ -68,13 +69,16 @@ int	in_and_out(t_token *stream)
 			else if (stream->type == REDIR_SO && stream->next)
 			{
 				filename = file_join(filename, "tmp/");
-				fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
-				printf("fd:%i\n", fd);
+				fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 				if (init_and_check_fd(fd))
 					return (1);
 				for_heredoc(filename , fd);
+				close(fd);
+				fd = open(filename, O_RDONLY);
 				find_com(&stream, fd, 1);
 			}
+			if (!stream)
+				return (1);
 		}
 		stream = stream->next;
 	}
@@ -116,56 +120,26 @@ int parse(t_data *data, char *str)
 	if (!data->stream)
 	{
 		data->exit_status = 0;
-		printf("Armaaaaan\n");
 		return (1);
 	}
-	// while (data->stream)
-	// {
-	// 	printf(":%s\n", data->stream->value);
-	// 	data->stream = data->stream->next;
-	// }
-	// return (1);
 	if (validation(data->stream, &data->exit_status))
 		return (1);
 	open_fields(data->stream, data->envies, data->exit_status);
+	printf("exit_status:%i\n", data->exit_status);
 	if (in_and_out(data->stream))
 	{
 		data->exit_status = 1;
 		return (1);
 	}
-		// printf("yooooooo\n");
-	// print_stream(data->stream);
+	if (!data->stream)
+	{
+		data->exit_status = 0;
+		return (1);
+	}
 	to_commands(data);
 	to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }
 
-
-
-
-
-// void parse(t_data *data, char *str)
-// {
-// 	tokenize(&data->stream, str);
-// 	if (!validation(data->stream))
-// 		return ;
-// 	open_fields(data->stream, data->envies, data->exit_status);
-// 	in_and_out(data->stream);
-// 	to_commands(data);
-// 	to_struct(data->command, &data->com_stream);
-// }
-
-// the syntax of rediraction
-// 		command [arguments] < input_file > output_file
-// 		command >> output_file
-// the syntax of here-doc
-	// command <<END_MARKER
-	// 	input_lines
-	// 	END_MARKER
 // the syntax of pipe
 // 			command1 | command2 | command3 ...
-//  variable syntax
-//      variable_name=value
-// the syntax of echo
-//        echo [options] [text or variable]
-// -n is without \n at the end

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/16 11:02:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:28:19 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,20 @@ int red_parse(t_token *stream, int *exit_status)
 	return (0);
 }
 
+int here_doc_cnt(t_token *stream)
+{
+	int i = 0;
+	while (stream)
+	{
+		if (stream->type == REDIR_SO)
+			i++;
+		stream = stream->next;
+	}
+	return (i);
+}
+
 int validation(t_token *stream, int *exit_status)
 {
-	// if (here_doc_cnt() > 16 || pipe_cnt() > 5)
-		
 	while (stream)
 	{
 		if (stream->type == SP)
@@ -82,5 +92,7 @@ int validation(t_token *stream, int *exit_status)
 		}
 		stream = stream->next;
 	}
+	if (here_doc_cnt(stream) > 16)
+		return (1);
 	return (0);
 }

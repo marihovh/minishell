@@ -15,8 +15,8 @@
 #define STDIN 0
 
 // libraries
-#include <readline/readline.h>
-#include <readline/history.h>
+#include "readline/readline.h"
+#include "readline/history.h"
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -33,6 +33,7 @@ typedef struct s_token		t_token;
 typedef struct s_streams	t_streams;
 typedef struct s_command	t_command;
 typedef struct s_envies		t_envies;
+typedef struct s_export		t_export;
 
 struct s_token   //done
 {
@@ -58,6 +59,13 @@ struct s_command
 };
 
 struct s_envies       // done
+{
+	char *key;
+	char *value;
+	t_envies *next;
+};
+
+struct s_export      // done
 {
 	char *key;
 	char *value;
@@ -100,6 +108,7 @@ t_token	*cut_red(t_token *stream);
 void	delete_files(t_token **stream);
 int parse(t_data *data, char *str);
 void	init_path(t_data *data);
+void signals (void);
 int init_and_check_fd(int fd);
 void	for_heredoc(char *filename, int fd);
 char *file_name(t_token *stream);
@@ -115,8 +124,6 @@ void tokenize(t_token **stream, char *str);
 int	redir_error(void);
 void	open_eror(void);
 int validation(t_token *stream, int *exit_status);
-
-
 void prin(t_token *stream, t_command *com_stream);
 void pri(t_command *com_stream);
 void print_en(t_envies *envies);
@@ -136,7 +143,7 @@ int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
 void error_msg(char *str);
-int	built_in(t_command *node);
+int	built_in(t_command *node, int *exit_status);
 int is_built_in(t_command *node);
 
 #endif
