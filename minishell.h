@@ -19,6 +19,7 @@
 // #include "readline_Mariam/history.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/stat.h>
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -84,15 +85,13 @@ struct s_data // my all data here
 	t_command	*com_stream;
 };
 
-
-
 void to_struct(char **command, t_command **com_stream, t_token *stream);   //done
 void to_commands(t_data *data);    // done
 t_envies *new_node(char *key, char *value);
 void init_env(t_envies **envp, char **environ);
 char	*what_path(char **paths, char *command);
 int	ft_lstcnt(t_envies *lst);
-void dups(t_command *command);
+void dups(int in, int out);
 char **to_matrix(t_envies *envies);
 void print_env(char **env);
 void execute(t_data *data);
@@ -111,8 +110,8 @@ void	delete_files(t_token **stream);
 int parse(t_data *data, char *str);
 void	init_path(t_data *data);
 int signals (void);
-int init_and_check_fd(int fd);
-void	for_heredoc(char *filename, int fd);
+int init_and_check_fd(int fd, char *filename);
+int	for_heredoc(char *filename);
 char *file_name(t_token *stream);
 // void find_com(t_token **stream, int in, int out);
 void find_com(t_token **stream, int fd , int fedo);

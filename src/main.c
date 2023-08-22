@@ -6,32 +6,22 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 21:19:37 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/22 11:15:02 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
 void signal_hend(int signum)
 {
-	(void)signum;
 	if (signum == SIGINT)
 	{
 		rl_on_new_line();
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_redisplay();
-		// write(STDIN_FILENO, "\n\n", 2);
 	}
 	return ;
-}
-
-void sig_hend(int num)
-{
-	(void)num;
-	// ft_exit();
-	exit(0);
 }
 
 int signals (void)
@@ -56,7 +46,20 @@ int main(int argc, char **argv, char **environ)
 	str = NULL;
 	signals();
 	data = malloc(sizeof(t_data));
-	init_line(data, environ); 
+	init_env(&data->envies, environ);
+	while (1)
+	{
+		str = readline("shyshell$ ");
+		if (!str)
+			exit(0);
+		if (str[0])
+		{
+			add_history(str);
+			if (parse(data, str) == 0)
+				execute(data);
+			data->exit_status = 0;
+		}
+	}
 	return (0);
 }
 

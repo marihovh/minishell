@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 17:17:08 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/22 11:19:51 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,6 @@ int	ft_lstcnt(t_envies *lst)
 	}
 	return (cnt);
 }
-void dups(t_command *command)
-{
-	// (void)command;
-	if (command->in != STDIN)
-		dup2(command->in, STDIN_FILENO);
-	if (command->out != STDOUT)
-		dup2(command->out, STDOUT_FILENO);	
-}
 
 char **to_matrix(t_envies *envies)
 {
@@ -78,15 +70,18 @@ void print_env(char **env)
 		printf("%s\n", env[i]);
 }
 
+void dups(int in, int out)
+{
+	if (in != STDIN)
+		dup2(in, STDIN);
+	if((out != STDOUT))
+		dup2(out, STDOUT);
+}
+
 void execute(t_data *data)
 {
 	char **env;
 	char *path;
-	// skzbic fd-nery 
-	// cmdnery lcnum enq u heto dup enq anum
-	//hanum enq <  << >> > kam fd-neri het 
-	//bultiner stugum enq ete chen uremn execeve
-	//pipe-i qanakov fork enq anum
 	
 	while (data->com_stream)
 	{
@@ -101,20 +96,16 @@ void execute(t_data *data)
 		}
 		else
 		{
-			// printf("data->com_stream->out:%i\n", data->com_stream->out);
-			// printf("data->com_stream->in:%i\n", data->com_stream->in);
 			env = to_matrix(data->envies);
 			pid_t f = fork();
 			if (f == 0)
 			{
-				if (data->com_stream->in != STDIN)
-					dup2(data->com_stream->in, STDIN);
-				if((data->com_stream->out != STDOUT))
-					dup2(data->com_stream->out, STDOUT);
+				dups(data->com_stream->in, data->com_stream->out);
 				execve(path, data->com_stream->command, env);
 				close(data->com_stream->in);
 				close(data->com_stream->out);
 			}
+			init_env(&data->envies, env);
 		}
 		data->com_stream = data->com_stream->next;
 	}

@@ -13,9 +13,6 @@ INCLUDES = -I./readline-marihovh/include
 LINKERS	= -L./readline-marihovh/lib -lreadline
 PREFIX = $(shell pwd)/readline-marihovh
 
-# test :
-# 	@echo $(OBJ)
-
 all: libcomp creat_dir $(NAME) $(OBJ)
 
 libcomp:
@@ -23,7 +20,6 @@ libcomp:
 
 creat_dir:
 	mkdir -p obj
-	mkdir -p tmp
 
 obj/%.o : src/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -39,10 +35,8 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 	@make -C libft fclean
-	$(RM) tmp
 
 readline:
-		cd readline-master && make clean && ./configure --prefix=$(PREFIX) && make && make install
-
+	cd readline-master  && ./configure --prefix=$(PREFIX) && make && make install
 
 re: fclean all

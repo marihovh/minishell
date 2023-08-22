@@ -6,37 +6,31 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 21:20:01 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/22 15:18:02 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void init_line(t_data *data, char **environ)
-{
-	char *str;
-
-	str = NULL;
-	(void)environ;
-	data = malloc(sizeof(t_data));
-	while(1)
-	{
-		str = readline("shyshell$ ");
-		if (!str)
-			exit(0);
-		if (str[0])
-		{
-			init_env(&data->envies, environ);
-			add_history(str);
-			if (parse(data, str) == 0)
-				execute(data);
-			printf("exit_stat:%i\n", data->exit_status);
-			data->exit_status = 0;
-		}
-	}
-}
-
 //nayel tuylatreli cahrery filenameri hamar
+
+int not_file(char *filename)
+{
+	struct stat path_stat;
+    if (stat(filename, &path_stat) == 0)
+	{
+        if (S_ISREG(path_stat.st_mode)) {
+            return (0);
+        } else if (S_ISDIR(path_stat.st_mode)) {
+            printf("shyshell: %s: Is a directory\n", filename);
+			return (1);
+        } else {
+			printf("shyshell: %s: No such file or directory\n", filename);
+			return (1);
+        }
+    }
+	return (0);
+}
 
 int	in_and_out(t_token *stream)
 {
@@ -48,36 +42,34 @@ int	in_and_out(t_token *stream)
 		if (stream->op == 1)
 		{
 			filename = file_name(stream);
+			if (not_file(filename) == 1)
+				return (1);
 			if (stream->type == REDIR_IN)
 			{
 				fd = open(filename, O_RDONLY);
-				if (init_and_check_fd(fd))
+				if (init_and_check_fd(fd, filename))
 					return (1);
 				find_com(&stream, fd, 1);
 			}
 			else if (stream->type == REDIR_OUT && stream->next)
 			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-				if (init_and_check_fd(fd))
+				if (init_and_check_fd(fd, filename))
 					return (1);
 				find_com(&stream, fd, 0);
 			}
 			else if (stream->type == REDIR_AP && stream->next)
 			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
-				if (init_and_check_fd(fd))
+				if (init_and_check_fd(fd, filename))
 					return (1);
 				find_com(&stream, fd, 0);
 			}
 			else if (stream->type == REDIR_SO && stream->next)
 			{
-				filename = file_join(filename, "tmp/");
-				fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-				if (init_and_check_fd(fd))
+				fd = for_heredoc(filename);
+				if (fd == -1)
 					return (1);
-				for_heredoc(filename , fd);
-				close(fd);
-				fd = open(filename, O_RDONLY);
 				find_com(&stream, fd, 1);
 			}
 			if (!stream)
@@ -89,10 +81,6 @@ int	in_and_out(t_token *stream)
 }
 
 //nayel tuylatreli cahrery filenameri hamar
-
-//ctrl+d ev filename 
-//heredoc
-
 
 t_token *prev_word(t_token *stream)
 {
