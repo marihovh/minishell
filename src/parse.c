@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/22 15:18:02 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 21:54:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 int not_file(char *filename)
 {
 	struct stat path_stat;
+
     if (stat(filename, &path_stat) == 0)
 	{
         if (S_ISREG(path_stat.st_mode)) {
@@ -43,26 +44,29 @@ int	in_and_out(t_token *stream)
 		{
 			filename = file_name(stream);
 			if (not_file(filename) == 1)
+			{
+				free(filename);
 				return (1);
+			}
 			if (stream->type == REDIR_IN)
 			{
 				fd = open(filename, O_RDONLY);
-				if (init_and_check_fd(fd, filename))
+				if (fd < 0)
+				{
+					free(filename);
+					printf("the file does not exist\n");
 					return (1);
+				}
 				find_com(&stream, fd, 1);
 			}
 			else if (stream->type == REDIR_OUT && stream->next)
 			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-				if (init_and_check_fd(fd, filename))
-					return (1);
 				find_com(&stream, fd, 0);
 			}
 			else if (stream->type == REDIR_AP && stream->next)
 			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
-				if (init_and_check_fd(fd, filename))
-					return (1);
 				find_com(&stream, fd, 0);
 			}
 			else if (stream->type == REDIR_SO && stream->next)
@@ -74,6 +78,7 @@ int	in_and_out(t_token *stream)
 			}
 			if (!stream)
 				return (1);
+			free(filename);
 		}
 		stream = stream->next;
 	}
@@ -105,28 +110,45 @@ void print_stream(t_token *stream)
 	}
 }
 
+void free_com_p(char **command)
+{
+	int i = -1;
+	while (command[++i])
+		free(command[i]);
+	free(command);
+}
+
 int parse(t_data *data, char *str)
 {
 	tokenize(&data->stream, str, &data->exit_status);
+	free(str);
 	if (!data->stream)
 	{
 		data->exit_status = 0;
+		// free_tokens(data->stream);
 		return (1);
 	}
 	if (validation(data->stream, &data->exit_status))
+	{
+		free_tokens(data->stream);
 		return (1);
+	}
 	open_fields(data->stream, data->envies, data->exit_status);
-	if (in_and_out(data->stream))
-	{
-		data->exit_status = 1;
-		return (1);
-	}
-	if (!data->stream)
-	{
-		data->exit_status = 0;
-		return (1);
-	}
-	to_commands(data);
-	to_struct(data->command, &data->com_stream, data->stream);
+	prin(data->stream, NULL);
+	printf("aaaaaa\n");
+	// if (in_and_out(data->stream))
+	// {
+	// 	data->exit_status = 1;
+	// 	free_tokens(data->stream);
+	// 	return (1);
+	// }
+	// if (!data->stream)
+	// {
+	// 	data->exit_status = 0;
+	// 	free_tokens(data->stream);
+	// 	return (1);
+	// }
+	// to_commands(data);
+	// to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }

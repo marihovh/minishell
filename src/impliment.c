@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 15:04:14 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/23 16:05:25 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	built_in(t_command *node, int *exit_status)
 	// else if(!(ft_strcmp("env", node->command[0])))
 	// 	// ft_env(node);
 	else if(!(ft_strcmp("exit", node->command[0])))
-		exit (0);
+		exit (*exit_status);
 	else if(!(ft_strcmp("export", node->command[0]))) 
 		ft_export(node);
 	// else if(!(ft_strcmp("unset", node->command[0])))

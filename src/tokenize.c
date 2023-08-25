@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 17:05:03 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:00:36 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_token	*which_token(char **str, int *exit_status)
 {
-	t_token	*token;
-	(void)exit_status;
+	t_token *token;
+
 	token = NULL;
 	if (*str[0] == '|')
 		token = token_9(str);

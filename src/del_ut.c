@@ -1,23 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   del_ut.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 10:04:56 by marihovh          #+#    #+#             */
+/*   Updated: 2023/08/24 21:46:20 by marihovh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void prin(t_token *stream, t_command *com_stream)
 {
-	int i = -1;
+	(void)com_stream;
+	// int i = -1;
 	while (stream)
 	{
 		printf("stream:%s\n", stream->value);
 		stream = stream->next;
 	}
 	printf("\n-----------------------------------------\n");
-	while (com_stream)
-	{
-		printf("command:");
-		i = -1;
-		while (com_stream->command[++i])
-			printf("%s ", com_stream->command[i]);
-		printf("\n");
-		com_stream = com_stream->next;
-	}
+	// while (com_stream)
+	// {
+	// 	printf("command:");
+	// 	i = -1;
+	// 	while (com_stream->command[++i])
+	// 		printf("%s ", com_stream->command[i]);
+	// 	printf("\n");
+	// 	com_stream = com_stream->next;
+	// }
 }
 
 

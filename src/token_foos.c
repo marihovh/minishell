@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 16:59:24 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 21:45:01 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,22 @@ t_token	*token_1(char **str)
 {
 	char	*chunk;
 	int		i;
+	t_token *new;
 
 	i = 0;
 	chunk = *str;
 	while (*str && ft_isspace(*str[0]))
 		(*str)++;
 	chunk = ft_substr(chunk, 0, *str - chunk);
-	return (new_token(SP, chunk, 0));
+	new = new_token(SP, chunk, 0);
+	return (new);
 }
 
 t_token	*token_2(char **str)
 {
 	char	*chunk;
 	int		i;
+	t_token	*new;
 
 	i = 0;
 	chunk = *str;
@@ -36,28 +39,31 @@ t_token	*token_2(char **str)
 		&& *str[0] != '>' && *str[0] != '<' && *str[0] != 39 && *str[0] != 34)
 		(*str)++;
 	chunk = ft_substr(chunk, 0, *str - chunk);
-	return (new_token(WORD, chunk, 0));
+	new = new_token(WORD, chunk, 0);
+	return (new);
 }
 
 t_token	*token_3(char **str)
 {
 	char	*chunk;
+	t_token *new;
 
 	chunk = (*str);
 	(*str) = ft_strchr(++chunk, 39);
 	if (!(*str))
 	{
-		
 		error_msg("Token error\n");
 		return (NULL);
 	}
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
-	return (new_token(FIELD, chunk, 0));
+	new = new_token(EXP_FIELD, chunk, 0);
+	return (new);
 }
 
 t_token	*token_4(char **str)
 {
+	t_token *new;
 	char	*chunk;
 
 	chunk = (*str);
@@ -69,19 +75,25 @@ t_token	*token_4(char **str)
 	}
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
-	return (new_token(EXP_FIELD, chunk, 0));
+	new = new_token(EXP_FIELD, chunk, 0);
+	return (new);
 }
 
 t_token	*token_5(char **str)
 {
+	char *ch;
 	(*str)++;
 	if (**str == 62)
 	{
 		(*str) += 1;
-		return (new_token(REDIR_AP, ">>", 1));
+		ch = ft_strdup(">>");
+		return (new_token(REDIR_AP, ch, 1));
 	}
 	else
-		return (new_token(REDIR_OUT, ">", 1));
+	{
+		ch = ft_strdup(">");
+		return (new_token(REDIR_OUT, ch, 1));
+	}
 	error_msg("Token error\n");
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 21:07:14 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 21:53:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ t_command	*new_com(char **args, int in, int out)
 	if (!new_com)
 		return (NULL);
 	while (++i < len)
-		new_com->command[i] = args[i];
+	{
+		new_com->command[i] = ft_strdup(args[i]);
+		free(args[i]);
+	}
+	free(args);
 	new_com->command[i] = NULL;
 	new_com->out = out;
 	new_com->in = in;
@@ -79,6 +83,8 @@ char	*env_name(char **str)
 	i = 0;
 	(*str)++;
 	chunk = one_dol(str);
+	if (chunk)
+		return (chunk);
 	chunk = malloc(sizeof(char) * ft_strlen(*str) + 1);
 	while (**str)
 	{
@@ -93,6 +99,8 @@ char	*env_name(char **str)
 		}
 		(*str)++;
 	}
+	// if (!(*str[0]))
+	// 	*str = NULL;
 	chunk[i] = '\0';
 	return (chunk);
 }

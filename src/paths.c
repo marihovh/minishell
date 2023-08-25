@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 18:24:39 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/10 17:11:31 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 18:11:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	init_path(t_data *data)
 {
-	t_envies *first;
-	int i;
-	int len;
-	char **splited;
+	t_envies	*first;
+	int			i;
+	int			len;
+	char		**splited;
 
 	first = data->envies; 
 	while (data->envies)
@@ -33,7 +33,8 @@ void	init_path(t_data *data)
 	data->paths = malloc(sizeof(char *) * (len + 1));
 	i = -1;
 	while (splited[++i])
-		data->paths[i] = splited[i];
+		data->paths[i] = ft_strdup(splited[i]);
 	data->paths[i] = NULL;
+	free_spl(splited);
 	data->envies = first;
 }

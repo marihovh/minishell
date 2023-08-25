@@ -6,18 +6,31 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/15 20:13:57 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 21:32:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void to_struct(char **command, t_command **com_stream, t_token *stream)   //done
+void	free_spl(char **splited)
 {
-	char **splited;
-	int i;
-	int j;
-	int len;
+	int	k;
+
+	k = -1;
+	while (splited && splited[++k])
+	{
+		free(splited[k]);
+		splited[k] = NULL;
+	}
+	free(splited);
+}
+
+void	to_struct(char **command, t_command **com_stream, t_token *stream)
+{
+	char	**splited;
+	int		i;
+	int		j;
+	int		len;
 
 	i = -1;
 	while (command[++i])
@@ -28,25 +41,32 @@ void to_struct(char **command, t_command **com_stream, t_token *stream)   //done
 		while (len--)
 			stream = stream->next;
 		(*com_stream) = new_com(splited, stream->in, stream->out);
+		if (!(*com_stream))
+			break ;
 		com_stream = &(*com_stream)->next;
 	}
+	i = -1;
+	while (command[++i])
+		free(command[i]);
+	free(command);
 }
 
-void to_commands(t_data *data)    // done
+void	to_commands(t_data *data)
 {
-	char *str = NULL;
-	t_token *ptr;
-	int pip_cnt;
-	int i = 0;
+	char	*str;
+	t_token	*ptr;
+	int		i;
 
+	str = NULL;
+	i = 0;
 	ptr = data->stream;
-	pip_cnt = ft_com_len(data->stream);
-	data->command = malloc(sizeof(char *) * (pip_cnt + 2));
+	data->command = malloc(sizeof(char *) * (ft_com_len(data->stream) + 2));
 	while (data->stream)
 	{
 		if (data->stream->type == PIPE)
 		{
-			data->command[i] = str;
+			data->command[i] = ft_strdup(str);
+			free(str);
 			str = NULL;
 			i++;
 			data->stream = data->stream->next;
@@ -55,26 +75,7 @@ void to_commands(t_data *data)    // done
 		data->stream = data->stream->next;
 	}
 	data->stream = ptr;
-	data->command[i] = str;
+	data->command[i] = ft_strdup(str);
+	free(str);
 	data->command[i + 1] = NULL;
 }
-
-
-/*          cd validation
-with nothing -> going to HOME
-with wrong dir -> error
-with no permissions -> error
-not directory -> error
-*/
-
-/*              pwd validation
-no exeptions it works always the same
-
-*/
-
-// word validation each of command 
-// redirection validation
-// pipe validation
-// variables in fields
-// $s validation
-// builtins

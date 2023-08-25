@@ -85,8 +85,11 @@ struct s_data // my all data here
 	t_command	*com_stream;
 };
 
-void to_struct(char **command, t_command **com_stream, t_token *stream);   //done
-void to_commands(t_data *data);    // done
+void to_struct(char **command, t_command **com_stream, t_token *stream);
+void to_commands(t_data *data);
+void free_env(t_envies *env);
+void frees(t_data *data);
+void free_spl(char **splited);
 t_envies *new_node(char *key, char *value);
 void init_env(t_envies **envp, char **environ);
 char	*what_path(char **paths, char *command);
@@ -94,18 +97,13 @@ int	ft_lstcnt(t_envies *lst);
 void dups(int in, int out);
 char **to_matrix(t_envies *envies);
 void print_env(char **env);
-void execute(t_data *data);
+int execute(t_data *data);
 char *if_env(char *str, t_envies *env, int exs);
 void open_fields(t_token *stream, t_envies *env, int exs);
-// void ft_echo(t_data *data, t_token *token);
-// void ft_cd(t_data *data, t_token *token);
-// void ft_pwd(t_data *data, t_token *token);
 void signal_hend(int signum);
 void init_line(t_data *data, char **environ);
 int	in_and_out(t_token *stream);
 t_token	*cut_red(t_token *stream);
-// void	cut_red(t_token **stream);
-// int	delete_files(t_token *stream);
 void	delete_files(t_token **stream);
 int parse(t_data *data, char *str);
 void	init_path(t_data *data);
@@ -113,13 +111,13 @@ int signals (void);
 int init_and_check_fd(int fd, char *filename);
 int	for_heredoc(char *filename);
 char *file_name(t_token *stream);
-// void find_com(t_token **stream, int in, int out);
 void find_com(t_token **stream, int fd , int fedo);
 t_token	*token_1(char **str);
 t_token	*token_2(char **str);
 t_token	*token_3(char **str);
 t_token	*token_4(char **str);
 t_token	*token_5(char **str);
+void free_tokens(t_token *stream);
 t_token	*which_token(char **str, int *exit_status);
 void	tokenize(t_token **stream, char *str, int *exit_status);
 int		redir_error(void);
@@ -146,5 +144,5 @@ char  *ft_ispipe(char *str);
 void error_msg(char *str);
 int	built_in(t_command *node, int *exit_status);
 int is_built_in(t_command *node);
-
+void free_coms(t_command *stream); 	
 #endif

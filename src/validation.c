@@ -6,17 +6,11 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/21 18:58:38 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/22 15:55:07 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	redir_error(void)
-{
-	printf("syntax error near unexpected token `newline'\n");
-	return (0);
-}
 
 void	open_eror(void)
 {
@@ -40,14 +34,19 @@ int pipe_parse(t_token *stream, int *exit_status)
 }
 
 int red_parse(t_token *stream, int *exit_status)
-{
-	if (stream->next == NULL || (stream->next->type == SP && stream->next->next->type != WORD))
+{	
+	if (stream->next == NULL)
 	{
+		printf("shyshell: syntax error near unexpected token `newline'\n");
 		*exit_status = 1;
 		return (1);
 	}
-	else
-		*exit_status = 0;
+	else if (stream->next->type == SP && stream->next->next->type != WORD)
+	{
+		printf("shyshell: syntax error near unexpected token `%s'\n", stream->next->next->value);
+		*exit_status = 1;
+		return (1);
+	}
 	return (0);
 }
 
@@ -87,7 +86,6 @@ int validation(t_token *stream, int *exit_status)
 		{
 			if (red_parse(stream, exit_status))
 			{
-				printf("syntax error near unexpected token `newline'\n");
 				*exit_status = 258;
 				return (1);
 			}

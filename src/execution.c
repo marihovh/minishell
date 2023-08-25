@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/22 11:19:51 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 20:37:26 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ char	*what_path(char **paths, char *command)
 		res = ft_strjoin(res, command);
 		if (access(res, F_OK) == 0)
 			return (res);
+		else 
+			free(res);
+		res = NULL;
 	}
 	return (0);
 }
@@ -56,7 +59,6 @@ char **to_matrix(t_envies *envies)
 	{
 		matrix[++i] = ft_strjoin(envies->key, "=");
 		matrix[i] = ft_strjoin(matrix[i], envies->value);
-		free(envies);
 		envies = envies->next;
 	}
 	matrix[i] = NULL;
@@ -78,36 +80,62 @@ void dups(int in, int out)
 		dup2(out, STDOUT);
 }
 
-void execute(t_data *data)
+void free_env(t_envies *env)
 {
-	char **env;
+	if (!env)
+		return ;
+	t_envies *current = env;
+    t_envies *nextNode;
+
+    while (current != NULL)
+	{
+        nextNode = current->next;
+        free(current->value);
+        free(current->key);
+		free(current);
+        current = nextNode;
+    }
+}
+
+int	execute(t_data *data)
+{
+	char **env = NULL;
 	char *path;
 	
+	init_path(data);
 	while (data->com_stream)
 	{
-		init_path(data);
+		env = to_matrix(data->envies);
+		free_env(data->envies);
 		path = what_path(data->paths, data->com_stream->command[0]);
-		if (!path && is_built_in(data->com_stream))
-			built_in(data->com_stream, &data->exit_status);
-		else if (!path)
+		if (path == NULL)
 		{
-			printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
-			data->exit_status = 127;
+			if (is_built_in(data->com_stream))
+				built_in(data->com_stream, &data->exit_status); // return (value);
+			else
+			{
+				printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
+				return (127);
+			}
 		}
 		else
 		{
-			env = to_matrix(data->envies);
-			pid_t f = fork();
-			if (f == 0)
-			{
-				dups(data->com_stream->in, data->com_stream->out);
-				execve(path, data->com_stream->command, env);
-				close(data->com_stream->in);
-				close(data->com_stream->out);
-			}
-			init_env(&data->envies, env);
+			// free_spl(env);
+			// pid_t f = fork();
+			// if (f == 0)
+			// {
+			// 	signals();
+			// 	dups(data->com_stream->in, data->com_stream->out);
+			// 	execve(path, data->com_stream->command, env);
+			// 	exit(0);
+			// 	// execve(path, data->com_stream->command, env)
+			// 	close(data->com_stream->in);
+			// 	close(data->com_stream->out);
+			// }
+			// init_env(&data->envies, env);
+			// free_spl(env);
 		}
 		data->com_stream = data->com_stream->next;
 	}
-	waitpid(-1, 0, 0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/22 11:15:02 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 21:40:13 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,57 @@ int signals (void)
 	return (0);
 }
 
+void free_coms(t_command *stream)
+{
+	t_command *current = stream;
+    t_command *nextNode;
+	int i;
+
+    while (current != NULL) {
+        nextNode = current->next;
+		i = -1;
+		while (current->command[++i])
+			free(current->command[i]);
+		free(current->command);
+        free(current);
+        current = nextNode;
+    }
+}
+
+void free_tokens(t_token *stream)
+{
+	t_token *current = stream;
+    t_token *nextNode;
+
+    while (current != NULL)
+	{
+        nextNode = current->next;
+		// nextNode->prev = NULL;
+        free(current->value);
+		free(current);
+        current = nextNode;
+		// current->prev = NULL;                   
+    }
+}
+
+void frees(t_data *data)
+{
+	// int i = -1;
+	// free_tokens(data->stream);
+	free_coms(data->com_stream);
+	// while (data->paths[++i])
+	// 	free(data->paths[i]);
+	// i = -1;
+	// while (data->command[++i])
+	// 	free(data->command[i]);	
+}
+
 int main(int argc, char **argv, char **environ)
 {
 	(void)argc;
 	(void)argv;
+	(void)environ;
+	// t_command *tmp_c;
 	t_data *data = NULL;
 	char *str;
 	
@@ -55,45 +102,25 @@ int main(int argc, char **argv, char **environ)
 		if (str[0])
 		{
 			add_history(str);
-			if (parse(data, str) == 0)
-				execute(data);
-			data->exit_status = 0;
+			parse(data, str);
+			// if (parse(data, str) == 0)
+			// {
+				// prin(data->stream, data->com_stream);
+				// free_tokens(data->stream);
+				// free_env(data->envies);
+				// free_coms(data->com_stream);
+				// printf("de giteq\n");
+				// init_env(&data->envies, environ);
+				// prin(data->stream, data->com_stream);
+				// free_tokens(data->stream);
+				// data->exit_status = execute(data);
+				// free_coms(data->com_stream);
+				// free_env(data->envies);
+				// free_spl(data->paths);
+			// }
+			// system("leaks minishell");
 		}
 	}
+	// while (1){}
 	return (0);
 }
-
-
-// int main(int argc, char **argv, char **environ)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	t_data *data = NULL;
-// 	char *str;
-
-// 	str = NULL;
-// 	(void)environ;
-// 	data = malloc(sizeof(t_data));
-// 	while(1)
-// 	{
-// 		signals();
-// 		str = readline("shyshell$ ");
-// 		if (!str)
-// 		{
-// 			write(1, "\n", 1);
-// 			exit(0);
-// 		}
-// 		if (!str[0])
-// 			continue;
-// 		else
-// 		{
-// 			init_env(&data->envies, environ);
-// 			add_history(str);
-// 			if (parse(data, str) == 0)
-// 				execute(data);
-// 			printf("exit_stat:%i\n", data->exit_status);
-// 			data->exit_status = 0;
-// 		}
-// 	}
-// 	return (0);
-// }

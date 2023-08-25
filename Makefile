@@ -9,7 +9,6 @@ LIBFT=libft/libft.a
 CFLAGS=-Wall -Werror -Wextra
 RM=rm -rf
 INCLUDES = -I./readline-marihovh/include
-
 LINKERS	= -L./readline-marihovh/lib -lreadline
 PREFIX = $(shell pwd)/readline-marihovh
 

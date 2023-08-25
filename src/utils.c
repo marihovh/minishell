@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 12:46:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 15:12:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:32:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ t_token *new_token(int type, char *str, int op)
 	if (!new_token)
 		return (NULL);
 	new_token->type = (int)type;
-	new_token->value = str;
+	new_token->value = ft_strdup(str);
+	free(str);
 	new_token->op = op;
 	new_token->in = STDIN;
 	new_token->out = STDOUT;
