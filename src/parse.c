@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 21:54:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:09:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,21 +134,21 @@ int parse(t_data *data, char *str)
 		return (1);
 	}
 	open_fields(data->stream, data->envies, data->exit_status);
-	prin(data->stream, NULL);
-	printf("aaaaaa\n");
-	// if (in_and_out(data->stream))
-	// {
-	// 	data->exit_status = 1;
-	// 	free_tokens(data->stream);
-	// 	return (1);
-	// }
-	// if (!data->stream)
-	// {
-	// 	data->exit_status = 0;
-	// 	free_tokens(data->stream);
-	// 	return (1);
-	// }
-	// to_commands(data);
-	// to_struct(data->command, &data->com_stream, data->stream);
+	// prin(data->stream, NULL);
+	// printf("aaaaaa\n");
+	if (in_and_out(data->stream))
+	{
+		data->exit_status = 1;
+		free_tokens(data->stream);
+		return (1);
+	}
+	if (!data->stream)
+	{
+		data->exit_status = 0;
+		free_tokens(data->stream);
+		return (1);
+	}
+	to_commands(data);
+	to_struct(data->command, &data->com_stream, data->stream);
 	return (0);
 }

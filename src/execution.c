@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 20:37:26 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/26 14:41:13 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ int	execute(t_data *data)
 	while (data->com_stream)
 	{
 		env = to_matrix(data->envies);
-		free_env(data->envies);
+		// free_spl(env);
+		// free_env(data->envies);
 		path = what_path(data->paths, data->com_stream->command[0]);
 		if (path == NULL)
 		{
@@ -115,27 +116,37 @@ int	execute(t_data *data)
 			else
 			{
 				printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
-				return (127);
+				init_env(&data->envies, env);
+				free_spl(env);
+				data->exit_status = 127;
+				return (0);
 			}
 		}
 		else
 		{
-			// free_spl(env);
-			// pid_t f = fork();
-			// if (f == 0)
-			// {
-			// 	signals();
-			// 	dups(data->com_stream->in, data->com_stream->out);
-			// 	execve(path, data->com_stream->command, env);
-			// 	exit(0);
-			// 	// execve(path, data->com_stream->command, env)
-			// 	close(data->com_stream->in);
-			// 	close(data->com_stream->out);
-			// }
-			// init_env(&data->envies, env);
-			// free_spl(env);
+			pid_t f = fork();
+			if (f == 0)
+			{
+				signals();
+				dups(data->com_stream->in, data->com_stream->out);
+				data->exit_status = 1;
+				// printf("aaaaa\n");
+				// close(fds[0]);
+				execve(path, data->com_stream->command, env);
+				// write(fds[1, &tf, sizeof(int));
+				exit(0);
+				// if (execve(path, data->com_stream->command, env))
+				// {
+				// 	perror("execve");
+				// }
+				close(data->com_stream->in);
+				close(data->com_stream->out);
+			}
+			init_env(&data->envies, env);
+			free_spl(env);
 		}
 		data->com_stream = data->com_stream->next;
 	}
+	waitpid(-1, 0, 0);
 	return (0);
 }

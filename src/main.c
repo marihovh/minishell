@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 21:40:13 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:14:48 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,11 @@ int main(int argc, char **argv, char **environ)
 		if (str[0])
 		{
 			add_history(str);
-			parse(data, str);
-			// if (parse(data, str) == 0)
-			// {
+			// parse(data, str);
+			if (parse(data, str) == 0)
+			{
 				// prin(data->stream, data->com_stream);
+				execute(data);
 				// free_tokens(data->stream);
 				// free_env(data->envies);
 				// free_coms(data->com_stream);
@@ -117,7 +118,7 @@ int main(int argc, char **argv, char **environ)
 				// free_coms(data->com_stream);
 				// free_env(data->envies);
 				// free_spl(data->paths);
-			// }
+			}
 			// system("leaks minishell");
 		}
 	}
