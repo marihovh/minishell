@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 21:32:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:23:39 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,57 +25,69 @@ void	free_spl(char **splited)
 	free(splited);
 }
 
-void	to_struct(char **command, t_command **com_stream, t_token *stream)
+void	to_struct(t_data *data, t_command **com_stream)
 {
-	char	**splited;
-	int		i;
-	int		j;
-	int		len;
+	int pip_cnt;
+	t_token *tmp;
+	char **command;
+	t_token *eee;
 
-	i = -1;
-	while (command[++i])
+	eee = data->stream;
+	pip_cnt = ft_com_len(data) + 1;
+	while (pip_cnt--)
 	{
-		j = 0;
-		splited = ft_split(command[i], ' ');
-		len = split_len(splited) * 2 - 2;
-		while (len--)
-			stream = stream->next;
-		(*com_stream) = new_com(splited, stream->in, stream->out);
+		command = init_com(&data->stream);
+		tmp = data->stream;
+		if (tmp->prev &&  tmp->prev->type == WORD)
+			tmp = tmp->prev;
+		else if (data->stream->next && data->stream->next->type == PIPE)
+			tmp = data->stream;
+		(*com_stream) = new_com(command, tmp->in, tmp->out);
+		data->stream = data->stream->next;
 		if (!(*com_stream))
 			break ;
 		com_stream = &(*com_stream)->next;
 	}
-	i = -1;
-	while (command[++i])
-		free(command[i]);
-	free(command);
+	data->stream = eee;
 }
 
-void	to_commands(t_data *data)
-{
-	char	*str;
-	t_token	*ptr;
-	int		i;
 
-	str = NULL;
-	i = 0;
-	ptr = data->stream;
-	data->command = malloc(sizeof(char *) * (ft_com_len(data->stream) + 2));
-	while (data->stream)
+int ft_arg_len(t_token *stream)
+{
+	int i = 0;
+
+	while (stream && stream->type != PIPE)
 	{
-		if (data->stream->type == PIPE)
-		{
-			data->command[i] = ft_strdup(str);
-			free(str);
-			str = NULL;
+		if (stream->type == WORD || stream->type == FIELD)
 			i++;
-			data->stream = data->stream->next;
-		}
-		str = ft_strjoin(str, data->stream->value);
-		data->stream = data->stream->next;
+		stream = stream->next;
 	}
-	data->stream = ptr;
-	data->command[i] = ft_strdup(str);
-	free(str);
-	data->command[i + 1] = NULL;
+	return (i);
+}
+
+char **init_com(t_token **stream)
+{
+	char **command;
+	int len;
+	int i;
+
+	i = 0;
+	if ((*stream) && (*stream)->type == PIPE)
+		(*stream) = (*stream)->next;
+	len  = ft_arg_len((*stream));
+	command = malloc(sizeof(char *) * (len + 1));
+	while ((*stream) && (*stream)->type != PIPE)
+	{
+		if ((*stream)->type == WORD || (*stream)->type == FIELD)
+			command[i++] = ft_strdup((*stream)->value);
+		if ((*stream)->next == NULL || (*stream)->next->type == PIPE)
+			break ;
+		(*stream) = (*stream)->next;
+	}
+	command[i] = NULL;
+	// i = -1;
+	// while (command[++i])
+	// 	printf("com:%s\n", command[i]);
+	// printf("as:{%s}\n", (*stream)->value);
+	return (command);
 }

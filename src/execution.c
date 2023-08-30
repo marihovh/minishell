@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/26 14:41:13 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/30 15:29:20 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,24 +106,16 @@ int	execute(t_data *data)
 	while (data->com_stream)
 	{
 		env = to_matrix(data->envies);
-		// free_spl(env);
-		// free_env(data->envies);
 		path = what_path(data->paths, data->com_stream->command[0]);
-		if (path == NULL)
+		if (is_built_in(data->com_stream))
 		{
-			if (is_built_in(data->com_stream))
-				built_in(data->com_stream, &data->exit_status); // return (value);
-			else
-			{
-				printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
-				init_env(&data->envies, env);
-				free_spl(env);
-				data->exit_status = 127;
-				return (0);
-			}
+			printf("built_in\n");
+			init_env(&data->envies, env);
+			built_in(data->com_stream, data); // return (value);
 		}
-		else
+		else if (path != NULL)
 		{
+			// env = to_matrix(data->envies);
 			pid_t f = fork();
 			if (f == 0)
 			{
@@ -144,6 +136,14 @@ int	execute(t_data *data)
 			}
 			init_env(&data->envies, env);
 			free_spl(env);
+		}
+		else
+		{
+			printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
+			init_env(&data->envies, env);
+			free_spl(env);
+			data->exit_status = 127;
+			return (0);
 		}
 		data->com_stream = data->com_stream->next;
 	}

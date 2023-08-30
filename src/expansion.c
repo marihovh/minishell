@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 21:53:52 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/28 15:24:34 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void open_fields(t_token *stream, t_envies *env, int exs)
 				stream->value = ft_strjoin(stream->value, dol);
 				dol = ft_strchr((stream->value + ft_strlen(stream->value)) - ft_strlen(dol), '$');
 			}
+			stream->type = WORD;
 		}
 		stream = stream->next;
 	}

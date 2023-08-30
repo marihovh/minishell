@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/25 15:14:48 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:36:32 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,12 @@ int main(int argc, char **argv, char **environ)
 		{
 			add_history(str);
 			// parse(data, str);
-			if (parse(data, str) == 0)
+			// prin(data->stream, data->com_stream);
+			// 	prin(data->stream, data->com_stream);
+			if (!parse(data, str))
 			{
-				// prin(data->stream, data->com_stream);
 				execute(data);
+				// ;
 				// free_tokens(data->stream);
 				// free_env(data->envies);
 				// free_coms(data->com_stream);

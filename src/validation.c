@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/22 15:55:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/30 15:16:59 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ int pipe_parse(t_token *stream, int *exit_status)
 }
 
 int red_parse(t_token *stream, int *exit_status)
-{	
-	if (stream->next == NULL)
+{
+	if (stream->next == NULL ||  (stream->next->type == SP && !stream->next->next))
 	{
 		printf("shyshell: syntax error near unexpected token `newline'\n");
 		*exit_status = 1;
 		return (1);
-	}
-	else if (stream->next->type == SP && stream->next->next->type != WORD)
+	}else if (stream->next->type != WORD && stream->next->type != SP \
+		&& stream->next->type != EXP_FIELD && stream->next->type != FIELD)
 	{
-		printf("shyshell: syntax error near unexpected token `%s'\n", stream->next->next->value);
+		printf("shyshell: syntax error near unexpected token `%s'\n", stream->next->value);
 		*exit_status = 1;
 		return (1);
 	}

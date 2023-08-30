@@ -7,6 +7,9 @@
 		"string_view": "c",
 		"vector": "c",
 		"rlstdc.h": "c",
-		"locale": "c"
+		"locale": "c",
+		"__locale": "c",
+		"ios": "c",
+		"__node_handle": "c"
 	}
 }

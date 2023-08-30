@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 13:00:36 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/27 17:02:49 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ t_token	*which_token(char **str, int *exit_status)
 		token = token_2(str);
 	else if (ft_isspace(*str[0]))
 		token = token_1(str);
-	else
-		error_msg("Token error\n");
+		// error_msg("Token error\n");
 	if (token == NULL)
 		*exit_status = 1;
 	return (token);

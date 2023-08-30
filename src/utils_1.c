@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 21:53:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/08/29 15:50:59 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,19 @@ t_command	*new_com(char **args, int in, int out)
 	return (new_com);
 }
 
-int	ft_com_len(t_token *stream)
+int	ft_com_len(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	t_token	*tmp = stream;
-	while (tmp)
+	t_token	*tmp = data->stream;
+	while (data->stream)
 	{
-		if (tmp->type == PIPE)
+		if (data->stream->type == PIPE)
 			i++;
-		tmp = tmp->next;
+		data->stream = data->stream->next;
 	}
+	data->stream = tmp;
 	return (i);
 }
 
@@ -75,6 +76,11 @@ char	*one_dol(char **str)
 	return (NULL);
 }
 
+int ft_norm_name(char ch)
+{
+	return ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || ch == 95);
+}
+
 char	*env_name(char **str)
 {
 	char	*chunk;
@@ -89,7 +95,7 @@ char	*env_name(char **str)
 	while (**str)
 	{
 		chunk[i++] = **str;
-		if (**str == '$' || **str == '?')
+		if (!ft_norm_name(**str))
 		{
 			if (i != 1)
 				i--;

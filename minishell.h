@@ -72,7 +72,8 @@ struct s_export      // done
 {
 	char *key;
 	char *value;
-	t_envies *next;
+	char *def;
+	t_export *next;
 };
 
 struct s_data // my all data here 
@@ -82,10 +83,12 @@ struct s_data // my all data here
 	t_token		*stream;
 	int			exit_status;
 	char		**command;
+	t_export	*export;
 	t_command	*com_stream;
 };
 
-void to_struct(char **command, t_command **com_stream, t_token *stream);
+void	to_struct(t_data *data, t_command **com_stream);
+// void to_struct(char **command, t_command **com_stream, t_token *stream);
 void to_commands(t_data *data);
 void free_env(t_envies *env);
 void frees(t_data *data);
@@ -128,7 +131,8 @@ void	pri(t_command *com_stream);
 void print_en(t_envies *envies);
 int	split_len(char **str);
 t_command	*new_com(char **args, int in, int out);
-int	ft_com_len(t_token *stream);
+char **init_com(t_token **token);
+int	ft_com_len(t_data *data);
 char	*one_dol(char **str);
 char	*env_name(char **str);
 t_token	*token_6(char **str);
@@ -141,8 +145,8 @@ void	esim(void);
 int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
-void error_msg(char *str);
-int	built_in(t_command *node, int *exit_status);
+void error_msg(char *str/*, char h, int exs, int *exit_status*/);
+int	built_in(t_command *node, t_data *data);
 int is_built_in(t_command *node);
 void free_coms(t_command *stream); 	
 #endif
