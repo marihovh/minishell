@@ -58,6 +58,7 @@ struct s_command
 	int in;
 	int out;
 	int exit_status;
+	t_command *prev;
 	t_command *next;
 };
 
@@ -78,11 +79,12 @@ struct s_export      // done
 
 struct s_data // my all data here 
 {
-	t_envies	*envies;
+	int			pip_cnt;
 	char		**paths;
-	t_token		*stream;
-	int			exit_status;
+	int			*exit_status;
 	char		**command;
+	t_token		*stream;
+	t_envies	*envies;
 	t_export	*export;
 	t_command	*com_stream;
 };
@@ -92,17 +94,18 @@ void	to_struct(t_data *data, t_command **com_stream);
 void to_commands(t_data *data);
 void free_env(t_envies *env);
 void frees(t_data *data);
+void free_export(t_export *export);
 void free_spl(char **splited);
 t_envies *new_node(char *key, char *value);
 void init_env(t_envies **envp, char **environ);
 char	*what_path(char **paths, char *command);
 int	ft_lstcnt(t_envies *lst);
-void dups(int in, int out);
+void dups(t_command *com, int pip[][2], int i);
 char **to_matrix(t_envies *envies);
 void print_env(char **env);
 int execute(t_data *data);
-char *if_env(char *str, t_envies *env, int exs);
-void open_fields(t_token *stream, t_envies *env, int exs);
+char *if_env(char *str, t_envies *env, int *exs);
+void open_fields(t_token *stream, t_envies *env, int *exs);
 void signal_hend(int signum);
 void init_line(t_data *data, char **environ);
 int	in_and_out(t_token *stream);
@@ -122,7 +125,7 @@ t_token	*token_4(char **str);
 t_token	*token_5(char **str);
 void free_tokens(t_token *stream);
 t_token	*which_token(char **str, int *exit_status);
-void	tokenize(t_token **stream, char *str, int *exit_status);
+int	tokenize(t_token **stream, char *str, int *exit_status);
 int		redir_error(void);
 void	open_eror(void);
 int		validation(t_token *stream, int *exit_status);
@@ -146,7 +149,30 @@ int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
 void error_msg(char *str/*, char h, int exs, int *exit_status*/);
-int	built_in(t_command *node, t_data *data);
+int	built_in(t_command *node, t_data *data,t_envies *env);
+t_export	*new_expo_node(char *key, char *value, char *def);
+void	fill_the_export(t_export **export, t_envies *env);
 int is_built_in(t_command *node);
 void free_coms(t_command *stream); 	
+
+
+//built_insss
+
+int ft_cd(t_command *node,  t_envies *env);
+int ft_pwd(t_command *node);
+void	ft_lstadd_gr(t_export **lst, t_export *new);
+void	ft_lstadd_fr(t_envies **lst, t_envies *new);
+int ft_exxport(t_command *node, t_data *data, t_export **export, t_envies **env);
+void	delete_node(t_envies **env, char *del_node);
+t_export	*new_expo_node(char *key, char *value, char *def);
+int ft_unset(t_command *node, t_envies *env);
+char	*f_v(char	*str);
+char	*f_k(char	*str);
+void	add_new_env(t_envies **env, char *key, char *value);
+int ft_echo(t_command *node);
+void	printing_export(t_data *data);
+int ft_env(t_command *node, t_envies *env);
+int ft_strcmp_up(char *str, char *chm);
+int ft_export(t_command *node, t_data *data);
+void ft_exit(t_data *data);
 #endif

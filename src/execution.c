@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/30 15:29:20 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 15:34:47 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	*what_path(char **paths, char *command)
 	}
 	return (0);
 }
+
 int	ft_lstcnt(t_envies *lst)
 {
 	t_envies	*curr;
@@ -72,21 +73,13 @@ void print_env(char **env)
 		printf("%s\n", env[i]);
 }
 
-void dups(int in, int out)
+void free_export(t_export *export)
 {
-	if (in != STDIN)
-		dup2(in, STDIN);
-	if((out != STDOUT))
-		dup2(out, STDOUT);
-}
-
-void free_env(t_envies *env)
-{
-	if (!env)
+	if (!export)
 		return ;
-	t_envies *current = env;
-    t_envies *nextNode;
-
+	t_export *current = export;
+    t_export *nextNode;
+	printf("freeing\n");
     while (current != NULL)
 	{
         nextNode = current->next;
@@ -97,56 +90,146 @@ void free_env(t_envies *env)
     }
 }
 
-int	execute(t_data *data)
+void free_env(t_envies *env)
 {
-	char **env = NULL;
-	char *path;
-	
-	init_path(data);
+	if (!env)
+		return ;
+	t_envies *current = env;
+    t_envies *nextNode;
+	printf("freeing\n");
+    while (current != NULL)
+	{
+        nextNode = current->next;
+        free(current->value);
+        free(current->key);
+		free(current);
+        current = nextNode;
+    }
+}
+
+
+
+void ft_pip_cnt(t_data *data)
+{
+	t_command *tmp;
+
+	tmp = data->com_stream;
+	int i = 0;
 	while (data->com_stream)
 	{
+		i++;
+		data->com_stream = data->com_stream->next;
+	}
+	data->com_stream = tmp;
+	data->pip_cnt = i - 1;
+}
+
+// int	**piping(t_data *data)
+// {
+// 	int i;
+
+// 	i = -1;
+// 	ft_pip_cnt(data);
+// 	int pip[data->pip_cnt][2];
+// 	while (++i < data->pip_cnt)
+// 	{
+// 		if (pipe(pip[i]) == -1)
+// 		{
+// 			printf("Pipe error\n");
+// 			return (0);
+// 		}
+// 	}
+// 	return (pip);
+// }
+
+void ft_run(t_data *data)
+{
+	char *path = NULL;
+	char **env = NULL;
+	init_path(data);
+	//built_in
+	// if (is_built_in(data->com_stream))
+	// {
+	// 	// fill_the_export(&data->export, &data->envies);
+	// 	printf("built in\n");
+	// 	built_in(data->com_stream, data, data->envies);
+	// 	return ;
+	// }
+	path = what_path(data->paths, data->com_stream->command[0]);
+	if (path != NULL)
+	{
 		env = to_matrix(data->envies);
-		path = what_path(data->paths, data->com_stream->command[0]);
+		if (execve(path, data->com_stream->command, env))
+		init_env(&data->envies, env);
+		free_spl(env);
+	}else
+	{
+		printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
+		init_env(&data->envies, env);
+		free_spl(env);
+		*data->exit_status = 127;
+		exit(0);
+	}
+}
+void dups(t_command *com, int pip[][2], int i)
+{
+	if (com->prev != NULL)
+		com->in = pip[i - 1][0];
+	if (com->next != NULL)
+		com->out = pip[i][1];
+	if (com->in != STDIN)
+		dup2(com->in, STDIN);
+	if (com->out != STDOUT)
+		dup2(com->out, STDOUT);
+}
+
+int	execute(t_data *data)
+{
+	int i = 0;
+
+	i = -1;
+	ft_pip_cnt(data);
+	int pip[data->pip_cnt][2];
+	while (++i < data->pip_cnt)
+	{
+		if (pipe(pip[i]) == -1)
+		{
+			printf("Pipe error\n");
+			return (0);
+		}
+	}
+	i = 0;
+	while (data->com_stream && i < data->pip_cnt + 1)
+	{
 		if (is_built_in(data->com_stream))
 		{
-			printf("built_in\n");
-			init_env(&data->envies, env);
-			built_in(data->com_stream, data); // return (value);
+			// printf("built in\n");
+			dups(data->com_stream, pip, i);
+			built_in(data->com_stream, data, data->envies);
 		}
-		else if (path != NULL)
+		else
 		{
-			// env = to_matrix(data->envies);
 			pid_t f = fork();
 			if (f == 0)
 			{
 				signals();
-				dups(data->com_stream->in, data->com_stream->out);
-				data->exit_status = 1;
-				// printf("aaaaa\n");
-				// close(fds[0]);
-				execve(path, data->com_stream->command, env);
-				// write(fds[1, &tf, sizeof(int));
+				if (pip[i][0] != 0)
+					close(pip[i][0]);
+				dups(data->com_stream, pip, i);
+				ft_run(data);
 				exit(0);
-				// if (execve(path, data->com_stream->command, env))
-				// {
-				// 	perror("execve");
-				// }
-				close(data->com_stream->in);
-				close(data->com_stream->out);
 			}
-			init_env(&data->envies, env);
-			free_spl(env);
+			else
+			{
+				signals();
+				if (pip[i][1] != 1)
+					close(pip[i][1]);
+				waitpid(f, NULL, 0);
+			}
 		}
-		else
-		{
-			printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
-			init_env(&data->envies, env);
-			free_spl(env);
-			data->exit_status = 127;
-			return (0);
-		}
+		i++;
 		data->com_stream = data->com_stream->next;
 	}
-	waitpid(-1, 0, 0);
+	waitpid(-1, NULL, 0);
 	return (0);
 }

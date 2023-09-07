@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/29 15:50:59 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/02 18:35:16 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_command	*new_com(char **args, int in, int out)
 	new_com->out = out;
 	new_com->in = in;
 	new_com->next = NULL;
+	new_com->prev = NULL;
 	return (new_com);
 }
 

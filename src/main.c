@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/29 20:36:32 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 15:29:09 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int main(int argc, char **argv, char **environ)
 	(void)argc;
 	(void)argv;
 	(void)environ;
-	// t_command *tmp_c;
 	t_data *data = NULL;
 	char *str;
 	
@@ -94,36 +93,29 @@ int main(int argc, char **argv, char **environ)
 	signals();
 	data = malloc(sizeof(t_data));
 	init_env(&data->envies, environ);
+	fill_the_export(&data->export, data->envies);
 	while (1)
 	{
 		str = readline("shyshell$ ");
 		if (!str)
+		{
+			printf("exit\n");
 			exit(0);
+		}
 		if (str[0])
 		{
 			add_history(str);
-			// parse(data, str);
-			// prin(data->stream, data->com_stream);
-			// 	prin(data->stream, data->com_stream);
 			if (!parse(data, str))
 			{
+				free_tokens(data->stream);
 				execute(data);
-				// ;
-				// free_tokens(data->stream);
-				// free_env(data->envies);
-				// free_coms(data->com_stream);
-				// printf("de giteq\n");
-				// init_env(&data->envies, environ);
-				// prin(data->stream, data->com_stream);
-				// free_tokens(data->stream);
-				// data->exit_status = execute(data);
-				// free_coms(data->com_stream);
-				// free_env(data->envies);
-				// free_spl(data->paths);
+				*data->exit_status = 0;
+				free_coms(data->com_stream);
 			}
-			// system("leaks minishell");
 		}
 	}
-	// while (1){}
 	return (0);
 }
+
+
+// echon pti writeov lini vor ete echo em anum inch vor file i mej karena gna yte

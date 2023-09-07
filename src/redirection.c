@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 18:03:13 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/02 12:23:25 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char *file_name(t_token *stream)
 	return (name);
 }
 
+
 void find_com(t_token **stream, int fd , int fedo)
 {
 	t_token *com;
@@ -101,8 +102,10 @@ void find_com(t_token **stream, int fd , int fedo)
 	com = (*stream);
 	tmp = (*stream);
 	if ((com)->prev)
+	{
 		while (com && com->type != WORD)
 			com = com->prev;
+	}
 	while (tmp && tmp->type != WORD)
 		tmp = tmp->next;
 	if (com != (*stream))
@@ -117,6 +120,23 @@ void find_com(t_token **stream, int fd , int fedo)
 		tmp->next->prev = com;
 	else 
 		com->next = NULL;
+	t_token *ww;
+	t_token *aa = (*stream);
+	while ((*stream) && (*stream) != tmp->next)
+	{
+		ww = (*stream)->next;
+		free((*stream)->value);
+		free(*stream);
+		(*stream) = ww;
+	}
+	aa = aa->prev;
+    while (aa && aa != com)
+	{
+		ww = aa->prev;
+        free(aa->value);
+		free(aa);
+        aa = ww;                   
+    }
 	(*stream) = com;
 	if (!(*stream))
 		return ;
@@ -124,6 +144,4 @@ void find_com(t_token **stream, int fd , int fedo)
 		(*stream)->in = fd;
 	else
 		(*stream)->out = fd;
-	com = NULL;
-	tmp = NULL;
 }

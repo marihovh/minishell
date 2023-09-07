@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/29 20:23:39 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:43:21 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	to_struct(t_data *data, t_command **com_stream)
 	t_token *tmp;
 	char **command;
 	t_token *eee;
+	t_command *pre = NULL;
 
 	eee = data->stream;
 	pip_cnt = ft_com_len(data) + 1;
@@ -43,9 +44,12 @@ void	to_struct(t_data *data, t_command **com_stream)
 		else if (data->stream->next && data->stream->next->type == PIPE)
 			tmp = data->stream;
 		(*com_stream) = new_com(command, tmp->in, tmp->out);
-		data->stream = data->stream->next;
+		if (data->stream)
+			data->stream = data->stream->next;
 		if (!(*com_stream))
 			break ;
+		(*com_stream)->prev = pre;
+		pre = (*com_stream);
 		com_stream = &(*com_stream)->next;
 	}
 	data->stream = eee;

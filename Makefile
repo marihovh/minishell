@@ -1,8 +1,10 @@
 NAME=minishell
-SRC = src/main.c src/parse.c src/token_foos.c src/validation.c src/impliment.c \
+SRC = src/main.c src/parse.c src/token_foos.c src/validation.c built_in/impliment.c \
 	src/command.c  src/expansion.c src/signal.c src/tokenize.c \
 	src/paths.c src/execution.c src/envies.c src/redirection.c \
-	src/utils.c src/utils_1.c src/utils_2.c src/utils_3.c src/del_ut.c 
+	src/utils.c src/utils_1.c src/utils_2.c src/utils_3.c src/del_ut.c \
+	built_in/add_rm.c built_in/ft_cd_pwd.c built_in/utils.c built_in/utils_2.c \
+	built_in/ft_ech_ex.c
 OBJ=$(SRC:src/%.c=obj/%.o) 
 CC=cc
 LIBFT=libft/libft.a

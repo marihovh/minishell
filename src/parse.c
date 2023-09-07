@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/29 20:36:09 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:01:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ int not_file(char *filename)
         } else if (S_ISDIR(path_stat.st_mode)) {
             printf("shyshell: %s: Is a directory\n", filename);
 			return (1);
-        } else {
-			printf("shyshell: %s: No such file or directory\n", filename);
-			return (1);
-        }
+        } else
+			return (2);
     }
 	return (0);
 }
@@ -37,16 +35,19 @@ int	in_and_out(t_token *stream)
 {
 	int fd;
 	char *filename;
+	int nb;
 	
 	while (stream)
 	{
 		if (stream->op == 1)
 		{
 			filename = file_name(stream);
-			if (not_file(filename) == 1)
+			nb = not_file(filename);
+			if (nb == 1 || nb == 2)
 			{
+				// printf("voch mek\n");
 				free(filename);
-				return (1);
+				return (nb);
 			}
 			if (stream->type == REDIR_IN)
 			{
@@ -63,6 +64,7 @@ int	in_and_out(t_token *stream)
 			{
 				fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 				find_com(&stream, fd, 0);
+				// prin(stream, NULL);
 			}
 			else if (stream->type == REDIR_AP && stream->next)
 			{
@@ -76,9 +78,9 @@ int	in_and_out(t_token *stream)
 					return (1);
 				find_com(&stream, fd, 1);
 			}
-			if (!stream)
-				return (1);
 			free(filename);
+			if (!stream)
+				return (2);
 		}
 		stream = stream->next;
 	}
@@ -87,28 +89,6 @@ int	in_and_out(t_token *stream)
 
 //nayel tuylatreli cahrery filenameri hamar
 
-t_token *prev_word(t_token *stream)
-{
-	while (stream)
-	{
-		if (stream->type == WORD)
-			return (stream);
-		printf("yoo:%s\n", stream->value);
-		stream = stream->prev;
-	}
-	printf("no  command here\n");
-	return (0);
-}
-
-
-void print_stream(t_token *stream)
-{
-	while (stream)
-	{
-		printf("token:%s\n\tin:%i\n\tout:%i\n", stream->value, stream->in, stream->out);
-		stream = stream->next;
-	}
-}
 
 void free_com_p(char **command)
 {
@@ -120,25 +100,25 @@ void free_com_p(char **command)
 
 int parse(t_data *data, char *str)
 {
-	tokenize(&data->stream, str, &data->exit_status);
+	if (tokenize(&data->stream, str, data->exit_status))
+		return (1);
 	free(str);
 	if (!data->stream)
 	{
-		data->exit_status = 0;
+		*data->exit_status = 0;
 		// free_tokens(data->stream);
 		return (1);
 	}
-	if (validation(data->stream, &data->exit_status))
+	if (validation(data->stream, data->exit_status))
 	{
 		free_tokens(data->stream);
 		return (1);
 	}
-	// prin(data->stream, data->com_stream);
 	open_fields(data->stream, data->envies, data->exit_status);
 	if (in_and_out(data->stream))
 	{
-		data->exit_status = 1;
-		free_tokens(data->stream);
+		*data->exit_status = 1;
+		// free_tokens(data->stream);
 		return (1);
 	}
 	if (!data->stream)
@@ -147,9 +127,6 @@ int parse(t_data *data, char *str)
 		free_tokens(data->stream);
 		return (1);
 	}
-	// init_com(data);
-	// to_commands(data);
 	to_struct(data, &data->com_stream);
-	// prin(data->stream, data->com_stream);
 	return (0);
 }

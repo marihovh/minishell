@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 10:04:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/29 20:21:04 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/01 14:06:13 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void prin(t_token *stream, t_command *com_stream)
 		printf("command:");
 		i = -1;
 		while (com_stream->command[++i])
+		{
 			printf("{%s}", com_stream->command[i]);
+			printf("%i, %i\n", com_stream->in, com_stream->out);
+		}
 		printf("\n");
 		com_stream = com_stream->next;
 	}
