@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 15:34:47 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 21:19:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,14 +147,14 @@ void ft_run(t_data *data)
 	char *path = NULL;
 	char **env = NULL;
 	init_path(data);
-	//built_in
-	// if (is_built_in(data->com_stream))
-	// {
-	// 	// fill_the_export(&data->export, &data->envies);
-	// 	printf("built in\n");
-	// 	built_in(data->com_stream, data, data->envies);
-	// 	return ;
-	// }
+	// built_in
+	if (is_built_in(data->com_stream))
+	{
+		// fill_the_export(&data->export, &data->envies);
+		printf("built in\n");
+		built_in(data->com_stream, data, data->envies);
+		return ;
+	}
 	path = what_path(data->paths, data->com_stream->command[0]);
 	if (path != NULL)
 	{
@@ -201,9 +201,9 @@ int	execute(t_data *data)
 	i = 0;
 	while (data->com_stream && i < data->pip_cnt + 1)
 	{
+		signals();
 		if (is_built_in(data->com_stream))
 		{
-			// printf("built in\n");
 			dups(data->com_stream, pip, i);
 			built_in(data->com_stream, data, data->envies);
 		}
@@ -230,6 +230,6 @@ int	execute(t_data *data)
 		i++;
 		data->com_stream = data->com_stream->next;
 	}
-	waitpid(-1, NULL, 0);
+	// waitpid(-1, NULL, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 17:35:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 18:07:25 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@ int add_exp(t_command *node, t_export **export, t_envies **env)
 	int i = 1;
 	while((*export)->next)
 		export = &(*export)->next;
-	// while((*data)->envies)
-	// 	(*data)->envies = (*data)->envies->next;
+	while((*env)->next)
+		env = &(*env)->next;
 	while(node->command[i])
 	{
-		// if((f_v(node->command[i])))
-		// 	(*data)->envies = new_node(f_k(node->command[i]),f_v(node->command[i]));
-		// printf("aaa:%s\n", (*export)->key);
-		(*export) = new_expo_node(f_k(node->command[i]),f_v(node->command[i]),"declare - x ");
+		if((f_v(node->command[i])))
+		{
+			(*env) = new_node(f_k(node->command[i]),f_v(node->command[i]));
+			env = &(*env)->next;
+		}
+		(*export) = new_expo_node(f_k(node->command[i]),f_v(node->command[i]),"declare -x ");
+		export = &(*export)->next;
 		i++;
 	}
 	return (0);
@@ -36,7 +39,7 @@ int ft_export(t_command *node, t_data *data)
 	int i = 0;
 	if(!(node->command[++i]))
 	{
-		printing_export(data);
+		printing_export(data->export);
 		return(0);
 	}
 	add_exp(node, &data->export, &data->envies);

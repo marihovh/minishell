@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 15:25:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 20:13:00 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,19 +152,17 @@ int	ft_spl(char	*nodik, t_export **exp, t_envies **env)
 
 int ft_env(t_command *node, t_envies *env)
 {
-	t_envies *tmp;
 	if(!(node->command[1]))
 	{
-
 		while(env != NULL)
 		{
-			printf("%s" , env->key);
-			printf("=");
-			printf("%s\n" , env->value);
+			write(1, env->key, ft_strlen(env->key));
+			write(1, "=", 1);
+			write(1, env->value, ft_strlen(env->value));
+			write (1, "\n", 1);
 			env = env->next;
 		}
 	}
-	tmp = env;
-	return (node->exit_status);
+	return (0);
 }
 

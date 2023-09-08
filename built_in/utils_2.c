@@ -6,20 +6,20 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:04:20 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 12:19:28 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:59:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	printing_export(t_data *data)
+void	printing_export(t_export *export)
 {
-	while(data->export)
+	while(export)
 	{
-		printf("%s",data->export->def);
-		printf("%s",data->export->key);
-		printf("%s\n",data->export->value);
-		data->export = data->export->next;
+		printf("%s",export->def);
+		printf("%s",export->key);
+		printf("%s\n",export->value);
+		export = export->next;
 	}
 }
 
