@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 21:19:18 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:39:19 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ void free_env(t_envies *env)
     }
 }
 
-
-
-void ft_pip_cnt(t_data *data)
+int ft_pip_cnt(t_data *data)
 {
 	t_command *tmp;
 
@@ -117,79 +115,76 @@ void ft_pip_cnt(t_data *data)
 	int i = 0;
 	while (data->com_stream)
 	{
-		i++;
 		data->com_stream = data->com_stream->next;
+		i++;
 	}
 	data->com_stream = tmp;
-	data->pip_cnt = i - 1;
+	return (i - 1);
 }
-
-// int	**piping(t_data *data)
-// {
-// 	int i;
-
-// 	i = -1;
-// 	ft_pip_cnt(data);
-// 	int pip[data->pip_cnt][2];
-// 	while (++i < data->pip_cnt)
-// 	{
-// 		if (pipe(pip[i]) == -1)
-// 		{
-// 			printf("Pipe error\n");
-// 			return (0);
-// 		}
-// 	}
-// 	return (pip);
-// }
 
 void ft_run(t_data *data)
 {
 	char *path = NULL;
 	char **env = NULL;
 	init_path(data);
-	// built_in
-	if (is_built_in(data->com_stream))
-	{
-		// fill_the_export(&data->export, &data->envies);
-		printf("built in\n");
-		built_in(data->com_stream, data, data->envies);
-		return ;
-	}
 	path = what_path(data->paths, data->com_stream->command[0]);
-	if (path != NULL)
-	{
-		env = to_matrix(data->envies);
-		if (execve(path, data->com_stream->command, env))
-		init_env(&data->envies, env);
-		free_spl(env);
-	}else
+	env = to_matrix(data->envies);
+	if (execve(path, data->com_stream->command, env) == -1)
 	{
 		printf("shyshell : %s: command not found\n", data->com_stream->command[0]);
 		init_env(&data->envies, env);
 		free_spl(env);
-		*data->exit_status = 127;
-		exit(0);
+		g_exit_statuss = 127;
+	}else
+	{
+		ft_putstr_fd("advd\n", 1);
+		init_env(&data->envies, env);
+		free_spl(env);
 	}
-}
-void dups(t_command *com, int pip[][2], int i)
-{
-	if (com->prev != NULL)
-		com->in = pip[i - 1][0];
-	if (com->next != NULL)
-		com->out = pip[i][1];
-	if (com->in != STDIN)
-		dup2(com->in, STDIN);
-	if (com->out != STDOUT)
-		dup2(com->out, STDOUT);
+	exit(0);
 }
 
-int	execute(t_data *data)
+void dups(t_command *com, int pip[][2], t_data *data)
 {
-	int i = 0;
+	if (com->prev != NULL && com->in == 0)
+		dup2(pip[data->index - 1][0], 0);
+	else if (com->in != 0)
+		dup2(com->in, 0);
+	if (com->next != NULL && com->out == 1)
+		dup2(pip[data->index][1], 1);
+	else if (com->out != 1)
+		dup2(com->out, 1);
+}
 
-	i = -1;
-	ft_pip_cnt(data);
+
+int one_com(t_data *data)
+{
+	signals();
+	if (data->com_stream->in != 0)
+		dup2(data->com_stream->in, 0);
+	if (data->com_stream->out != 1)
+		dup2(data->com_stream->out, 1);
+	if (is_built_in(data->com_stream))
+		built_in(data->com_stream, data, data->envies);
+	else
+	{
+		pid_t f = fork();
+		if (f == 0)
+		{
+			ft_run(data);
+			exit(0);
+		}
+		else
+			waitpid(f, NULL, 0);
+	}
+	// system("leaks minishell");
+	return (0);
+}
+
+int piping(t_data *data)
+{
 	int pip[data->pip_cnt][2];
+	int i = -1;
 	while (++i < data->pip_cnt)
 	{
 		if (pipe(pip[i]) == -1)
@@ -199,37 +194,47 @@ int	execute(t_data *data)
 		}
 	}
 	i = 0;
-	while (data->com_stream && i < data->pip_cnt + 1)
+	while (data->com_stream)
 	{
-		signals();
+		data->index = i;
+		dups(data->com_stream, pip, data);
 		if (is_built_in(data->com_stream))
-		{
-			dups(data->com_stream, pip, i);
 			built_in(data->com_stream, data, data->envies);
-		}
 		else
 		{
 			pid_t f = fork();
 			if (f == 0)
 			{
 				signals();
-				if (pip[i][0] != 0)
-					close(pip[i][0]);
-				dups(data->com_stream, pip, i);
 				ft_run(data);
-				exit(0);
 			}
 			else
-			{
-				signals();
-				if (pip[i][1] != 1)
-					close(pip[i][1]);
 				waitpid(f, NULL, 0);
-			}
 		}
+		dup2(data->in_c, 0);
+		dup2(data->out_c, 1);
+		close(pip[data->index][1]);
 		i++;
+		free_spl(data->com_stream->command);
 		data->com_stream = data->com_stream->next;
 	}
-	// waitpid(-1, NULL, 0);
+	return (0);
+}
+
+
+int	execution(t_data *data)
+{
+	data->pip_cnt = ft_pip_cnt(data);
+	if (!data->pip_cnt)
+	{
+		signals();
+		one_com(data);
+		// free_coms(data->com_stream);
+		dup2(data->in_c, 0);
+		dup2(data->out_c, 1);
+	}else
+	{
+		piping(data);
+	}
 	return (0);
 }

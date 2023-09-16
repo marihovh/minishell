@@ -6,15 +6,14 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/06 16:57:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:20:24 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char *if_env(char *str, t_envies *env, int *exs)
+char *if_env(char *str, t_envies *env)
 {
-	(void)exs;
 	int pid;
 
 	pid = getpid();
@@ -23,7 +22,7 @@ char *if_env(char *str, t_envies *env, int *exs)
 	if (*str == '$')
 		return (ft_itoa(pid));
 	if (*str == '?')
-		return (ft_itoa(*exs));
+		return (ft_itoa(0));
 	while (env)
 	{
 		if (!ft_strcmp(str, env->key))
@@ -33,11 +32,12 @@ char *if_env(char *str, t_envies *env, int *exs)
 	return ("");
 }
 
-void open_fields(t_token *stream, t_envies *env, int *exs)
+void open_fields(t_token *stream, t_envies *env)
 {
 	char *name;
 	char *dol;
 	char *chunk;
+	char *tmp;
 
 	while (stream)
 	{
@@ -46,9 +46,12 @@ void open_fields(t_token *stream, t_envies *env, int *exs)
 			dol = ft_strchr(stream->value, '$');
 			while (dol)
 			{
+				tmp = stream->value;
 				stream->value = ft_substr(stream->value, 0, ft_strlen(stream->value) - ft_strlen(dol));
+				// free(tmp);
 				name = env_name(&dol);
-				chunk = if_env(name, env, exs);
+				chunk = if_env(name, env);
+				free(name);
 				stream->value = ft_strjoin(stream->value, chunk);
 				stream->value = ft_strjoin(stream->value, dol);
 				dol = ft_strchr((stream->value + ft_strlen(stream->value)) - ft_strlen(dol), '$');

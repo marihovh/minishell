@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:04:20 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 17:59:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/13 20:14:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@ void	printing_export(t_export *export)
 {
 	while(export)
 	{
-		printf("%s",export->def);
-		printf("%s",export->key);
-		printf("%s\n",export->value);
+		ft_putstr_fd("declare -x ", 1);
+		ft_putstr_fd(export->key, 1);
+		ft_putstr_fd("=\"", 1);
+		ft_putstr_fd(export->value, 1);
+		ft_putstr_fd("\"\n", 1);
+		
 		export = export->next;
 	}
 }

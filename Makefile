@@ -8,7 +8,7 @@ SRC = src/main.c src/parse.c src/token_foos.c src/validation.c built_in/implimen
 OBJ=$(SRC:src/%.c=obj/%.o) 
 CC=cc
 LIBFT=libft/libft.a
-CFLAGS=-Wall -Werror -Wextra
+CFLAGS=-Wall -Werror -Wextra #-fsanitize=address -static-libsan -g
 RM=rm -rf
 INCLUDES = -I./readline-marihovh/include
 LINKERS	= -L./readline-marihovh/lib -lreadline

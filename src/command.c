@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/04 17:43:21 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/14 20:39:17 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	to_struct(t_data *data, t_command **com_stream)
 	char **command;
 	t_token *eee;
 	t_command *pre = NULL;
+	int sp = 0;
 
 	eee = data->stream;
 	pip_cnt = ft_com_len(data) + 1;
@@ -51,6 +52,7 @@ void	to_struct(t_data *data, t_command **com_stream)
 		(*com_stream)->prev = pre;
 		pre = (*com_stream);
 		com_stream = &(*com_stream)->next;
+		sp = 0;
 	}
 	data->stream = eee;
 }
@@ -83,15 +85,16 @@ char **init_com(t_token **stream)
 	while ((*stream) && (*stream)->type != PIPE)
 	{
 		if ((*stream)->type == WORD || (*stream)->type == FIELD)
-			command[i++] = ft_strdup((*stream)->value);
+		{
+			command[i] = ft_strdup((*stream)->value);
+			if (i && (*stream)->next && (*stream)->next->type == SP)
+				command[i] = ft_strjoin(command[i], " ");
+			i++;
+		}	
 		if ((*stream)->next == NULL || (*stream)->next->type == PIPE)
 			break ;
 		(*stream) = (*stream)->next;
 	}
 	command[i] = NULL;
-	// i = -1;
-	// while (command[++i])
-	// 	printf("com:%s\n", command[i]);
-	// printf("as:{%s}\n", (*stream)->value);
 	return (command);
 }

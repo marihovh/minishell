@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/02 18:35:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:06:54 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*one_dol(char **str)
 {
 	char	*chunk;
 
-	if (!(**str))
+	if (!(*str))
 	{
 		chunk = (char *)malloc(sizeof(char) * 1);
 		chunk[0] = '\0';
@@ -106,8 +106,6 @@ char	*env_name(char **str)
 		}
 		(*str)++;
 	}
-	// if (!(*str[0]))
-	// 	*str = NULL;
 	chunk[i] = '\0';
 	return (chunk);
 }

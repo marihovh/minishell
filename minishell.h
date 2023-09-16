@@ -6,7 +6,7 @@
 #define WORD 2 // words // partly done
 #define FIELD 3 // '  ' // dont need vslidation
 #define EXP_FIELD 4 // " " // not done
-#define REDIR_OUT 5 // > // 
+#define REDIR_OUT 5 // >
 #define REDIR_IN 6 // <
 #define REDIR_AP 7 // >>
 #define REDIR_SO 8 // <<
@@ -15,8 +15,6 @@
 #define STDIN 0
 
 // libraries
-// #include "readline_Mariam/readline.h"
-// #include "readline_Mariam/history.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/stat.h>
@@ -31,6 +29,8 @@
 #include <errno.h>
 #include "./libft/libft.h"
 
+
+
 typedef struct s_data		t_data;
 typedef struct s_token		t_token;
 typedef struct s_streams	t_streams;
@@ -42,7 +42,6 @@ struct s_token   //done
 {
 	int type;
 	char *value;
-	int command;
 	int in;
 	int out;
 	int op;
@@ -56,8 +55,8 @@ struct s_command
 {
 	char **command;
 	int in;
+	int sp;
 	int out;
-	int exit_status;
 	t_command *prev;
 	t_command *next;
 };
@@ -73,7 +72,6 @@ struct s_export      // done
 {
 	char *key;
 	char *value;
-	char *def;
 	t_export *next;
 };
 
@@ -81,7 +79,9 @@ struct s_data // my all data here
 {
 	int			pip_cnt;
 	char		**paths;
-	int			*exit_status;
+	int			in_c;
+	int			out_c;
+	int			index;
 	char		**command;
 	t_token		*stream;
 	t_envies	*envies;
@@ -100,12 +100,12 @@ t_envies *new_node(char *key, char *value);
 void init_env(t_envies **envp, char **environ);
 char	*what_path(char **paths, char *command);
 int	ft_lstcnt(t_envies *lst);
-void dups(t_command *com, int pip[][2], int i);
+void dups(t_command *com, int pip[][2], t_data *data);
 char **to_matrix(t_envies *envies);
 void print_env(char **env);
-int execute(t_data *data);
-char *if_env(char *str, t_envies *env, int *exs);
-void open_fields(t_token *stream, t_envies *env, int *exs);
+int execution(t_data *data);
+char *if_env(char *str, t_envies *env);
+void open_fields(t_token *stream, t_envies *env);
 void signal_hend(int signum);
 void init_line(t_data *data, char **environ);
 int	in_and_out(t_token *stream);
@@ -124,17 +124,17 @@ t_token	*token_3(char **str);
 t_token	*token_4(char **str);
 t_token	*token_5(char **str);
 void free_tokens(t_token *stream);
-t_token	*which_token(char **str, int *exit_status);
-int	tokenize(t_token **stream, char *str, int *exit_status);
+t_token	*which_token(char **str);
+int	tokenize(t_token **stream, char *str);
 int		redir_error(void);
 void	open_eror(void);
-int		validation(t_token *stream, int *exit_status);
+int		validation(t_token *stream);
 void	prin(t_token *stream, t_command *com_stream);
 void	pri(t_command *com_stream);
 void print_en(t_envies *envies);
 int	split_len(char **str);
 t_command	*new_com(char **args, int in, int out);
-char **init_com(t_token **token);
+char **init_com(t_token **stream);
 int	ft_com_len(t_data *data);
 char	*one_dol(char **str);
 char	*env_name(char **str);
@@ -148,9 +148,8 @@ void	esim(void);
 int ft_isspace(int ch);
 int correct_pipe(char *tmp, char *str);
 char  *ft_ispipe(char *str);
-void error_msg(char *str/*, char h, int exs, int *exit_status*/);
+void error_msg(char *str);
 int	built_in(t_command *node, t_data *data,t_envies *env);
-t_export	*new_expo_node(char *key, char *value, char *def);
 void	fill_the_export(t_export **export, t_envies *env);
 int is_built_in(t_command *node);
 void free_coms(t_command *stream); 	
@@ -164,15 +163,16 @@ void	ft_lstadd_gr(t_export **lst, t_export *new);
 void	ft_lstadd_fr(t_envies **lst, t_envies *new);
 int ft_exxport(t_command *node, t_data *data, t_export **export, t_envies **env);
 void	delete_node(t_envies **env, char *del_node);
-t_export	*new_expo_node(char *key, char *value, char *def);
+t_export	*new_expo_node(char *key, char *value);
 int ft_unset(t_command *node, t_envies *env);
 char	*f_v(char	*str);
-char	*f_k(char	*str);
+char	*f_k(char	*str, int *flag);
 void	add_new_env(t_envies **env, char *key, char *value);
 int ft_echo(t_command *node);
 void	printing_export(t_export *export);
 int ft_env(t_command *node, t_envies *env);
 int ft_strcmp_up(char *str, char *chm);
 int ft_export(t_command *node, t_data *data);
-void ft_exit(t_data *data);
+void ft_exit(t_command *node, t_data *data);
+int	g_exit_statuss;
 #endif

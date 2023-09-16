@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 12:46:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/27 17:04:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:19:05 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,6 @@ void	esim(void)
 	exit(1);
 }
 
-
-int ft_isspace(int ch)
-{
-	return (ch == '\t' || ch == ' ');
-}
-
 int correct_pipe(char *tmp, char *str)
 {
 	return (str[0] != '|' && tmp[1] && tmp[1] == ' ');
@@ -79,10 +73,10 @@ char  *ft_ispipe(char *str)
 	return (0);
 }
 
-void error_msg(char *str/*, char ch, int exs, int *exit_status*/) 
+void error_msg(char *str) 
 {
-	printf("%s\n", str);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
 	// if (ch != NULL)
 	// 	printf(" `%c'\n");
-	// *exit_status = exs;
 }

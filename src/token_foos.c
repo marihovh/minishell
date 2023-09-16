@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/06 17:02:37 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:15:00 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_token	*token_1(char **str)
 
 	i = 0;
 	chunk = *str;
-	while (*str && ft_isspace(*str[0]))
+	while (*str && *str[0] == ' ')
 		(*str)++;
 	chunk = ft_substr(chunk, 0, *str - chunk);
 	new = new_token(SP, chunk, 0);
@@ -57,7 +57,7 @@ t_token	*token_3(char **str)
 	}
 	chunk = ft_substr(chunk, 0, (*str) - chunk);
 	(*str)++;
-	new = new_token(EXP_FIELD, chunk, 0);
+	new = new_token(FIELD, chunk, 0);
 	return (new);
 }
 

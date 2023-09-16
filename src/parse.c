@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/06 17:01:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:04:58 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,33 +100,32 @@ void free_com_p(char **command)
 
 int parse(t_data *data, char *str)
 {
-	if (tokenize(&data->stream, str, data->exit_status))
+	if (tokenize(&data->stream, str))
 		return (1);
 	free(str);
 	if (!data->stream)
 	{
-		*data->exit_status = 0;
-		// free_tokens(data->stream);
+		g_exit_statuss = 0;
 		return (1);
 	}
-	if (validation(data->stream, data->exit_status))
+	open_fields(data->stream, data->envies);
+	if (validation(data->stream))
 	{
 		free_tokens(data->stream);
 		return (1);
 	}
-	open_fields(data->stream, data->envies, data->exit_status);
 	if (in_and_out(data->stream))
 	{
-		*data->exit_status = 1;
-		// free_tokens(data->stream);
+		g_exit_statuss = 1;
 		return (1);
 	}
 	if (!data->stream)
 	{
-		data->exit_status = 0;
+		g_exit_statuss = 0;
 		free_tokens(data->stream);
 		return (1);
 	}
 	to_struct(data, &data->com_stream);
+	prin(NULL, data->com_stream);
 	return (0);
 }

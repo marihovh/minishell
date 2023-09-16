@@ -6,13 +6,13 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/06 17:01:39 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:23:54 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token	*which_token(char **str, int *exit_status)
+t_token	*which_token(char **str)
 {
 	t_token *token;
 
@@ -25,29 +25,29 @@ t_token	*which_token(char **str, int *exit_status)
 		token = token_5(str);
 	else if (*str[0] == '<')
 		token = token_6(str);
-	else if (*str[0] == 34)
+	else if (*str[0] == 34) /*""*/
 		token = token_4(str);
 	else if (ft_isprint(*str[0]))
-		token = token_2(str);
-	else if (ft_isspace(*str[0]))
+		token = token_2(str); // word
+	else if (*str[0] == ' ')
 		token = token_1(str);
 	if (token == NULL)
-		*exit_status = 1;
+		g_exit_statuss = 1;
 	return (token);
 }
 
-int	tokenize(t_token **stream, char *str, int *exit_status)
+int	tokenize(t_token **stream, char *str)
 {
 	t_token	*tmp;
 	
 	tmp = NULL;
 	while (*str)
 	{
-		(*stream) = which_token(&str, exit_status);
+		(*stream) = which_token(&str);
 		if (!(*stream))
 		{
-			if (*exit_status != 1)
-				*exit_status = 0;
+			if (g_exit_statuss != 1)
+				g_exit_statuss = 0;
 			else
 				return (1);
 			break ;

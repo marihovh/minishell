@@ -6,11 +6,11 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 20:13:00 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 16:23:03 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
 int is_built_in(t_command *node)
 {
@@ -35,7 +35,6 @@ int is_built_in(t_command *node)
 
 int	built_in(t_command *node, t_data *data,t_envies *env)
 {
-	// (void)exit_status;
 	(void)data;
 	if(!(ft_strcmp_up("echo", node->command[0])))
 		ft_echo(node);
@@ -47,15 +46,17 @@ int	built_in(t_command *node, t_data *data,t_envies *env)
 		ft_env(node, env);
 	else if(!(ft_strcmp("exit", node->command[0])))
 	{
-		ft_exit(data);
+		ft_exit(node, data);
 	}
 	else if(!(ft_strcmp("env", node->command[0])))
 		ft_env(node, env);
 	else if(!(ft_strcmp("export", node->command[0])))
+	{
 		ft_export(node, data);
+	}
 	// else if(!(ft_strcmp("unset", node->command[0])))
 	// 	ft_unset(node);
-	return (node->exit_status);
+	return (g_exit_statuss);
 }
 
 int count_char(char *str, char target) {

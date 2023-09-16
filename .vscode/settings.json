@@ -10,6 +10,21 @@
 		"locale": "c",
 		"__locale": "c",
 		"ios": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"__bit_reference": "c",
+		"__functional_base": "c",
+		"algorithm": "c",
+		"atomic": "c",
+		"bitset": "c",
+		"chrono": "c",
+		"__memory": "c",
+		"functional": "c",
+		"limits": "c",
+		"memory": "c",
+		"optional": "c",
+		"ratio": "c",
+		"system_error": "c",
+		"tuple": "c",
+		"type_traits": "c"
 	}
 }

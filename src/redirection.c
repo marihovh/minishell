@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/02 12:23:25 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/13 14:49:38 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ int init_and_check_fd(int fd, char *filename)
 		return (1);
 	}
 	return(0);
+}
+
+void hendo(int sig)
+{
+	(void)sig;
+	exit(5);
 }
 
 void write_here_doc(int fd, char *filename)
@@ -61,6 +67,7 @@ int	for_heredoc(char *filename)
 		return (fds[0]);
 	}
 }
+// here-doc signal error
 
 char *no_escape(char *str)
 {

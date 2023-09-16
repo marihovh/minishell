@@ -6,29 +6,88 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 18:07:25 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 16:19:15 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+int is_export(t_export **export, char *str)
+{
+	while ((*export))
+	{
+		if (!ft_strcmp(str, (*export)->key))
+			return (1);
+		export = &(*export)->next;
+	}
+	return (0);
+}
+
+void join_to_value(t_export **export, char *key, char *value)
+{
+	char *tmp;
+	while ((*export))
+	{
+		if (!ft_strcmp(key, (*export)->key))
+		{
+			tmp = (*export)->value;
+			(*export)->value = ft_strjoin((*export)->value, value);
+			free(tmp);
+			return ;
+		}
+		export = &(*export)->next;
+	}
+}
+
+void update_value(t_export **export, char *key, char *value)
+{
+	while ((*export))
+	{
+		if (!ft_strcmp(key, (*export)->key))
+		{
+			free((*export)->value);
+			(*export)->value = ft_strdup(value);
+			return ;
+		}
+		export = &(*export)->next;
+	}
+}
+
 int add_exp(t_command *node, t_export **export, t_envies **env)
 {
-	(void)env;
+	char *value;
+	char *key;
+	int flag = 0;
 	int i = 1;
-	while((*export)->next)
-		export = &(*export)->next;
-	while((*env)->next)
+	while((*env))
 		env = &(*env)->next;
 	while(node->command[i])
 	{
-		if((f_v(node->command[i])))
+		key = f_k(node->command[i], &flag);
+		printf("yoyyoyoyo:%i\n", flag);
+		value = f_v(node->command[i]);
+		if (value)
 		{
-			(*env) = new_node(f_k(node->command[i]),f_v(node->command[i]));
+			(*env) = new_node(key, value);
 			env = &(*env)->next;
 		}
-		(*export) = new_expo_node(f_k(node->command[i]),f_v(node->command[i]),"declare -x ");
-		export = &(*export)->next;
+		if (is_export(export, key))
+		{
+		// printf("exp:%s\n", (*export)->value);
+			if (flag == 1)
+				join_to_value(export, key, value);
+			else
+				update_value(export, key, value);
+		}
+		else
+		{
+			while((*export))
+				export = &(*export)->next;
+			(*export) = new_expo_node(key, value);
+			export = &(*export)->next;
+		}
+		free(key);
+		free(value);
 		i++;
 	}
 	return (0);
@@ -38,12 +97,8 @@ int ft_export(t_command *node, t_data *data)
 {
 	int i = 0;
 	if(!(node->command[++i]))
-	{
 		printing_export(data->export);
-		return(0);
-	}
 	add_exp(node, &data->export, &data->envies);
-	// printing_export(data);
 	return (0);
 }
 
@@ -77,7 +132,6 @@ int ft_export(t_command *node, t_data *data)
 // 	return (0);
 // }
 
-
 void	delete_node(t_envies **env, char *del_node)
 {
 	t_envies *head;
@@ -103,7 +157,7 @@ void	delete_node(t_envies **env, char *del_node)
 }
 
 
-t_export	*new_expo_node(char *key, char *value, char *def)
+t_export	*new_expo_node(char *key, char *value)
 {
 	t_export	*new_node;
 
@@ -112,7 +166,6 @@ t_export	*new_expo_node(char *key, char *value, char *def)
 		return (NULL);
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
-	new_node->def = ft_strdup(def);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -122,7 +175,7 @@ void	fill_the_export(t_export **export, t_envies *env)
 {
 	while(env != NULL)
 	{
-		(*export) = new_expo_node(env->key, env->value, "declare -x ");
+		(*export) = new_expo_node(env->key, env->value);
 		if (!(*export))
 			break ;
 		export = &(*export)->next;
@@ -144,5 +197,5 @@ int ft_unset(t_command *node, t_envies *env)
 		env = env->next;	
 	}
 	env = tmp;
-	return (node->exit_status);
+	return (g_exit_statuss);
 }

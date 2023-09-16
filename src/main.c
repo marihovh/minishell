@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 18:00:25 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 16:23:07 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ void free_tokens(t_token *stream)
     while (current != NULL)
 	{
         nextNode = current->next;
-		// nextNode->prev = NULL;
         free(current->value);
 		free(current);
-        current = nextNode;
-		// current->prev = NULL;                   
+        current = nextNode;                   
     }
 }
 
@@ -94,6 +92,8 @@ int main(int argc, char **argv, char **environ)
 	data = malloc(sizeof(t_data));
 	init_env(&data->envies, environ);
 	fill_the_export(&data->export, data->envies);
+	data->in_c = dup(STDIN);
+	data->out_c = dup(STDOUT);
 	while (1)
 	{
 		str = readline("shyshell$ ");
@@ -108,8 +108,11 @@ int main(int argc, char **argv, char **environ)
 			if (!parse(data, str))
 			{
 				free_tokens(data->stream);
-				execute(data);
-				*data->exit_status = 0;
+				execution(data);
+				// system("leaks minishell");
+				dup2(data->in_c, 0);
+				dup2(data->out_c, 1);
+				g_exit_statuss = 0;
 				free_coms(data->com_stream);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 11:56:23 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/07 11:58:32 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:27:29 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,18 @@ int ft_cd(t_command *node,  t_envies *env)
 			}
 		}
 	}
-	return (node->exit_status);
+	return (g_exit_statuss);
 }
 
 int ft_pwd(t_command *node)
 {
+	(void)node;
 	char path[1024];
 
-	
 	if(getcwd(path, sizeof(path)) != NULL)
-		printf("%s\n",path);
-	return (node->exit_status);
+	{
+		ft_putstr_fd(path, 1);
+		ft_putstr_fd("\n", 1);
+	}
+	return (g_exit_statuss);
 }
