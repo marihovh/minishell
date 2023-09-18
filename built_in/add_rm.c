@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/16 18:09:30 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:12:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,11 @@ int is_export(t_export **export, char *str)
 
 void join_to_value(t_export **export, char *key, char *value)
 {
-	char *tmp;
 	while ((*export))
 	{
 		if (!ft_strcmp(key, (*export)->key))
 		{
-			tmp = (*export)->value;
 			(*export)->value = ft_strjoin((*export)->value, value);
-			free(tmp);
 			return ;
 		}
 		export = &(*export)->next;
@@ -72,7 +69,6 @@ int add_exp(t_command *node, t_export **export, t_envies **env)
 		}
 		if (is_export(export, key))
 		{
-		// printf("exp:%s\n", (*export)->value);
 			if (flag == 1)
 				join_to_value(export, key, value);
 			else

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 11:58:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 16:22:56 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 19:57:17 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,20 @@ char	*f_k(char	*str, int *flag)
 	if (!str)
 		return (NULL);
 	esim = ft_strchr(str, '=');
+	
 	len = ft_strlen(esim);
+	// printf("sa:%s\n", esim);
+	// printf("str:%c\n", ((str + ft_strlen(str)) - len - 1)[0]);
 	if (((str + ft_strlen(str)) - len - 1)[0] == '+')
 	{
+		// printf("here\n");
 		*flag = 1;
-		len -= 1;
+		len += 1;
 	}
 	if (esim)
 		key = ft_substr(str, 0, ft_strlen(str) - len);
+	// printf("k:%s\n", key);
+	// exit(0);
 	return (key);
 }
 
