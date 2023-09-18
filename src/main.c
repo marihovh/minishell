@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 16:23:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:56:58 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int main(int argc, char **argv, char **environ)
 			add_history(str);
 			if (!parse(data, str))
 			{
-				free_tokens(data->stream);
+				// free_tokens(data->stream);
 				execution(data);
 				// system("leaks minishell");
 				dup2(data->in_c, 0);

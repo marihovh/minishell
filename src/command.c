@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/14 20:39:17 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:51:49 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,15 @@ char **init_com(t_token **stream)
 	if ((*stream) && (*stream)->type == PIPE)
 		(*stream) = (*stream)->next;
 	len  = ft_arg_len((*stream));
+	// printf("%i\n", len);
 	command = malloc(sizeof(char *) * (len + 1));
 	while ((*stream) && (*stream)->type != PIPE)
 	{
 		if ((*stream)->type == WORD || (*stream)->type == FIELD)
-		{
-			command[i] = ft_strdup((*stream)->value);
-			if (i && (*stream)->next && (*stream)->next->type == SP)
-				command[i] = ft_strjoin(command[i], " ");
-			i++;
-		}	
+			command[i++] = ft_strdup((*stream)->value);
+		// else if ((*stream)->type == SP)
+		// 	command[i] = ft_strdup(" ");
+		// i++;
 		if ((*stream)->next == NULL || (*stream)->next->type == PIPE)
 			break ;
 		(*stream) = (*stream)->next;

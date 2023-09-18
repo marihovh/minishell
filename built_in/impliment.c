@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 16:23:03 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:31:54 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int is_built_in(t_command *node)
 
 int	built_in(t_command *node, t_data *data,t_envies *env)
 {
-	(void)data;
+	// printf("data:%s\n", data->stream->value);
 	if(!(ft_strcmp_up("echo", node->command[0])))
-		ft_echo(node);
+		ft_echo(data, node);
 	else if(!(ft_strcmp("pwd", node->command[0])))
 		ft_pwd(node);
 	else if(!(ft_strcmp("cd", node->command[0])))

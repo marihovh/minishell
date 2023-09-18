@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 16:19:15 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:09:30 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int add_exp(t_command *node, t_export **export, t_envies **env)
 	while(node->command[i])
 	{
 		key = f_k(node->command[i], &flag);
-		printf("yoyyoyoyo:%i\n", flag);
 		value = f_v(node->command[i]);
 		if (value)
 		{

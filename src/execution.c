@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 14:39:19 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:17:22 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,14 @@ int piping(t_data *data)
 		data->index = i;
 		dups(data->com_stream, pip, data);
 		if (is_built_in(data->com_stream))
+		{
+			if (data->stream && data->stream->type == PIPE)
+			{
+				while (data->stream && data->stream->type == WORD)
+					data->stream = data->stream->next;
+			}
 			built_in(data->com_stream, data, data->envies);
+		}
 		else
 		{
 			pid_t f = fork();
@@ -215,6 +222,8 @@ int piping(t_data *data)
 		dup2(data->out_c, 1);
 		close(pip[data->index][1]);
 		i++;
+		while (data->stream && data->stream->type != PIPE)
+			data->stream = data->stream->next;
 		free_spl(data->com_stream->command);
 		data->com_stream = data->com_stream->next;
 	}
@@ -229,7 +238,6 @@ int	execution(t_data *data)
 	{
 		signals();
 		one_com(data);
-		// free_coms(data->com_stream);
 		dup2(data->in_c, 0);
 		dup2(data->out_c, 1);
 	}else

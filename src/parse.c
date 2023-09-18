@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/16 18:04:58 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:21:09 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ int parse(t_data *data, char *str)
 		return (1);
 	}
 	to_struct(data, &data->com_stream);
-	prin(NULL, data->com_stream);
+	// prin(data->stream, data->com_stream);
+	// exit (0);
 	return (0);
 }

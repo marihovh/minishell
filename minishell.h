@@ -168,7 +168,7 @@ int ft_unset(t_command *node, t_envies *env);
 char	*f_v(char	*str);
 char	*f_k(char	*str, int *flag);
 void	add_new_env(t_envies **env, char *key, char *value);
-int ft_echo(t_command *node);
+int ft_echo(t_data *data, t_command *node);
 void	printing_export(t_export *export);
 int ft_env(t_command *node, t_envies *env);
 int ft_strcmp_up(char *str, char *chm);

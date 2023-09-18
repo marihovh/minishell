@@ -6,13 +6,13 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:05:49 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/16 18:03:55 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:47:23 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int option(t_command *node)
+int option(t_token *stream, t_command *node)
 {
 	int flag = 0;
 	int i = 0;
@@ -32,77 +32,53 @@ int option(t_command *node)
 				flag++;
 		}
 		else
-			return (12);
+			return (flag);
+		stream = stream->next;
+		if (stream->type == SP)
+			stream = stream->next;
 		j++;
 	}
 	return (flag);
 }
 
-int ft_echo(t_command *node) // echo done
+int ft_echo(t_data *data, t_command *node)
 {
 	int i = 0;
 	
-	int flag = option(node);
-	printf("flag:%i\n", flag);
+	int flag = option(data->stream, node);
+	if (data->stream && data->stream->next)
+	{
+		data->stream = data->stream->next;
+		if (data->stream->next->next)
+			data->stream = data->stream->next;
+	}
 	if (flag == -1)
 	{
 		ft_putstr_fd("\n", 1);
 		return (0);
 	}
 	i += flag;
+	int j = 0;
+	while (j++ < flag)
+		data->stream = data->stream->next;
+	if (data->stream->type == SP)
+		data->stream = data->stream->next;
 	while (node->command[++i])
+	{
+		data->stream = data->stream->next;
 		ft_putstr_fd(node->command[i], 1);
+		if (data->stream && data->stream->type == SP)
+		{
+			if (node->command[i + 1])
+				ft_putstr_fd(" ", 1);
+			data->stream = data->stream->next;
+		}
+	}
 	if (!flag)
 		ft_putstr_fd("\n", 1);
 	return (0);
 }
 
-// int ft_echo(t_command *node)
-// {
-// 	int i;
-// 	int j;
-// 	int sharunakeli = 0;
-// 	if(!(node->command[1]))
-// 		write(1, "\n", 1);
-// 	j = 0;
-// 	i = 1;
-// 	while(node->command[i] && node->command[i][0] == '-')
-// 	{
-// 		if(!(node->command[i][0] == '-'))
-// 		{
-// 			sharunakeli = i;
-// 			break;
-// 		}
-// 		j = 1;
-// 		while(node->command[i][j])
-// 		{
-// 			if(!(node->command[i][j] == 'n'))
-// 				break;
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	i = 0;
-// 	if(sharunakeli == 0)
-// 	{
-// 		while(node->command[++i])
-// 		{
-// 			write(1, node->command[i], ft_strlen(node->command[i]));
-// 			if(node->command[i + 1])
-// 				write(1, "", 1);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		while(node->command[++sharunakeli])
-// 		{
-// 			write(1, node->command[sharunakeli], ft_strlen(node->command[sharunakeli]));
-// 			if(node->command[sharunakeli + 1])
-// 				write(1, " ", 1);
-// 		}
-// 	}
-// 	return (g_exit_statuss);
-// }
 
 void ft_exit(t_command *node, t_data *data)
 {
