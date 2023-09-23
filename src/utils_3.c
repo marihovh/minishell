@@ -6,50 +6,58 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:09:24 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/09 21:24:49 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 08:46:42 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void free_data(t_data *data)
+
+long long int	ft_long_atoi(const char *str)
 {
-	while (data->envies)
-	{
-		free(data->envies);
-		data->envies = data->envies->next;
-	}
-	while (data->stream)
-	{
-		free (data->stream);
-		data->stream = data->stream->next;
-	}
-	free (data);
+	int	i;
+	int	minus;
+	long long	num;
+
+	i = 0;
+	minus = 1;
+	num = 0;
+	while (str[i] == '\t' || str[i] == '\n'
+		|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r' || str[i] == 32)
+		i++;
+	if (str[i] == '-')
+		minus = -1;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i] >= 48 && str[i] <= 57)
+		num = (num * 10) + (str[i++] - 48);
+	return (num * minus);
 }
 
-char *file_join(char *buffer, char *stat)
+char	*env_name(char **str)
 {
-	char	*join;
-	size_t	i;
-	size_t	c;
+	char	*chunk;
+	int		i;
 
-	if (!stat)
+	i = 0;
+	(*str)++;
+	chunk = one_dol(str);
+	if (chunk)
+		return (chunk);
+	chunk = malloc(sizeof(char) * ft_strlen(*str) + 1);
+	while (**str)
 	{
-		stat = (char *)malloc(sizeof(char) * 1);
-		stat[0] = '\0';
+		chunk[i++] = **str;
+		if (!ft_norm_name(**str))
+		{
+			if (i != 1)
+				i--;
+			else
+				(*str)++;
+			break ;
+		}
+		(*str)++;
 	}
-	if (!stat || !buffer)
-		return (NULL);
-	i = -1;
-	c = -1;
-	join = (char *)malloc(sizeof(char)
-			* (ft_strlen(stat) + ft_strlen(buffer) + 1));
-	if (!join)
-		return (NULL);
-	while (stat[++i] != '\0')
-		join[i] = stat[i];
-	while (buffer[++c])
-		join[i++] = buffer[c];
-	join[i] = '\0';
-	return (join);
+	chunk[i] = '\0';
+	return (chunk);
 }

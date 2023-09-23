@@ -6,16 +6,17 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 10:04:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/01 14:06:13 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 10:50:30 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void prin(t_token *stream, t_command *com_stream)
+void	prin(t_token *stream, t_command *com_stream)
 {
-	(void)com_stream;
-	int i = -1;
+	int	i;
+
+	i = -1;
 	while (stream)
 	{
 		printf("stream:%s\n", stream->value);
@@ -37,8 +38,7 @@ void prin(t_token *stream, t_command *com_stream)
 	}
 }
 
-
-void pri(t_command *com_stream)
+void	pri(t_command *com_stream)
 {
 	while (com_stream)
 	{
@@ -47,7 +47,8 @@ void pri(t_command *com_stream)
 		com_stream = com_stream->next;
 	}
 }
-void print_en(t_envies *envies)
+
+void	print_en(t_envies *envies)
 {
 	while (envies)
 	{

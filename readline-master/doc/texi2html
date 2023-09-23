@@ -4463,7 +4463,7 @@ if ($has_top_command)
     $node = $sec2node{$section};
     $node2up{$node} = Sec2UpNode($section) unless $node2up{$node};
     $node2prev{$node} = Sec2PrevNode($section) unless $node2prev{$node};
-    $node2next{$node} = Sec2NextNode($section) unless $node2next{$node};
+    $node2next{$node} = Sec2next_node($section) unless $node2next{$node};
   }
 }
 
@@ -4930,7 +4930,7 @@ sub Sec2PrevNode
   return '';
 }
 
-sub Sec2NextNode
+sub Sec2next_node
 {
   my $sec = shift;
   my $num = $sec2number{$sec};

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:44:10 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/18 16:55:55 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 08:46:37 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,30 +82,3 @@ int ft_norm_name(char ch)
 	return ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || ch == 95);
 }
 
-char	*env_name(char **str)
-{
-	char	*chunk;
-	int		i;
-
-	i = 0;
-	(*str)++;
-	chunk = one_dol(str);
-	if (chunk)
-		return (chunk);
-	chunk = malloc(sizeof(char) * ft_strlen(*str) + 1);
-	while (**str)
-	{
-		chunk[i++] = **str;
-		if (!ft_norm_name(**str))
-		{
-			if (i != 1)
-				i--;
-			else
-				(*str)++;
-			break ;
-		}
-		(*str)++;
-	}
-	chunk[i] = '\0';
-	return (chunk);
-}

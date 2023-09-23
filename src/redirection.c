@@ -6,38 +6,26 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/13 14:49:38 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:12:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int init_and_check_fd(int fd, char *filename)
-{
-	if (fd == -1)
-	{
-		printf("shyshell: %s: No such file or directory\n", filename);
-		return (1);
-	}
-	return(0);
-}
-
-void hendo(int sig)
-{
-	(void)sig;
-	exit(5);
-}
+//erkushabti 11
 
 void write_here_doc(int fd, char *filename)
 {
 	char *line;
-	
-	line = readline("> ");
-	while(line && ft_strcmp(line, filename))
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_DFL);
+	while(1)
 	{
+		line = readline("> ");
+		if ((line == NULL || ft_strcmp(line, filename) == 0))
+			break ;
 		write(fd , line, ft_strlen(line));
 		write(fd , "\n", 1);
-		line = readline("> ");
 	}
 	close(fd);
 }
@@ -46,26 +34,32 @@ int	for_heredoc(char *filename)
 {
 	int pid;
 	int fds[2];
+	int status;
 
+	foo(0);
 	if (pipe(fds) == -1)
 	{
-		printf("here-doc error\n");
+		error_msg("shyshell: Here-doc error", 1);
 		return (-1);
-	}	
+	}
 	pid = fork();
 	if (pid == 0)
 	{
-		signals();
 		close(fds[0]);
 		write_here_doc(fds[1], filename);
+		close(fds[1]);
 		exit(0);
 	}
-	else
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status)) 
 	{
-		close (fds[1]);
-		waitpid(pid, NULL, 0);
-		return (fds[0]);
+		if (WTERMSIG((status)) == SIGINT)
+			write(1, "\n", 1);
+		fds[0] = -2;
 	}
+	foo(1);
+	close(fds[1]);
+	return (fds[0]);
 }
 // here-doc signal error
 
@@ -100,35 +94,12 @@ char *file_name(t_token *stream)
 	return (name);
 }
 
-
-void find_com(t_token **stream, int fd , int fedo)
+void find_com_2(t_token **stream, t_token *tmp, t_token *com)
 {
-	t_token *com;
-	t_token *tmp;
-
-	com = (*stream);
-	tmp = (*stream);
-	if ((com)->prev)
-	{
-		while (com && com->type != WORD)
-			com = com->prev;
-	}
-	while (tmp && tmp->type != WORD)
-		tmp = tmp->next;
-	if (com != (*stream))
-		com->next = tmp->next;
-	else
-	{
-		com = NULL;
-		(*stream) = com;
-		return ;
-	}
-	if (tmp->next != NULL)
-		tmp->next->prev = com;
-	else 
-		com->next = NULL;
 	t_token *ww;
-	t_token *aa = (*stream);
+	t_token *aa;
+	
+	aa = (*stream);
 	while ((*stream) && (*stream) != tmp->next)
 	{
 		ww = (*stream)->next;
@@ -145,10 +116,47 @@ void find_com(t_token **stream, int fd , int fedo)
         aa = ww;                   
     }
 	(*stream) = com;
+}
+
+void set_fd(t_token **stream, int fd, int fedo)
+{
 	if (!(*stream))
 		return ;
 	if (fedo == 1)
 		(*stream)->in = fd;
 	else
 		(*stream)->out = fd;
+}
+
+void soo_word(t_token **tmp)
+{
+	while (*tmp && (*tmp)->type != WORD)
+		(*tmp) = (*tmp)->next;
+}
+
+void find_com(t_token **stream, int fd , int fedo)
+{
+	t_token *com;
+	t_token *tmp;
+
+	com = (*stream);
+	tmp = (*stream);
+	if ((com)->prev)
+		while (com && com->type != WORD)
+			com = com->prev;
+	soo_word(&tmp);
+	if (com != (*stream))
+		com->next = tmp->next;
+	else
+	{
+		com = NULL;
+		(*stream) = com;
+		return ;
+	}
+	if (tmp->next != NULL)
+		tmp->next->prev = com;
+	else 
+		com->next = NULL;
+	find_com_2(stream, tmp, com);
+	set_fd(stream, fd, fedo);
 }

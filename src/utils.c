@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 12:46:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/15 14:19:05 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 08:45:38 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ t_token *new_token(int type, char *str, int op)
 }
 
 
-void	esim(void)
-{
-	printf("errrrror\n");
-	exit(1);
-}
-
 int correct_pipe(char *tmp, char *str)
 {
 	return (str[0] != '|' && tmp[1] && tmp[1] == ' ');
@@ -64,19 +58,14 @@ char  *ft_ispipe(char *str)
 	if (!tmp)
 		return (0);
 	if (correct_pipe(tmp, str))
-	{
-		printf ("the pipe is right\n");
 		return (tmp);
-	}
-	printf("pipe error\n");
-	error_msg("Token error\n");
+	error_msg("shyshell: |: pipe error", 1);
 	return (0);
 }
 
-void error_msg(char *str) 
+void error_msg(char *str, int exs) 
 {
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
-	// if (ch != NULL)
-	// 	printf(" `%c'\n");
+	g_exit_statuss = exs;
 }

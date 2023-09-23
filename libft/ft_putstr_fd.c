@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marihovh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 03:42:24 by marihovh          #+#    #+#             */
-/*   Updated: 2023/01/28 14:06:59 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/18 21:26:32 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	ft_putstr_fd(char *s, int fd)
 	int	i;
 
 	i = -1;
+	if (s == NULL)
+		return ;
 	while (s[++i])
 		write (fd, &s[i], 1);
 }

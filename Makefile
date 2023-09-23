@@ -4,9 +4,11 @@ SRC = src/main.c src/parse.c src/token_foos.c src/validation.c built_in/implimen
 	src/paths.c src/execution.c src/envies.c src/redirection.c \
 	src/utils.c src/utils_1.c src/utils_2.c src/utils_3.c src/del_ut.c \
 	built_in/add_rm.c built_in/ft_cd_pwd.c built_in/utils.c built_in/utils_2.c \
-	built_in/ft_ech_ex.c
+	built_in/ft_ech_ex.c src/pipes.c src/free_util.c built_in/utils_1.c \
+	built_in/export_util.c built_in/utils_3.c src/utils_4.c src/redir_util.c \
+	src/exec_util.c
 OBJ=$(SRC:src/%.c=obj/%.o) 
-CC=cc
+CC=gcc
 LIBFT=libft/libft.a
 CFLAGS=-Wall -Werror -Wextra #-fsanitize=address -static-libsan -g
 RM=rm -rf

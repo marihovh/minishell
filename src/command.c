@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/18 16:51:49 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 10:49:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,18 @@ void	free_spl(char **splited)
 
 void	to_struct(t_data *data, t_command **com_stream)
 {
-	int pip_cnt;
-	t_token *tmp;
-	char **command;
-	t_token *eee;
-	t_command *pre = NULL;
-	int sp = 0;
+	int			pip_cnt;
+	t_token		*tmp;
+	char		**command;
+	t_command	*pre;
 
-	eee = data->stream;
+	pre = NULL;
 	pip_cnt = ft_com_len(data) + 1;
 	while (pip_cnt--)
 	{
 		command = init_com(&data->stream);
 		tmp = data->stream;
-		if (tmp->prev &&  tmp->prev->type == WORD)
+		if (tmp->prev && tmp->prev->type == WORD)
 			tmp = tmp->prev;
 		else if (data->stream->next && data->stream->next->type == PIPE)
 			tmp = data->stream;
@@ -52,16 +50,14 @@ void	to_struct(t_data *data, t_command **com_stream)
 		(*com_stream)->prev = pre;
 		pre = (*com_stream);
 		com_stream = &(*com_stream)->next;
-		sp = 0;
 	}
-	data->stream = eee;
 }
 
-
-int ft_arg_len(t_token *stream)
+int	ft_arg_len(t_token *stream)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (stream && stream->type != PIPE)
 	{
 		if (stream->type == WORD || stream->type == FIELD)
@@ -71,25 +67,21 @@ int ft_arg_len(t_token *stream)
 	return (i);
 }
 
-char **init_com(t_token **stream)
+char	**init_com(t_token **stream)
 {
-	char **command;
-	int len;
-	int i;
+	char	**command;
+	int		len;
+	int		i;
 
 	i = 0;
 	if ((*stream) && (*stream)->type == PIPE)
 		(*stream) = (*stream)->next;
-	len  = ft_arg_len((*stream));
-	// printf("%i\n", len);
+	len = ft_arg_len((*stream));
 	command = malloc(sizeof(char *) * (len + 1));
 	while ((*stream) && (*stream)->type != PIPE)
 	{
 		if ((*stream)->type == WORD || (*stream)->type == FIELD)
 			command[i++] = ft_strdup((*stream)->value);
-		// else if ((*stream)->type == SP)
-		// 	command[i] = ft_strdup(" ");
-		// i++;
 		if ((*stream)->next == NULL || (*stream)->next->type == PIPE)
 			break ;
 		(*stream) = (*stream)->next;
