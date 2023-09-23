@@ -12,9 +12,9 @@
 
 #include "../minishell.h" 
 
-int ft_strcmp(char *str, char *chm)
+int	ft_strcmp(char *str, char *chm)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (str[++i] || chm[i])
@@ -25,8 +25,7 @@ int ft_strcmp(char *str, char *chm)
 	return (0);
 }
 
-
-t_token *new_token(int type, char *str, int op)
+t_token	*new_token(int type, char *str, int op)
 {
 	t_token	*new_token;
 
@@ -44,15 +43,14 @@ t_token *new_token(int type, char *str, int op)
 	return (new_token);
 }
 
-
-int correct_pipe(char *tmp, char *str)
+int	correct_pipe(char *tmp, char *str)
 {
 	return (str[0] != '|' && tmp[1] && tmp[1] == ' ');
 }
 
-char  *ft_ispipe(char *str)
+char	*ft_ispipe(char *str)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strchr(str, '|');
 	if (!tmp)
@@ -63,7 +61,7 @@ char  *ft_ispipe(char *str)
 	return (0);
 }
 
-void error_msg(char *str, int exs) 
+void	error_msg(char *str, int exs)
 {
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);

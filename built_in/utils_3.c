@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-unsigned long long	for_llu(t_command *node)
+unsigned long long int	for_llu(t_command *node)
 {
 	unsigned long long	num;
 
@@ -30,7 +30,7 @@ unsigned long long	for_llu(t_command *node)
 	return (num);
 }
 
-long long	for_ll(t_command *node)
+long long int	for_ll(t_command *node)
 {
 	long long	num1;
 

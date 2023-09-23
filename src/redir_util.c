@@ -83,3 +83,20 @@ int redirs(t_token *stream)
 	}
 	return (0);
 }
+
+void	write_here_doc(int fd, char *filename)
+{
+	char	*line;
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_DFL);
+	while (1)
+	{
+		line = readline("> ");
+		if ((line == NULL || ft_strcmp(line, filename) == 0))
+			break ;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+	}
+	close(fd);
+}

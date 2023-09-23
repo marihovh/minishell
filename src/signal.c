@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void signal_hend(int signum)
+void	signal_hend(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -21,15 +21,15 @@ void signal_hend(int signum)
 	}
 }
 
-int hand(void)
+int	hand(void)
 {
 	return (0);
 }
 
-int signals (void)
+int	signals(void)
 {
 	struct sigaction	sa;
-	
+
 	sa.sa_handler = &signal_hend;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
@@ -40,10 +40,10 @@ int signals (void)
 	return (0);
 }
 
-void foo(int num)
+void	foo(int num)
 {
-	static struct termios term_attr;
-	
+	static struct termios	term_attr;
+
 	if (num == 0)
 		tcgetattr(STDIN_FILENO, &term_attr);
 	if (num == 1)

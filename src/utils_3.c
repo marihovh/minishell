@@ -12,12 +12,11 @@
 
 #include "../minishell.h"
 
-
 long long int	ft_long_atoi(const char *str)
 {
-	int	i;
-	int	minus;
-	long long	num;
+	int				i;
+	int				minus;
+	long long int	num;
 
 	i = 0;
 	minus = 1;
@@ -60,4 +59,14 @@ char	*env_name(char **str)
 	}
 	chunk[i] = '\0';
 	return (chunk);
+}
+
+void	set_fd(t_token **stream, int fd, int fedo)
+{
+	if (!(*stream))
+		return ;
+	if (fedo == 1)
+		(*stream)->in = fd;
+	else
+		(*stream)->out = fd;
 }

@@ -50,10 +50,11 @@ t_command	*new_com(char **args, int in, int out)
 
 int	ft_com_len(t_data *data)
 {
-	int	i;
+	int		i;
+	t_token	*tmp;
 
 	i = 0;
-	t_token	*tmp = data->stream;
+	tmp = data->stream;
 	while (data->stream)
 	{
 		if (data->stream->type == PIPE)
@@ -77,8 +78,8 @@ char	*one_dol(char **str)
 	return (NULL);
 }
 
-int ft_norm_name(char ch)
+int	ft_norm_name(char ch)
 {
-	return ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || ch == 95);
+	return ((ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) \
+		|| (ch >= 48 && ch <= 57) || ch == 95);
 }
-
