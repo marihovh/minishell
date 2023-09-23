@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 12:56:17 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 16:06:52 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_run(t_data *data)
 	exit(0);
 }
 
-void	dups(t_command *com, int pip[][2], t_data *data)
+void	dups(t_command *com, int **pip, t_data *data)
 {
 	if (com->prev != NULL && com->in == 0)
 		dup2(pip[data->index - 1][0], 0);

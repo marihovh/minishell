@@ -6,23 +6,23 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 11:08:50 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 14:36:17 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 16:14:01 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int valid_name(char *filename)
+int	valid_name(char *filename)
 {
 	int	nb;
-	
+
 	nb = not_file(filename);
 	if (nb != 0)
 		free(filename);
 	return (nb);
 }
 
-int fd_error(int sign, char *filename)
+int	fd_error(int sign, char *filename)
 {
 	ft_putstr_fd("shyshell: ", 2);
 	ft_putstr_fd(filename, 2);
@@ -35,16 +35,18 @@ int fd_error(int sign, char *filename)
 	return (1);
 }
 
-int open_fd(t_token *stream, char *filename)
+int	open_fd(t_token *stream, char *filename)
 {
-	int fd = 0;
-	
+	int	fd;
+
+	fd = 0;
 	if (stream->type == REDIR_IN)
 	{
 		fd = open(filename, O_RDONLY);
 		if (fd < 0)
 			return (fd_error(1, filename));
-	}else if (stream->type == REDIR_OUT && stream->next)
+	}
+	else if (stream->type == REDIR_OUT && stream->next)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	else if (stream->type == REDIR_AP && stream->next)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
@@ -57,12 +59,12 @@ int open_fd(t_token *stream, char *filename)
 	return (fd);
 }
 
-int redirs(t_token *stream)
+int	redirs(t_token *stream)
 {
-	int sign;
-	char *filename;
-	int fd;
-	
+	int		sign;
+	char	*filename;
+	int		fd;
+
 	while (stream)
 	{
 		if (stream->op == 1)

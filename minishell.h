@@ -105,7 +105,7 @@ t_envies *new_node(char *key, char *value);
 void init_env(t_envies **envp, char **environ);
 char	*what_path(char **paths, char *command);
 int	ft_lstcnt(t_envies *lst);
-void dups(t_command *com, int pip[][2], t_data *data);
+void	dups(t_command *com, int **pip, t_data *data);
 char **to_matrix(t_envies *envies);
 void print_env(char **env);
 int execution(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 18:24:39 by marihovh          #+#    #+#             */
-/*   Updated: 2023/08/24 18:11:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 15:49:55 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_path(t_data *data)
 	int			len;
 	char		**splited;
 
-	first = data->envies; 
+	first = data->envies;
 	while (data->envies)
 	{
 		if (data->envies->key && !ft_strcmp(data->envies->key, "PATH"))
