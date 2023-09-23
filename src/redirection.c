@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 14:12:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 17:27:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char *no_escape(char *str)
 	i = -1;
 	j = 0;
 	new = malloc(sizeof(char) * ft_strlen(str));
+	if (!new)
+		return (NULL);
 	while (str[++i])
 	{
 		if (str[i] == 92)
@@ -86,10 +88,12 @@ char *file_name(t_token *stream)
 {
 	char *name;
 
-	while (stream && stream->type != WORD)
+	while (stream && (stream->type != WORD || stream->type != FIELD || stream->type != EXP_FIELD))
 		stream = stream->next;
+	if (!stream)
+		return (NULL);
 	name = no_escape(stream->value);
-	if (!(stream))
+	if (!name)
 		return (NULL);
 	return (name);
 }
@@ -107,6 +111,8 @@ void find_com_2(t_token **stream, t_token *tmp, t_token *com)
 		free(*stream);
 		(*stream) = ww;
 	}
+	if (!aa->prev)
+		return ;
 	aa = aa->prev;
     while (aa && aa != com)
 	{
