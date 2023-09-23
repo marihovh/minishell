@@ -14,7 +14,7 @@
 
 t_token	*which_token(char **str)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = NULL;
 	if (*str[0] == '|')
@@ -25,10 +25,10 @@ t_token	*which_token(char **str)
 		token = token_5(str);
 	else if (*str[0] == '<')
 		token = token_6(str);
-	else if (*str[0] == 34) /*""*/
+	else if (*str[0] == 34)
 		token = token_4(str);
 	else if (ft_isprint(*str[0]))
-		token = token_2(str); // word
+		token = token_2(str);
 	else if (*str[0] == ' ')
 		token = token_1(str);
 	if (token == NULL)
@@ -39,7 +39,7 @@ t_token	*which_token(char **str)
 int	tokenize(t_token **stream, char *str)
 {
 	t_token	*tmp;
-	
+
 	tmp = NULL;
 	while (*str)
 	{

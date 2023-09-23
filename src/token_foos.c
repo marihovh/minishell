@@ -16,7 +16,7 @@ t_token	*token_1(char **str)
 {
 	char	*chunk;
 	int		i;
-	t_token *new;
+	t_token	*new;
 
 	i = 0;
 	chunk = *str;
@@ -46,7 +46,7 @@ t_token	*token_2(char **str)
 t_token	*token_3(char **str)
 {
 	char	*chunk;
-	t_token *new;
+	t_token	*new;
 
 	chunk = (*str);
 	(*str) = ft_strchr(++chunk, 39);
@@ -63,7 +63,7 @@ t_token	*token_3(char **str)
 
 t_token	*token_4(char **str)
 {
-	t_token *new;
+	t_token	*new;
 	char	*chunk;
 
 	chunk = (*str);
@@ -81,7 +81,8 @@ t_token	*token_4(char **str)
 
 t_token	*token_5(char **str)
 {
-	char *ch;
+	char	*ch;
+
 	(*str)++;
 	if (**str == 62)
 	{

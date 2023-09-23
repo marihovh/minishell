@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int pipe_parse(t_token *stream)
+int	pipe_parse(t_token *stream)
 {
 	if ((stream->prev == NULL || stream->next == NULL) \
 		|| (stream->next->type == PIPE) \
@@ -22,13 +22,16 @@ int pipe_parse(t_token *stream)
 	return (0);
 }
 
-int red_parse(t_token *stream)
+int	red_parse(t_token *stream)
 {
-	if (stream->next == NULL ||  (stream->next->type == SP && !stream->next->next))
+	if (stream->next == NULL \
+		|| (stream->next->type == SP && !stream->next->next))
 	{
-		error_msg("shyshell: syntax error near unexpected token `newline\'", 258);
+		error_msg("shyshell: syntax error \
+		near unexpected token `newline\'", 258);
 		return (1);
-	}else if (stream->next->type != WORD && stream->next->type != SP \
+	}
+	else if (stream->next->type != WORD && stream->next->type != SP \
 		&& stream->next->type != EXP_FIELD && stream->next->type != FIELD)
 	{
 		write(2, "shyshell: syntax error near unexpected token `", 45);
@@ -41,9 +44,9 @@ int red_parse(t_token *stream)
 
 void	join_field(t_token **stream)
 {
-	char *tmp;
-    t_token *next_node;
-	
+	char	*tmp;
+	t_token	*next_node;
+
 	tmp = ft_strjoin((*stream)->value, (*stream)->next->value);
 	(*stream)->value = ft_strdup(tmp);
 	free(tmp);
@@ -60,7 +63,7 @@ void	join_field(t_token **stream)
 	(*stream)->next = next_node;
 }
 
-int validation_2(t_token *stream)
+int	validation_2(t_token *stream)
 {
 	if (stream->type == PIPE)
 	{
@@ -70,7 +73,8 @@ int validation_2(t_token *stream)
 			g_exit_statuss = 258;
 			return (1);
 		}
-	}else if (stream->op)
+	}
+	else if (stream->op)
 	{
 		if (red_parse(stream))
 		{
@@ -81,13 +85,15 @@ int validation_2(t_token *stream)
 	return (0);
 }
 
-int validation(t_token *stream)
+int	validation(t_token *stream)
 {
 	while (stream)
 	{
-		if (stream->type == WORD || stream->type == EXP_FIELD || stream->type == FIELD)
+		if (stream->type == WORD || stream->type == EXP_FIELD \
+			|| stream->type == FIELD)
 		{
-			if (stream->next && (stream->next->type == WORD || stream->next->type == EXP_FIELD \
+			if (stream->next && (stream->next->type == WORD \
+				|| stream->next->type == EXP_FIELD \
 				|| stream->next->type == FIELD))
 			{
 				join_field(&stream);
@@ -97,10 +103,7 @@ int validation(t_token *stream)
 		else if (stream->type == SP)
 		{
 			if (stream->prev == NULL && stream->next == NULL)
-			{
-				g_exit_statuss = 0;
-				return (1);
-			}
+				return (valid_helper());
 		}
 		if (validation_2(stream))
 			return (1);

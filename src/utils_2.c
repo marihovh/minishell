@@ -14,7 +14,8 @@
 
 t_token	*token_6(char **str)
 {
-	char *ch;
+	char	*ch;
+
 	(*str)++;
 	if (**str == 60)
 	{
@@ -33,13 +34,14 @@ t_token	*token_6(char **str)
 
 t_token	*token_9(char **str)
 {
-	char *ch;
+	char	*ch;
+
 	(*str)++;
 	ch = ft_strdup("|");
 	return (new_token(PIPE, ch, 0));
 }
 
-void free_data(t_data *data)
+void	free_data(t_data *data)
 {
 	while (data->envies)
 	{
@@ -54,7 +56,7 @@ void free_data(t_data *data)
 	free (data);
 }
 
-char *file_join(char *buffer, char *stat)
+char	*file_join(char *buffer, char *stat)
 {
 	char	*join;
 	size_t	i;

@@ -12,36 +12,21 @@
 
 #include "../minishell.h"
 
-//erkushabti 11
-
-void write_here_doc(int fd, char *filename)
+void	for_heredoc_helper(void)
 {
-	char *line;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_DFL);
-	while(1)
-	{
-		line = readline("> ");
-		if ((line == NULL || ft_strcmp(line, filename) == 0))
-			break ;
-		write(fd , line, ft_strlen(line));
-		write(fd , "\n", 1);
-	}
-	close(fd);
+	error_msg("shyshell: Here-doc error", 1);
+	return (-1);
 }
 
 int	for_heredoc(char *filename)
 {
-	int pid;
-	int fds[2];
-	int status;
+	int	pid;
+	int	fds[2];
+	int	status;
 
 	foo(0);
 	if (pipe(fds) == -1)
-	{
-		error_msg("shyshell: Here-doc error", 1);
-		return (-1);
-	}
+		for_heredoc_helper();
 	pid = fork();
 	if (pid == 0)
 	{
@@ -51,7 +36,7 @@ int	for_heredoc(char *filename)
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status)) 
+	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG((status)) == SIGINT)
 			write(1, "\n", 1);
@@ -61,13 +46,12 @@ int	for_heredoc(char *filename)
 	close(fds[1]);
 	return (fds[0]);
 }
-// here-doc signal error
 
-char *no_escape(char *str)
+char	*no_escape(char *str)
 {
-	char *new;
-	int i;
-	int j;
+	char	*new;
+	int		i;
+	int		j;
 
 	i = -1;
 	j = 0;
@@ -84,9 +68,9 @@ char *no_escape(char *str)
 	return (new);
 }
 
-char *file_name(t_token *stream)
+char	*file_name(t_token *stream)
 {
-	char *name;
+	char	*name;
 
 	while (stream && (stream->type != WORD || stream->type != FIELD || stream->type != EXP_FIELD))
 		stream = stream->next;
@@ -98,11 +82,11 @@ char *file_name(t_token *stream)
 	return (name);
 }
 
-void find_com_2(t_token **stream, t_token *tmp, t_token *com)
+void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 {
-	t_token *ww;
-	t_token *aa;
-	
+	t_token	*ww;
+	t_token	*aa;
+
 	aa = (*stream);
 	while ((*stream) && (*stream) != tmp->next)
 	{
@@ -114,55 +98,12 @@ void find_com_2(t_token **stream, t_token *tmp, t_token *com)
 	if (!aa->prev)
 		return ;
 	aa = aa->prev;
-    while (aa && aa != com)
+	while (aa && aa != com)
 	{
 		ww = aa->prev;
-        free(aa->value);
+		free(aa->value);
 		free(aa);
-        aa = ww;                   
-    }
-	(*stream) = com;
-}
-
-void set_fd(t_token **stream, int fd, int fedo)
-{
-	if (!(*stream))
-		return ;
-	if (fedo == 1)
-		(*stream)->in = fd;
-	else
-		(*stream)->out = fd;
-}
-
-void soo_word(t_token **tmp)
-{
-	while (*tmp && (*tmp)->type != WORD)
-		(*tmp) = (*tmp)->next;
-}
-
-void find_com(t_token **stream, int fd , int fedo)
-{
-	t_token *com;
-	t_token *tmp;
-
-	com = (*stream);
-	tmp = (*stream);
-	if ((com)->prev)
-		while (com && com->type != WORD)
-			com = com->prev;
-	soo_word(&tmp);
-	if (com != (*stream))
-		com->next = tmp->next;
-	else
-	{
-		com = NULL;
-		(*stream) = com;
-		return ;
+		aa = ww;
 	}
-	if (tmp->next != NULL)
-		tmp->next->prev = com;
-	else 
-		com->next = NULL;
-	find_com_2(stream, tmp, com);
-	set_fd(stream, fd, fedo);
+	(*stream) = com;
 }
