@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 09:47:33 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 11:00:45 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:40:52 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ int	red_parse(t_token *stream)
 	if (stream->next == NULL \
 		|| (stream->next->type == SP && !stream->next->next))
 	{
-		error_msg("shyshell: syntax error \
-		near unexpected token `newline\'", 258);
+		ft_putstr_fd("shyshell: syntax error near", 2);
+		ft_putstr_fd(" unexpected token `newline\'\n", 2);
+		g_exit_statuss = 258;
 		return (1);
 	}
 	else if (stream->next->type != WORD && stream->next->type != SP \

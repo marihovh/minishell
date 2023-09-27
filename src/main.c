@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 14:00:51 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:10:09 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,25 @@ void	init1(t_data *data, char **environ)
 
 void	parse_and_exec(t_data *data, char *str)
 {
-	t_token	*tmp;
-
+	t_token		*tmp;
+	t_command	*com;
+	
 	add_history(str);
 	if (!parse(data, str))
 	{
-		tmp = NULL;
 		tmp = data->stream;
 		to_struct(data, &data->com_stream);
 		data->stream = tmp;
+		// prin(data->stream, data->com_stream);
+		// exit(0);
+		tmp = data->stream;
+		com = data->com_stream;
 		execution(data);
+		data->com_stream = com;
+		data->stream = tmp;
 		free_tokens(data->stream);
 		free_coms(data->com_stream);
 	}
-	dup2(data->in_c, 0);
-	dup2(data->out_c, 1);
 }
 
 int	main(int argc, char **argv, char **environ)
@@ -65,7 +69,10 @@ int	main(int argc, char **argv, char **environ)
 	char	*str;
 
 	if (argc > 1 && argv[0])
+	{
 		printf("are you kidding? 😒\n");
+		return (0);
+	}
 	data = malloc(sizeof(t_data));
 	init1(data, environ);
 	while (1)
@@ -73,13 +80,14 @@ int	main(int argc, char **argv, char **environ)
 		str = readline("shyshell$ ");
 		if (!str)
 		{
-			printf("exit\n");
+			printf("exit\n"); // clear
 			exit(0);
 		}
 		if (str[0])
 			parse_and_exec(data, str);
 		else
 			free(str);
+		system("leaks minishell");
 	}
 	return (0);
 }

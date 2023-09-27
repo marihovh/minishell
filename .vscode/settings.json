@@ -23,6 +23,11 @@
 		"system_error": "c",
 		"tuple": "c",
 		"type_traits": "c",
-		"ostream": "c"
+		"ostream": "c",
+		"exception": "c",
+		"typeinfo": "c",
+		"readline.h": "c",
+		"stdlib.h": "c",
+		"minishell.h": "c"
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:05:49 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 10:20:58 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:41:57 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	ft_echo(t_data *data, t_command *node)
 	}
 	print_w_sp(data, node, flag);
 	data->stream = tmp;
+	g_exit_statuss = 0;
 	return (0);
 }
 

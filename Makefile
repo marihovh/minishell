@@ -8,13 +8,13 @@ SRC = src/main.c src/parse.c src/token_foos.c src/validation.c built_in/implimen
 	built_in/export_util.c built_in/utils_3.c src/utils_4.c src/redir_util.c \
 	src/exec_util.c
 OBJ=$(SRC:src/%.c=obj/%.o) 
-CC=gcc
+CC=cc
 LIBFT=libft/libft.a
-CFLAGS=-Wall -Werror -Wextra -fsanitize=address -static-libsan -g
+CFLAGS=-Wall -Werror -Wextra #-fsanitize=address -static-libsan -g
 RM=rm -rf
-INCLUDES = -I./readline-marihovh/include
-LINKERS	= -L./readline-marihovh/lib -lreadline
-PREFIX = $(shell pwd)/readline-marihovh
+INCLUDES = -Ireadline/include
+LINKERS	= -Lreadline/lib -lreadline -lhistory
+PREFIX = $(shell pwd)/readline
 
 all: libcomp creat_dir $(NAME) $(OBJ)
 
@@ -27,9 +27,8 @@ creat_dir:
 obj/%.o : src/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-
 $(NAME) : $(OBJ)
-	$(CC) $(CFLAGS) $(LIBFT) $(INCLUDES) $(LINKERS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(INCLUDES) -o $(NAME) $(LINKERS)
 
 clean:
 	@make -C libft clean
@@ -40,6 +39,8 @@ fclean: clean
 	@make -C libft fclean
 
 readline:
-	cd readline-master  && ./configure --prefix=$(PREFIX) && make && make install
+	cd readline-8.1  && ./configure --prefix=$(PREFIX) && make && make install
 
 re: fclean all
+
+.PHONY: re readline fclean clean all

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:24 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 11:31:46 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/24 07:05:47 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,15 @@ void	print_env(char **env)
 		printf("%s\n", env[i]);
 }
 
-int	ft_pip_cnt(t_data *data)
+int	ft_pip_cnt(t_command **com)
 {
-	t_command	*tmp;
 	int			i;
 
-	tmp = data->com_stream;
 	i = 0;
-	while (data->com_stream)
+	while (*com)
 	{
-		data->com_stream = data->com_stream->next;
+		com = &(*com)->next;
 		i++;
 	}
-	data->com_stream = tmp;
 	return (i - 1);
 }

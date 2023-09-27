@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 10:55:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 15:46:22 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/24 13:22:24 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	one_com(t_data *data)
 		if (f == 0)
 		{
 			ft_run(data);
-			exit(0);
+			exit(g_exit_statuss);
 		}
+		wait_and_sig(status);
 	}
 	dup2(data->in_c, 0);
 	dup2(data->out_c, 1);
-	wait_and_sig(status);
 	return (0);
 }

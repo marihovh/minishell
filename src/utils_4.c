@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 18:08:29 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 11:32:10 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:21:32 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	valid_helper(void)
 
 void	soo_word(t_token **tmp)
 {
-	while (*tmp && (*tmp)->type != WORD)
+	while (*tmp && ((*tmp)->type != PIPE && (*tmp)->type != WORD && (*tmp)->type != FIELD && (*tmp)->type != EXP_FIELD))
 		(*tmp) = (*tmp)->next;
 }
 
@@ -66,8 +66,10 @@ void	find_com(t_token **stream, int fd, int fedo)
 	com = (*stream);
 	tmp = (*stream);
 	if ((com)->prev)
-		while (com && com->type != WORD)
+		while (com && ((com)->type != PIPE com->type != WORD && com->type != FIELD && com->type != EXP_FIELD))
 			com = com->prev;
+	if ((com)->type == PIPE)
+		free_after()
 	soo_word(&tmp);
 	if (com != (*stream))
 		com->next = tmp->next;
@@ -83,4 +85,5 @@ void	find_com(t_token **stream, int fd, int fedo)
 		com->next = NULL;
 	find_com_2(stream, tmp, com);
 	set_fd(stream, fd, fedo);
+	printf("aasasas\n");
 }

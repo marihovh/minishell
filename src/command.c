@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 10:49:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:13:54 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@ void	free_spl(char **splited)
 	int	k;
 
 	k = -1;
-	while (splited && splited[++k])
-	{
+	while (splited[++k])
 		free(splited[k]);
-		splited[k] = NULL;
-	}
 	free(splited);
 }
 

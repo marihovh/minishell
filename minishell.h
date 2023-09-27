@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
+/*   Updated: 2023/09/24 07:06:15 by marihovh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -14,8 +26,6 @@
 # define STDIN 0
 
 // libraries
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <sys/stat.h>
 # include <termios.h>
 # include <unistd.h>
@@ -26,6 +36,8 @@
 # include <dirent.h>
 # include <string.h>
 # include <errno.h>
+# include <./readline/readline.h>
+# include <readline/history.h>
 # include "./libft/libft.h"
 
 typedef struct s_data		t_data;
@@ -99,7 +111,7 @@ t_envies				*new_node(char *key, char *value);
 void					init_env(t_envies **envp, char **environ);
 char					*what_path(char **paths, char *command);
 int						ft_lstcnt(t_envies *lst);
-void					dups(t_command *com, int pip[][2], t_data *data);
+void					dups(t_command *com, int **pip, t_data *data);
 char					**to_matrix(t_envies *envies);
 void					print_env(char **env);
 int						execution(t_data *data);
@@ -123,6 +135,7 @@ t_token					*token_4(char **str);
 t_token					*token_5(char **str);
 void					free_tokens(t_token *stream);
 t_token					*which_token(char **str);
+int						fd_error(int sign, char *filename);
 int						tokenize(t_token **stream, char *str);
 int						redir_error(void);
 void					open_eror(void);
@@ -151,7 +164,7 @@ int						built_in(t_command *node, t_data *data, t_envies *env);
 void					fill_the_export(t_export **export, t_envies *env);
 int						is_built_in(t_command *node);
 void					free_coms(t_command *stream);
-int						ft_pip_cnt(t_data *data);
+int						ft_pip_cnt(t_command **com);
 int						ft_norm_name(char ch);
 void					ft_run(t_data *data);
 int						ft_cd(t_command *node, t_envies *env);
@@ -190,7 +203,10 @@ void					to_env(t_envies **env, char *key, char *value);
 int						option(t_token *stream, t_command *node);
 int						numeric(char **command);
 int						valid_helper(void);
+void					find_com_2(t_token **stream, t_token *tmp, t_token *com);
+void					set_fd(t_token **stream, int fd, int fedo);
+void					write_here_doc(int fd, char *filename);
 int							g_exit_statuss;
-void					for_heredoc_helper(void);
+int						for_heredoc_helper(void);
 
 #endif

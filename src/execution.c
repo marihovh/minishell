@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 16:06:52 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:09:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,20 @@ char	**to_matrix(t_envies *envies)
 	return (matrix);
 }
 
+void from_matrix(t_envies **envp, char **matrix)
+{
+	int i;
+
+	i = -1;
+	while (matrix[++i])
+	{
+		(*envp) = new_node(matrix[0], matrix[1]);
+		if (!(*envp))
+			break ;
+		envp = &(*envp)->next;
+	}
+}
+
 void	ft_run(t_data *data)
 {
 	char	*path;
@@ -40,6 +54,12 @@ void	ft_run(t_data *data)
 	path = NULL;
 	env = NULL;
 	init_path(data);
+	if (data->paths == NULL)
+	{
+		fd_error(1, data->com_stream->command[0]);
+		g_exit_statuss = 127;
+		exit(127);
+	}
 	path = what_path(data->paths, data->com_stream->command[0]);
 	env = to_matrix(data->envies);
 	if (execve(path, data->com_stream->command, env) == -1)
@@ -50,6 +70,7 @@ void	ft_run(t_data *data)
 		free(path);
 		free_spl(env);
 		g_exit_statuss = 127;
+		exit(0);
 	}
 	else
 	{
@@ -75,6 +96,7 @@ void	wait_and_sig(int status)
 {
 	while (wait(&status) != -1)
 		;
+	g_exit_statuss = status / 256;
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG((status)) == SIGINT)
@@ -93,12 +115,18 @@ void	wait_and_sig(int status)
 
 int	execution(t_data *data)
 {
-	data->pip_cnt = ft_pip_cnt(data);
+	data->pip_cnt = ft_pip_cnt(&data->com_stream);
+	printf("data->pip_cnt:%i\n", data->pip_cnt);
 	if (!data->pip_cnt)
 	{
+		printf("aaaaa\n");
 		one_com(data);
 	}
 	else
+	{
 		piping(data);
+		dup2(data->in_c, 0);
+		dup2(data->out_c, 1);
+	}
 	return (0);
 }

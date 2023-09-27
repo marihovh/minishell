@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 15:49:41 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/24 13:29:39 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,25 @@ int	not_file(char *filename)
 			return (1);
 		}
 		else
-			return (1);
+			return (3);
 	}
 	return (0);
 }
 
 void	tilda(t_token *stream, char *home)
 {
+	char	*tmp;
+
+	tmp = NULL;
 	while (stream)
 	{
 		if (stream->value[0] == '~' && (!stream->value[1] \
 			|| stream->value[1] == '/'))
 		{
-			stream->value++;
-			stream->value = ft_strjoin(home, stream->value);
+			tmp = ft_strdup(stream->value);
+			free(stream->value);
+			stream->value = ft_strjoin(ft_strdup(home), tmp + 1);
+			free(tmp);
 		}
 		stream = stream->next;
 	}
@@ -61,7 +66,7 @@ void	free_com_p(char **command)
 int	parse(t_data *data, char *str)
 {
 	int	t;
-
+	
 	if (tokenize(&data->stream, str))
 	{
 		free(str);
@@ -80,7 +85,6 @@ int	parse(t_data *data, char *str)
 	if (t == 1 || t == 3)
 	{
 		free_tokens(data->stream);
-		g_exit_statuss = 0;
 		return (1);
 	}
 	return (0);
