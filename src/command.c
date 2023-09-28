@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 19:13:54 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 13:08:48 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void	to_struct(t_data *data, t_command **com_stream)
 	while (pip_cnt--)
 	{
 		command = init_com(&data->stream);
+		if (!data->stream)
+		{
+			(*com_stream) = new_com(command, 0, 1);
+			break ;
+		}
 		tmp = data->stream;
 		if (tmp->prev && tmp->prev->type == WORD)
 			tmp = tmp->prev;

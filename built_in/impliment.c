@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 10:22:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 10:34:34 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_built_in(t_command *node)
 
 int	built_in(t_command *node, t_data *data, t_envies *env)
 {
-	if (!(ft_strcmp("echo", node->command[0])))
+	if (!(ft_strcmp_up("echo", node->command[0])))
 		ft_echo(data, node);
 	else if (!(ft_strcmp("pwd", node->command[0])))
 		ft_pwd();

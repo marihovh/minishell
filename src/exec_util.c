@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 10:55:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 13:22:24 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:23:56 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	one_com(t_data *data)
 		dup2(data->com_stream->in, 0);
 	if (data->com_stream->out != 1)
 		dup2(data->com_stream->out, 1);
+	under_(data);
 	if (is_built_in(data->com_stream))
 		built_in(data->com_stream, data, data->envies);
 	else

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 19:10:09 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 13:18:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	parse_and_exec(t_data *data, char *str)
 		tmp = data->stream;
 		to_struct(data, &data->com_stream);
 		data->stream = tmp;
-		// prin(data->stream, data->com_stream);
-		// exit(0);
 		tmp = data->stream;
 		com = data->com_stream;
 		execution(data);
@@ -81,6 +79,7 @@ int	main(int argc, char **argv, char **environ)
 		if (!str)
 		{
 			printf("exit\n"); // clear
+		// system("leaks minishell");
 			exit(0);
 		}
 		if (str[0])

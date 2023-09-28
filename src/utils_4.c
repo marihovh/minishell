@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 18:08:29 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 19:21:32 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:34:12 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,8 @@ void	find_com(t_token **stream, int fd, int fedo)
 	com = (*stream);
 	tmp = (*stream);
 	if ((com)->prev)
-		while (com && ((com)->type != PIPE com->type != WORD && com->type != FIELD && com->type != EXP_FIELD))
+		while (com && ((com)->type != PIPE && com->type != WORD && com->type != FIELD && com->type != EXP_FIELD))
 			com = com->prev;
-	if ((com)->type == PIPE)
-		free_after()
 	soo_word(&tmp);
 	if (com != (*stream))
 		com->next = tmp->next;
@@ -84,6 +82,6 @@ void	find_com(t_token **stream, int fd, int fedo)
 	else
 		com->next = NULL;
 	find_com_2(stream, tmp, com);
-	set_fd(stream, fd, fedo);
-	printf("aasasas\n");
+	if((com)->type != PIPE) 
+		set_fd(stream, fd, fedo);
 }

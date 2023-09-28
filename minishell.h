@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 07:06:15 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:20:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,14 +186,16 @@ void					printing_export(t_export *export);
 int						ft_env(t_command *node, t_envies *env);
 int						ft_strcmp_up(char *str, char *chm);
 int						ft_export(t_command *node, t_data *data);
-void					update_value(t_export **export, char *key, char *value);
+void					update_exp_value(t_export **export, char *key, char *value);
 void					join_to_value(t_export **export, \
 	char *key, char *value);
+void under_(t_data *data);
 long long int			ft_long_atoi(const char *str);
 unsigned long long	int	for_llu(t_command *node);
 long long int			for_ll(t_command *node);
 void					helpp(t_export **export, \
 	char *key, char *value, int flag);
+void	update_env_value(t_envies **env, char *key, char *value);
 void					export_delete(t_export **export, char *node);
 int						is_export(t_export **export, char *str);
 void					free_kv(char *key, char *value);

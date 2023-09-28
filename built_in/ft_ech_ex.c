@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:05:49 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 18:41:57 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:02:50 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,13 @@ int	parse_ex(char **command)
 	{
 		i = numeric(command);
 		if (i >= 20)
+		{
+			ft_putstr_fd("shyshell: exit: ", 2);
+			ft_putstr_fd(command[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			g_exit_statuss = 255;
 			return (255);
+		}
 		if (command[2])
 		{
 			ft_putstr_fd("shyshell: exit: too many arguments\n", 2);

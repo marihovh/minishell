@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 19:09:18 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:23:16 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,11 @@ void	ft_run(t_data *data)
 		ft_putstr_fd(data->com_stream->command[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		free(path);
-		free_spl(env);
 		g_exit_statuss = 127;
-		exit(0);
 	}
 	else
-	{
 		init_env(&data->envies, env);
-		free_spl(env);
-	}
-	exit(0);
+	free_spl(env);
 }
 
 void	dups(t_command *com, int **pip, t_data *data)
@@ -113,15 +108,22 @@ void	wait_and_sig(int status)
 	}
 }
 
+void under_(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->com_stream->command[i])
+		i++;
+	update_env_value(&data->envies, "_", data->com_stream->command[i - 1]);
+
+}
+
 int	execution(t_data *data)
 {
 	data->pip_cnt = ft_pip_cnt(&data->com_stream);
-	printf("data->pip_cnt:%i\n", data->pip_cnt);
 	if (!data->pip_cnt)
-	{
-		printf("aaaaa\n");
 		one_com(data);
-	}
 	else
 	{
 		piping(data);

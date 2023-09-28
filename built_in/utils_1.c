@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 05:39:27 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 10:24:15 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:53:40 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	helpp(t_export **export, char *key, char *value, int flag)
 	if (flag == 1)
 		join_to_value(export, key, value);
 	else
-		update_value(export, key, value);
+		update_exp_value(export, key, value);
 }
 
 void	free_kv(char *key, char *value)

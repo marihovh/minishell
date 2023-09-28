@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 05:37:13 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 06:38:49 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 12:58:44 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	join_to_value(t_export **export, char *key, char *value)
 	}
 }
 
-void	update_value(t_export **export, char *key, char *value)
+void	update_exp_value(t_export **export, char *key, char *value)
 {
 	while ((*export))
 	{
@@ -65,6 +65,13 @@ t_export	*new_expo_node(char *key, char *value)
 
 void	to_env(t_envies **env, char *key, char *value)
 {
+	char *tmp = find_env(env, key);
+	if (tmp)
+	{
+		free(tmp);
+		update_env_value(env, key, value);
+		return ;
+	}
 	while ((*env))
 		env = &(*env)->next;
 	(*env) = new_node(key, value);

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:40:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 13:38:07 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 15:20:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	pip_signal(int status)
 {
 	while (wait(&status) != -1)
 		;
+	g_exit_statuss = status / 256;
 	if (WIFSIGNALED(status))
 	{
 		g_exit_statuss = WTERMSIG((status));
@@ -28,6 +29,7 @@ void	exec_2(t_data *data, t_token *stream, t_command *com_stream)
 {
 	pid_t	f;
 
+	under_(data);
 	if (is_built_in(com_stream))
 	{
 		if (stream && stream->type == PIPE)
@@ -42,7 +44,7 @@ void	exec_2(t_data *data, t_token *stream, t_command *com_stream)
 		{
 			signals();
 			ft_run(data);
-			exit(0);
+			exit(g_exit_statuss);
 		}
 	}
 }
@@ -90,10 +92,12 @@ int	piping(t_data *data)
 	if (!pip)
 		return (0);
 	data->index = 0;
-	while (data->index <= data->pip_cnt)
+	while (data->index <= data->pip_cnt && data->com_stream->command[0])
 	{
 		dups(data->com_stream, pip, data);
 		exec_2(data, data->stream, data->com_stream);
+		// update_env_value(&data->envies, "_", data->com_stream->command[0]);
+		// update_exp_value(&data->export, "_", data->com_stream->command[0]);
 		dup2(data->in_c, 0);
 		dup2(data->out_c, 1);
 		if (data->index < data->pip_cnt)
