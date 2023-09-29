@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 05:39:27 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 12:53:40 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:30:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	helpp(t_export **export, char *key, char *value, int flag)
 
 void	free_kv(char *key, char *value)
 {
+	if (key && !value)
+		free(key);
 	if (key && value)
 	{
 		free(key);

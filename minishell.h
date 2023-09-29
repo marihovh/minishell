@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 15:20:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 12:38:43 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void					wait_and_sig(int status);
 void					free_export(t_export *export);
 void					free_spl(char **splited);
 t_envies				*new_node(char *key, char *value);
-void					init_env(t_envies **envp, char **environ);
+void					init_env(t_envies **envp, char **environ, int flag);
 char					*what_path(char **paths, char *command);
 int						ft_lstcnt(t_envies *lst);
 void					dups(t_command *com, int **pip, t_data *data);
@@ -127,7 +127,7 @@ void					init_path(t_data *data);
 int						signals(void);
 int						for_heredoc(char *filename);
 char					*file_name(t_token *stream);
-void					find_com(t_token **stream, int fd, int fedo);
+int					find_com(t_token **stream, int fd, int fedo);
 t_token					*token_1(char **str);
 t_token					*token_2(char **str);
 t_token					*token_3(char **str);
@@ -167,7 +167,7 @@ void					free_coms(t_command *stream);
 int						ft_pip_cnt(t_command **com);
 int						ft_norm_name(char ch);
 void					ft_run(t_data *data);
-int						ft_cd(t_command *node, t_envies *env);
+int						ft_cd(t_command *node, t_envies *env, t_export *export);
 int						ft_pwd(void);
 void					signal_hend(int signum);
 int						hand(void);

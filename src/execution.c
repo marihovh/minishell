@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 15:23:16 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 12:59:02 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	ft_run(t_data *data)
 
 	path = NULL;
 	env = NULL;
+	if (!data->com_stream->command[0])
+		return ;
 	init_path(data);
 	if (data->paths == NULL)
 	{
@@ -71,7 +73,7 @@ void	ft_run(t_data *data)
 		g_exit_statuss = 127;
 	}
 	else
-		init_env(&data->envies, env);
+		init_env(&data->envies, env, 0);
 	free_spl(env);
 }
 
@@ -91,6 +93,7 @@ void	wait_and_sig(int status)
 {
 	while (wait(&status) != -1)
 		;
+	// system("leaks minishell");
 	g_exit_statuss = status / 256;
 	if (WIFSIGNALED(status))
 	{

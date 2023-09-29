@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 13:18:18 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:19:31 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	update_shlvl(t_envies **env)
 
 void	init1(t_data *data, char **environ)
 {
-	init_env(&data->envies, environ);
+	init_env(&data->envies, environ, 1);
 	update_shlvl(&data->envies);
 	fill_the_export(&data->export, data->envies);
 	data->home = find_env(&data->envies, "HOME");
@@ -79,14 +79,13 @@ int	main(int argc, char **argv, char **environ)
 		if (!str)
 		{
 			printf("exit\n"); // clear
-		// system("leaks minishell");
 			exit(0);
 		}
 		if (str[0])
 			parse_and_exec(data, str);
 		else
 			free(str);
-		system("leaks minishell");
+		// system("leaks minishell");
 	}
 	return (0);
 }

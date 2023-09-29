@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 11:08:50 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 19:57:18 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:19:10 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	open_fd(t_token *stream, char *filename)
 	}
 	return (fd);
 }
+// i dont know how but please solve the problem of redirection when there is no command
 
 int	redirs(t_token *stream)
 {

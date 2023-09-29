@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 20:07:53 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 06:42:46 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 11:21:11 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_envies	*new_node(char *key, char *value)
 	return (new_node);
 }
 
-void	init_env(t_envies **envp, char **environ)
+void	init_env(t_envies **envp, char **environ, int flag)
 {
 	char	*str;
 	char	*chunk;
@@ -40,7 +40,8 @@ void	init_env(t_envies **envp, char **environ)
 		chunk = ft_substr(environ[i], 0, str - environ[i]);
 		if (!chunk)
 			break ;
-		(*envp) = new_node(chunk, str + 1);
+		if (!(!ft_strcmp(chunk, "OLDPWD") && flag == 1))
+			(*envp) = new_node(chunk, str + 1);
 		free(chunk);
 		if (!(*envp))
 			break ;

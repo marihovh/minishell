@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:40:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 15:20:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 10:55:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,23 @@ void	exec_2(t_data *data, t_token *stream, t_command *com_stream)
 	pid_t	f;
 
 	under_(data);
-	if (is_built_in(com_stream))
+	f = fork();
+	if (f == 0)
 	{
-		if (stream && stream->type == PIPE)
-			while (stream && stream->type == WORD)
-				stream = stream->next;
-		built_in(com_stream, data, data->envies);
-	}
-	else
-	{
-		f = fork();
-		if (f == 0)
-		{
 			signals();
+		if (is_built_in(com_stream))
+		{
+			if (stream && stream->type == PIPE)
+				while (stream && stream->type == WORD)
+					stream = stream->next;
+			built_in(com_stream, data, data->envies);
+		}else
 			ft_run(data);
-			exit(g_exit_statuss);
-		}
+		exit(g_exit_statuss);
 	}
+	if (stream && stream->type == PIPE)
+		while (stream && stream->type == WORD)
+			stream = stream->next;
 }
 
 int	**init_pipe(t_data *data)
@@ -96,8 +96,6 @@ int	piping(t_data *data)
 	{
 		dups(data->com_stream, pip, data);
 		exec_2(data, data->stream, data->com_stream);
-		// update_env_value(&data->envies, "_", data->com_stream->command[0]);
-		// update_exp_value(&data->export, "_", data->com_stream->command[0]);
 		dup2(data->in_c, 0);
 		dup2(data->out_c, 1);
 		if (data->index < data->pip_cnt)

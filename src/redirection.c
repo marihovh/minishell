@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/24 03:57:39 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 12:44:34 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ int waiting (int pid, int status, char *filename)
 int	for_heredoc(char *filename)
 {
 	int	pid;
-	int	fds[2];
+	int	*fds;
 	int	status;
 
 	foo(0);
 	status = 0;
+	fds = malloc(sizeof(int *) * 2);
 	if (pipe(fds) == -1)
 		return (for_heredoc_helper());
 	pid = fork();
@@ -49,8 +50,9 @@ int	for_heredoc(char *filename)
 	{
 		close(fds[0]);
 		write_here_doc(fds[1], filename);
-		free(filename);
 		close(fds[1]);
+		free(filename);
+		// system("leaks minishell");
 		exit(0);
 	}
 	if (waiting(pid, status, filename) == -2)

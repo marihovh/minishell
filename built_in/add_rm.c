@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 16:04:23 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 11:20:33 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,13 @@ char *valid_key(char *command, int *flag, char *what)
 
 	i = 0;
 	key = f_k(command, flag);
-	if (!key)
+	if (!key[0])
+	{
+		exp_error(what, command);
+		g_exit_statuss = 1;
+		free(key);
 		return (0);
+	}
 	while (key[i])
 	{
 		if (i == 0 && first_char(key[i]))

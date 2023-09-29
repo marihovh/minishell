@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 18:08:29 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 11:34:12 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:21:20 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	soo_word(t_token **tmp)
 		(*tmp) = (*tmp)->next;
 }
 
-void	find_com(t_token **stream, int fd, int fedo)
+int	find_com(t_token **stream, int fd, int fedo)
 {
 	t_token	*com;
 	t_token	*tmp;
@@ -72,11 +72,7 @@ void	find_com(t_token **stream, int fd, int fedo)
 	if (com != (*stream))
 		com->next = tmp->next;
 	else
-	{
-		com = NULL;
-		(*stream) = com;
-		return ;
-	}
+		return (1); // here u can write your function to solve the problem of redir
 	if (tmp->next != NULL)
 		tmp->next->prev = com;
 	else
@@ -84,4 +80,5 @@ void	find_com(t_token **stream, int fd, int fedo)
 	find_com_2(stream, tmp, com);
 	if((com)->type != PIPE) 
 		set_fd(stream, fd, fedo);
+	return (0);
 }

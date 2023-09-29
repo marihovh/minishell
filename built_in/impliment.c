@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 12:19:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 10:34:34 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/09/29 12:10:46 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	built_in(t_command *node, t_data *data, t_envies *env)
 	else if (!(ft_strcmp("pwd", node->command[0])))
 		ft_pwd();
 	else if (!(ft_strcmp("cd", node->command[0])))
-		ft_cd(node, env);
+		ft_cd(node, env, data->export);
 	else if (!(ft_strcmp("env", node->command[0])))
 		ft_env(node, env);
 	else if (!(ft_strcmp("exit", node->command[0])))
