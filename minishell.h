@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/05 17:47:41 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:47:28 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,13 @@ char					*if_env(char *str, t_envies *env);
 void					open_fields(t_token *stream, t_envies *env);
 void					signal_hend(int signum);
 void					init_line(t_data *data, char **environ);
-int						redirs(t_token *stream);
+int						redirs(t_token *stream, t_envies *env);
 t_token					*cut_red(t_token *stream);
 void					delete_files(t_token **stream);
 int						parse(t_data *data, char *str);
 void					init_path(t_data *data);
 int						signals(void);
-int						for_heredoc(char *filename);
+int						for_heredoc(char *filename, t_envies *env);
 char					*file_name(t_token **stream);
 int	find_com(t_token **stream, int fd, int fedo, t_token *redir);
 t_token					*token_1(char **str);
@@ -147,7 +147,7 @@ int						split_len(char **str);
 t_command				*new_com(char **args, int in, int out);
 char					**init_com(t_token **stream);
 int						ft_com_len(t_data *data);
-char					*one_dol(char **str);
+char	*open_dol(char *dol, char *str, t_envies *env);
 char					*env_name(char **str);
 t_token					*token_6(char **str);
 t_token					*token_9(char **str);
@@ -207,7 +207,7 @@ int						numeric(char **command);
 int						valid_helper(void);
 void					find_com_2(t_token **stream, t_token *tmp, t_token *com);
 void					set_fd(t_token **stream, int fd, int fedo);
-void					write_here_doc(int fd, char *filename);
+void					write_here_doc(int fd, char *filename, t_envies *env);
 int							g_exit_statuss;
 int						for_heredoc_helper(void);
 

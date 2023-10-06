@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 18:08:29 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/05 18:43:54 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:28:44 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,13 @@ int find_com(t_token **stream, int fd, int fedo, t_token *redir)
 	else
 	{
 		// check is there a another ile
-		t_token *ant;
-		if (file->next)
-		{
-			ant = file->next;
-			while (ant && (ant->type != WORD))
-				ant = ant->next;
-		}
+		// t_token *ant;
+		// if (file->next)
+		// {
+		// 	ant = file->next;
+		// 	while (ant && (ant->type != WORD))
+		// 		ant = ant->next;
+		// }
 		// printf("morquri mard\n");
 		if (file->next != NULL)
 			file->next->prev = com;

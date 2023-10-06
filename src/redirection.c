@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/05 18:45:39 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:43:21 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ int waiting (int pid, int status, char *filename)
 	return (0);
 }
 
-int	for_heredoc(char *filename)
+int	for_heredoc(char *filename, t_envies *env)
 {
 	int	pid;
 	int	*fds;
 	int	status;
+	int ret;
 
 	foo(0);
 	status = 0;
@@ -49,16 +50,18 @@ int	for_heredoc(char *filename)
 	if (pid == 0)
 	{
 		close(fds[0]);
-		write_here_doc(fds[1], filename);
+		write_here_doc(fds[1], filename, env);
 		close(fds[1]);
 		free(filename);
 		// system("leaks minishell");
 		exit(0);
 	}
+	ret = fds[0];
 	if (waiting(pid, status, filename) == -2)
-		fds[0] = -2;
+		ret = -2;
 	close(fds[1]);
-	return (fds[0]);
+	free(fds);
+	return (ret);
 }
 
 char	*no_escape(char *str)
@@ -110,16 +113,13 @@ void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 		(*stream) = NULL;
 		(*stream) = ww;
 	}
-	if (aa && aa->prev)
-	{
-		aa = aa->prev;
+	aa = aa->prev;
 	while (aa && aa != com)
 	{
 		ww = aa->prev;
 		free(aa->value);
 		free(aa);
 		aa = ww;
-	}
 	}
 	(*stream) = com;
 }

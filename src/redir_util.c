@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 11:08:50 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/05 18:46:56 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:49:51 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	fd_error(int sign, char *filename)
 	return (-42);
 }
 
-int	open_fd(t_token *stream, char *filename)
+int	open_fd(t_token *stream, char *filename, t_envies *env)
 {
 	int	fd;
 
@@ -56,7 +56,7 @@ int	open_fd(t_token *stream, char *filename)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	else if (stream->type == REDIR_SO && stream->next)
 	{
-		fd = for_heredoc(filename);
+		fd = for_heredoc(filename, env);
 		if (fd == -2)
 			return (-42);
 	}
@@ -64,7 +64,7 @@ int	open_fd(t_token *stream, char *filename)
 }
 // i dont know how but please solve the problem of redirection when there is no command
 
-int	redirs(t_token *stream)
+int	redirs(t_token *stream, t_envies *env)
 {
 	int		sign;
 	char	*filename;
@@ -82,10 +82,10 @@ int	redirs(t_token *stream)
 				sign = 1;
 			if (valid_name(filename)== 1)
 				return (1);
-			fd = open_fd(tmp, filename);
+			fd = open_fd(tmp, filename, env);
 			if (fd == -42)
 				return (3);
-			// free(filename);
+			free(filename);
 			find_com(&stream, fd, sign, tmp);
 		}
 		if (!stream)
@@ -95,9 +95,11 @@ int	redirs(t_token *stream)
 	return (0);
 }
 
-void	write_here_doc(int fd, char *filename)
+void	write_here_doc(int fd, char *filename, t_envies *env)
 {
 	char	*line;
+	char	*dol;
+	char	*tmp;
 
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_DFL);
@@ -106,6 +108,14 @@ void	write_here_doc(int fd, char *filename)
 		line = readline("> ");
 		if ((line == NULL || ft_strcmp(line, filename) == 0))
 			break ;
+		dol = ft_strchr(line, '$');
+		if (dol)
+		{
+			tmp = ft_strdup(line);
+			free(line);
+			line = open_dol(dol, tmp, env);
+			free(tmp);
+		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
 		free(line);
