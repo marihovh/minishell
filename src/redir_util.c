@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 11:08:50 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 14:19:10 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/05 18:46:56 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,25 +69,27 @@ int	redirs(t_token *stream)
 	int		sign;
 	char	*filename;
 	int		fd;
+	t_token *tmp;
 
 	while (stream)
 	{
 		if (stream->op == 1)
 		{
 			sign = 0;
-			filename = file_name(stream);
+			tmp = stream;
+			filename = file_name(&stream);
+			if (tmp->type == REDIR_IN || tmp->type == REDIR_SO)
+				sign = 1;
 			if (valid_name(filename)== 1)
 				return (1);
-			if (stream->type == REDIR_IN || stream->type == REDIR_SO)
-				sign = 1;
-			fd = open_fd(stream, filename);
+			fd = open_fd(tmp, filename);
 			if (fd == -42)
 				return (3);
-			free(filename);
-			find_com(&stream, fd, sign);
+			// free(filename);
+			find_com(&stream, fd, sign, tmp);
 		}
 		if (!stream)
-			return (2);
+			return (2); // 2
 		stream = stream->next;
 	}
 	return (0);

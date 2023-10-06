@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 22:24:35 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/06 13:25:18 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,69 @@ int	will_open(t_token *stream)
 	return (1);
 }
 
-void open_fields(t_token *stream, t_envies *env)
+char	*open_dol(char *dol, char *str, t_envies *env)
 {
+	char *ret = NULL;
+	char *tmp;
+	char *value;
 	char *name;
+	
+	while (str && str[0])
+	{
+		if (str[0] != '$')
+		{
+			dol = ft_strchr(str, '$');
+			if (!dol)
+			{
+				ret = ft_strjoin(ret, str);
+				str = NULL;
+			}
+			else
+			{
+				tmp = ft_substr(str, 0, ft_strlen(str) - ft_strlen(dol));
+				str = ft_strchr(str, '$');
+				name = env_name(&str);
+				value = if_env(name, env);
+				free(name);
+				ret = ft_strjoin(ret, tmp);
+				free(tmp);
+				ret = ft_strjoin(ret, value);
+				free(value);
+			}
+		}
+		else
+		{
+			str = ft_strchr(str, '$');
+			name = env_name(&str);
+			value = if_env(name, env);
+			free(name);
+			ret = ft_strjoin(ret, value);
+			free(value);
+		}
+	}
+	return (ret);
+}
+
+void	open_fields(t_token *stream, t_envies *env)
+{
 	char *dol;
-	char *chunk;
 	char *tmp;
 	
 	while (stream)
 	{
 		if (stream->type == WORD || stream->type == EXP_FIELD)
 		{
-			dol = ft_strchr(stream->value, '$');
-			while (dol)
+			if (will_open(stream))
 			{
-				tmp = ft_strdup(stream->value);
-				free(stream->value);
-				stream->value = ft_substr(tmp, 0, ft_strlen(tmp) - ft_strlen(dol));
-				free(tmp);
-				name = env_name(&dol);
-				chunk = if_env(name, env);
-				free(name);
-				stream->value = ft_strjoin(stream->value, chunk);
-				free(chunk);
-				stream->value = ft_strjoin(stream->value, dol);
-				dol = ft_strchr((stream->value + ft_strlen(stream->value)) - ft_strlen(dol), '$');
+				dol = ft_strchr(stream->value, '$');
+				if (dol)
+				{
+					tmp = ft_strdup(stream->value);
+					free(stream->value);
+					stream->value = open_dol(dol, tmp, env);
+					free(tmp);
+				}
+				stream->type = WORD;
 			}
 		}
 		stream = stream->next;

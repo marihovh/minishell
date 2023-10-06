@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 10:04:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/27 20:39:13 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/05 18:39:32 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void	prin(t_token *stream, t_command *com_stream)
 	int	i;
 
 	i = -1;
+	if (!stream)
+		return ;
 	while (stream)
 	{
-		printf("stream:%s\n", stream->value);
+		printf("stream:{%s}\n", stream->value);
 		printf("type:%i\n", stream->type);
 		printf("in:%i\n", stream->in);
 		printf("oit:%i\n", stream->out);

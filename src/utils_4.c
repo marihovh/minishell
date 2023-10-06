@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 18:08:29 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 14:21:20 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/05 18:43:54 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,86 @@ void	soo_word(t_token **tmp)
 		(*tmp) = (*tmp)->next;
 }
 
-int	find_com(t_token **stream, int fd, int fedo)
+void free_part(t_token **stream, t_token *com, t_token *redir)
 {
-	t_token	*com;
-	t_token	*tmp;
+	(void)stream;
+    t_token *nextNode;
 
-	com = (*stream);
-	tmp = (*stream);
-	if ((com)->prev)
-		while (com && ((com)->type != PIPE && com->type != WORD && com->type != FIELD && com->type != EXP_FIELD))
-			com = com->prev;
-	soo_word(&tmp);
-	if (com != (*stream))
-		com->next = tmp->next;
+	t_token *current = redir;
+    while (current != NULL && current != com) {
+	
+        nextNode = current->next;
+        free(current->value);
+        free(current);
+		// current = NULL;
+        current = nextNode;
+    }
+	// free(stream);
+	// (*stream) = com;
+}
+
+int find_com(t_token **stream, int fd, int fedo, t_token *redir)
+{
+	(void)redir;
+	t_token	*com;
+	int new_fd;
+	t_token	*file;
+
+	new_fd = -42;
+	com = (*stream)->prev;
+	if ((*stream)->next)
+		file = (*stream)->next;
 	else
-		return (1); // here u can write your function to solve the problem of redir
-	if (tmp->next != NULL)
-		tmp->next->prev = com;
+		file = (*stream);
+	while (com && (com->type != WORD && com->type != PIPE))
+		com = com->prev;
+	if (!com || com->type != WORD)
+	{
+		// printf("aaaaa\n");
+		if ((*stream)->next)
+			com = (*stream)->next;
+		else
+			return (1); 
+		while (com && (com->type != WORD && com->type != PIPE))
+			com = com->next;
+		t_token *an;
+		an = com->next;
+		while (an && (an->type != WORD))
+			an = an->next;
+		if (an)
+		{
+			
+			free_part(stream, com, redir);
+			// prin(*stream, NULL);
+			// exit(0);
+			// free redira and another file
+		}
+		else
+		{
+			//set_fd to com
+			;
+		}
+		// printf("{%s}\n", com->value);
+		// exit(0);
+	}
 	else
-		com->next = NULL;
-	find_com_2(stream, tmp, com);
-	if((com)->type != PIPE) 
+	{
+		// check is there a another ile
+		t_token *ant;
+		if (file->next)
+		{
+			ant = file->next;
+			while (ant && (ant->type != WORD))
+				ant = ant->next;
+		}
+		// printf("morquri mard\n");
+		if (file->next != NULL)
+			file->next->prev = com;
+		else
+			com->next = NULL;
+		find_com_2(stream, file, com);
 		set_fd(stream, fd, fedo);
+	}
+	// exit(0);
 	return (0);
 }

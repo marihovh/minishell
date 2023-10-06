@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 12:38:43 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/05 17:47:41 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ int						parse(t_data *data, char *str);
 void					init_path(t_data *data);
 int						signals(void);
 int						for_heredoc(char *filename);
-char					*file_name(t_token *stream);
-int					find_com(t_token **stream, int fd, int fedo);
+char					*file_name(t_token **stream);
+int	find_com(t_token **stream, int fd, int fedo, t_token *redir);
 t_token					*token_1(char **str);
 t_token					*token_2(char **str);
 t_token					*token_3(char **str);

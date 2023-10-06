@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 12:44:34 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/05 18:45:39 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,20 @@ char	*no_escape(char *str)
 	return (new);
 }
 
-char	*file_name(t_token *stream)
+char	*file_name(t_token **stream)
 {
 	char	*name = NULL;
 
-	while (stream && (stream->type != WORD && stream->type != FIELD \
-		&& stream->type != EXP_FIELD))
-		stream = stream->next;
-	name = no_escape(stream->value);
+	while ((*stream) && ((*stream)->type != WORD && (*stream)->type != FIELD \
+		&& (*stream)->type != EXP_FIELD))
+		(*stream) = (*stream)->next;
+	name = no_escape((*stream)->value);
 	return (name);
 }
 
 void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 {
+	(void)tmp;
 	t_token	*ww;
 	t_token	*aa;
 
@@ -106,15 +107,19 @@ void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 		ww = (*stream)->next;
 		free((*stream)->value);
 		free(*stream);
+		(*stream) = NULL;
 		(*stream) = ww;
 	}
-	aa = aa->prev;
+	if (aa && aa->prev)
+	{
+		aa = aa->prev;
 	while (aa && aa != com)
 	{
 		ww = aa->prev;
 		free(aa->value);
 		free(aa);
 		aa = ww;
+	}
 	}
 	(*stream) = com;
 }
