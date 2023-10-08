@@ -6,11 +6,19 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:48:03 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 21:37:49 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*valid_key_helper(char *what, char *key)
+{
+	exp_error(what, key);
+	g_exit_statuss = 1;
+	free(key);
+	return (NULL);
+}
 
 char	*valid_key(char *command, int *flag, char *what)
 {
@@ -33,12 +41,7 @@ char	*valid_key(char *command, int *flag, char *what)
 		else if (i != 0 && other_char(key[i]))
 			i++;
 		else
-		{
-			exp_error(what, key);
-			g_exit_statuss = 1;
-			free(key);
-			return (NULL);
-		}
+			return (valid_key_helper(what, key));
 	}
 	return (key);
 }
@@ -96,29 +99,4 @@ void	fill_the_export(t_export **export, t_envies *env)
 	}
 	(*export) = new_expo_node("OLDPWD", NULL);
 	export = &(*export)->next;
-}
-
-void	env_delete(t_envies **env, char	*node)
-{
-	t_envies	*current;
-	t_envies	*prev;
-
-	prev = NULL;
-	current = *env;
-	while (current)
-	{
-		if (!ft_strcmp(node, current->key))
-		{
-			if (prev == NULL)
-				*env = current->next;
-			else
-				prev->next = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
-			return ;
-		}
-		prev = current;
-		current = current->next;
-	}
 }

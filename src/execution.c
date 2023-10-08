@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:14:17 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/09 01:05:17 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,15 @@ void	from_matrix(t_envies **envp, char **matrix)
 	}
 }
 
+void	ft_run_helper(char *com_stream, char *path)
+{
+	ft_putstr_fd("shyshell : ", 2);
+	ft_putstr_fd(com_stream, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free(path);
+	g_exit_statuss = 127;
+}
+
 void	ft_run(t_data *data)
 {
 	char	*path;
@@ -64,17 +73,10 @@ void	ft_run(t_data *data)
 	}
 	path = what_path(data->paths, data->com_stream->command[0]);
 	env = to_matrix(data->envies);
-	if (execve(path, data->com_stream->command, env) == -1)
-	{
-		ft_putstr_fd("shyshell : ", 2);
-		ft_putstr_fd(data->com_stream->command[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		free(path);
-		g_exit_statuss = 127;
+	if (execve(path, data->com_stream->command, env) == -1) {
+		ft_run_helper(data->com_stream->command[0], path);
+		free_spl(env);
 	}
-	else
-		init_env(&data->envies, env, 0);
-	free_spl(env);
 }
 
 void	dups(t_command *com, int **pip, t_data *data)
@@ -87,25 +89,4 @@ void	dups(t_command *com, int **pip, t_data *data)
 		dup2(pip[data->index][1], 1);
 	else if (com->out != 1)
 		dup2(com->out, 1);
-}
-
-void	wait_and_sig(int status)
-{
-	while (wait(&status) != -1)
-		;
-	g_exit_statuss = status / 256;
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG((status)) == SIGINT)
-		{
-			write(1, "\n", 1);
-			g_exit_statuss = 130;
-		}
-		if (WTERMSIG((status)) == SIGQUIT)
-		{
-			write(1, "Quit: 3", 7);
-			write(1, "\n", 1);
-			g_exit_statuss = 131;
-		}
-	}
 }

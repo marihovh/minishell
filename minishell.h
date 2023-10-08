@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 17:49:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:54:15 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 21:49:22 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	other_char(char ch);
 void	update_pwd(t_envies **env, char *new, char *old, t_export *export);
 char	*valid_key(char *command, int *flag, char *what);
 void	env_delete(t_envies **env, char	*node);
+int	half_cd_helper(t_envies *env, char *path, t_export *export);
+int	half_cd(char **command, t_envies *env, char *path, t_export *export);
 
 
 int normalize(t_token **stream);

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:23:59 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 22:10:58 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	parse(t_data *data, char *str)
 		free_tokens(data->stream);
 		return (1);
 	}
-	// prin(data->stream, data->com_stream);
 	if (t == 2)
 	{
 		free_tokens(data->stream);

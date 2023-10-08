@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 16:24:27 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/23 08:46:20 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 21:59:45 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,25 @@ char	*file_join(char *buffer, char *stat)
 		join[i++] = buffer[c];
 	join[i] = '\0';
 	return (join);
+}
+
+void	wait_and_sig(int status)
+{
+	while (wait(&status) != -1)
+		;
+	g_exit_statuss = status / 256;
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG((status)) == SIGINT)
+		{
+			write(1, "\n", 1);
+			g_exit_statuss = 130;
+		}
+		if (WTERMSIG((status)) == SIGQUIT)
+		{
+			write(1, "Quit: 3", 7);
+			write(1, "\n", 1);
+			g_exit_statuss = 131;
+		}
+	}
 }

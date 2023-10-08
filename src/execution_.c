@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 20:13:03 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:35:29 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/09 01:18:13 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,6 @@ void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 	t_token	*aa;
 
 	aa = (*stream);
-	while ((*stream) && (*stream) != tmp->next)
-	{
-		ww = (*stream)->next;
-		free((*stream)->value);
-		free(*stream);
-		(*stream) = ww;
-	}
 	if (aa && aa->prev)
 	{
 		aa = aa->prev;
@@ -69,6 +62,13 @@ void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
 			free(aa);
 			aa = ww;
 		}
+	}
+	while ((*stream) && (*stream) != tmp->next)
+	{
+		ww = (*stream)->next;
+		free((*stream)->value);
+		free(*stream);
+		(*stream) = ww;
 	}
 }
 

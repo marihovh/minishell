@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 11:08:50 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:38:24 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/09 01:09:01 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ int	open_fd(t_token *stream, char *filename, t_envies *env)
 	}
 	else if (stream->type == REDIR_OUT && stream->next)
 	{
-		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
 			return (-42);
 	}
 	else if (stream->type == REDIR_AP && stream->next)
-		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else if (stream->type == REDIR_SO && stream->next)
 	{
 		fd = for_heredoc(filename, env);

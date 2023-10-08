@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:40:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/08 20:24:41 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/09 01:01:35 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ int	piping(t_data *data)
 		data->com_stream = data->com_stream->next;
 	}
 	pip_signal(status);
+	free_pip(pip, data->pip_cnt);
 	// if (data->com_stream->in != STDIN)
 	// 	close(data->com_stream->in);
 	// if (data->com_stream->out != STDOUT)
 	// 	close(data->com_stream->out);
-	free_pip(pip, data->pip_cnt);
 	return (0);
 }
