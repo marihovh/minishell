@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 20:49:55 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 12:59:02 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:14:17 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char	**to_matrix(t_envies *envies)
 	return (matrix);
 }
 
-void from_matrix(t_envies **envp, char **matrix)
+void	from_matrix(t_envies **envp, char **matrix)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (matrix[++i])
@@ -93,7 +93,6 @@ void	wait_and_sig(int status)
 {
 	while (wait(&status) != -1)
 		;
-	// system("leaks minishell");
 	g_exit_statuss = status / 256;
 	if (WIFSIGNALED(status))
 	{
@@ -109,29 +108,4 @@ void	wait_and_sig(int status)
 			g_exit_statuss = 131;
 		}
 	}
-}
-
-void under_(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->com_stream->command[i])
-		i++;
-	update_env_value(&data->envies, "_", data->com_stream->command[i - 1]);
-
-}
-
-int	execution(t_data *data)
-{
-	data->pip_cnt = ft_pip_cnt(&data->com_stream);
-	if (!data->pip_cnt)
-		one_com(data);
-	else
-	{
-		piping(data);
-		dup2(data->in_c, 0);
-		dup2(data->out_c, 1);
-	}
-	return (0);
 }

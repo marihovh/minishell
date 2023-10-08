@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 17:55:31 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/19 12:21:37 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/07 05:57:49 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,21 @@ t_token	*token_4(char **str)
 t_token	*token_5(char **str)
 {
 	char	*ch;
+	t_token	*new;
 
 	(*str)++;
 	if (**str == 62)
 	{
 		(*str) += 1;
 		ch = ft_strdup(">>");
-		return (new_token(REDIR_AP, ch, 1));
+		new = new_token(REDIR_AP, ch, 1);
+		return (new);
 	}
 	else
 	{
 		ch = ft_strdup(">");
-		return (new_token(REDIR_OUT, ch, 1));
+		new = new_token(REDIR_OUT, ch, 1);
+		return (new);
 	}
 	error_msg("shyshell: >: Token error", 1);
 	return (NULL);

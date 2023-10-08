@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 18:16:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/06 13:25:18 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:21:53 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ int	will_open(t_token *stream)
 
 char	*open_dol(char *dol, char *str, t_envies *env)
 {
-	char *ret = NULL;
-	char *tmp;
-	char *value;
-	char *name;
-	
+	char	*ret;	
+	char	*tmp;
+	char	*value;
+	char	*name;
+
+	ret = NULL;
 	while (str && str[0])
 	{
 		if (str[0] != '$')
@@ -89,9 +90,9 @@ char	*open_dol(char *dol, char *str, t_envies *env)
 
 void	open_fields(t_token *stream, t_envies *env)
 {
-	char *dol;
-	char *tmp;
-	
+	char	*dol;
+	char	*tmp;
+
 	while (stream)
 	{
 		if (stream->type == WORD || stream->type == EXP_FIELD)

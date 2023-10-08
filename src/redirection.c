@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:12:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/06 13:43:21 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:30:09 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	for_heredoc_helper(void)
 	return (-1);
 }
 
-int waiting (int pid, int status, char *filename)
+int	waiting(int pid, int status, char *filename)
 {
-	int ret;
+	int	ret;
 
 	waitpid(pid, &status, 0);
 	if (WIFSIGNALED(status))
@@ -39,7 +39,7 @@ int	for_heredoc(char *filename, t_envies *env)
 	int	pid;
 	int	*fds;
 	int	status;
-	int ret;
+	int	ret;
 
 	foo(0);
 	status = 0;
@@ -53,7 +53,6 @@ int	for_heredoc(char *filename, t_envies *env)
 		write_here_doc(fds[1], filename, env);
 		close(fds[1]);
 		free(filename);
-		// system("leaks minishell");
 		exit(0);
 	}
 	ret = fds[0];
@@ -87,39 +86,14 @@ char	*no_escape(char *str)
 	return (new);
 }
 
-char	*file_name(t_token **stream)
+char	*file_name(t_token *stream)
 {
-	char	*name = NULL;
+	char	*name;
 
-	while ((*stream) && ((*stream)->type != WORD && (*stream)->type != FIELD \
-		&& (*stream)->type != EXP_FIELD))
-		(*stream) = (*stream)->next;
-	name = no_escape((*stream)->value);
+	name = NULL;
+	while (stream && (stream->type != WORD && stream->type != FIELD \
+		&& stream->type != EXP_FIELD))
+		stream = stream->next;
+	name = no_escape(stream->value);
 	return (name);
-}
-
-void	find_com_2(t_token **stream, t_token *tmp, t_token *com)
-{
-	(void)tmp;
-	t_token	*ww;
-	t_token	*aa;
-
-	aa = (*stream);
-	while ((*stream) && (*stream) != tmp->next)
-	{
-		ww = (*stream)->next;
-		free((*stream)->value);
-		free(*stream);
-		(*stream) = NULL;
-		(*stream) = ww;
-	}
-	aa = aa->prev;
-	while (aa && aa != com)
-	{
-		ww = aa->prev;
-		free(aa->value);
-		free(aa);
-		aa = ww;
-	}
-	(*stream) = com;
 }

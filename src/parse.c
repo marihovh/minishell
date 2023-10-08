@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:22 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/06 13:46:01 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:23:59 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	free_com_p(char **command)
 int	parse(t_data *data, char *str)
 {
 	int	t;
-	
-	if (tokenize(&data->stream, str))
+	// t_token *es;
+	if (tokenize(&data->stream, str, &data->token_cnt))
 	{
 		free(str);
 		free_tokens(data->stream);
@@ -81,15 +81,25 @@ int	parse(t_data *data, char *str)
 		free_tokens(data->stream);
 		return (1);
 	}
-	t = redirs(data->stream, data->envies);
+	// normalize(&data->stream);
+	// es = data->stream;
+	normalize(&data->stream);
+		// return (1);
+	// printf("asa%s\n", data->stream->value);
+	// data->stream = es;
+	// prin(data->stream, NULL);
+	// exit(0);
+	t = redirs(&data->stream, data->envies, data->token_cnt);
 	if (t == 1 || t == 3)
 	{
 		free_tokens(data->stream);
 		return (1);
 	}
+	// prin(data->stream, data->com_stream);
 	if (t == 2)
+	{
+		free_tokens(data->stream);
 		return (1);
-	// prin(data->stream, NULL);
-	// exit(0);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 05:37:13 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 12:58:44 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:40:31 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ t_export	*new_expo_node(char *key, char *value)
 
 void	to_env(t_envies **env, char *key, char *value)
 {
-	char *tmp = find_env(env, key);
+	char	*tmp;
+
+	tmp = find_env(env, key);
 	if (tmp)
 	{
 		free(tmp);

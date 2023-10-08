@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 11:45:15 by marihovh          #+#    #+#             */
-/*   Updated: 2023/10/06 13:22:11 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:23:05 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@ void	update_shlvl(t_envies **env)
 		if (!ft_strcmp("SHLVL", (*env)->key))
 		{
 			num = ft_atoi((*env)->value);
+			if (num == 999)
+			{
+				free((*env)->value);
+				return ;
+			}
 			num += 1;
-			free((*env)->value);
 			(*env)->value = ft_itoa(num);
 		}
 		env = &(*env)->next;
@@ -44,15 +48,17 @@ void	parse_and_exec(t_data *data, char *str)
 {
 	t_token		*tmp;
 	t_command	*com;
-	
+
 	add_history(str);
 	if (!parse(data, str))
 	{
-		// prin(data->stream, NULL);
-		// exit(0);
 		tmp = data->stream;
 		to_struct(data, &data->com_stream);
 		data->stream = tmp;
+// prin(data->stream, data->com_stream);
+// system("leaks minishell");
+// exit(0);
+// printf("aaaaa\n");
 		tmp = data->stream;
 		com = data->com_stream;
 		execution(data);
@@ -80,14 +86,13 @@ int	main(int argc, char **argv, char **environ)
 		str = readline("shyshell$ ");
 		if (!str)
 		{
-			printf("exit\n"); // clear
+			printf("exit\n");
 			exit(0);
 		}
 		if (str[0])
 			parse_and_exec(data, str);
 		else
 			free(str);
-		system("leaks minishell");
 	}
 	return (0);
 }

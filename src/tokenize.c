@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 21:10:47 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/19 12:24:48 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:31:41 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ t_token	*which_token(char **str)
 	return (token);
 }
 
-int	tokenize(t_token **stream, char *str)
+int	tokenize(t_token **stream, char *str, int *cnt)
 {
 	t_token	*tmp;
 
+	*cnt = 0;
 	tmp = NULL;
 	while (*str)
 	{
@@ -54,6 +55,7 @@ int	tokenize(t_token **stream, char *str)
 		}
 		(*stream)->prev = tmp;
 		tmp = (*stream);
+		(*cnt)++;
 		stream = &(*stream)->next;
 	}
 	return (0);

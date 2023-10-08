@@ -6,32 +6,13 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:00:18 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 11:20:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:48:03 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int first_char(char ch)
-{
-	return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_');
-}
-
-int other_char(char ch)
-{
-	return (first_char(ch) || (ch >= '0' && ch <= '9'));
-}
-
-void exp_error(char *what, char *key)
-{
-	ft_putstr_fd("shyshell : ", 2);
-	ft_putstr_fd(what, 2);
-	ft_putstr_fd(": `", 2);
-	ft_putstr_fd(key, 2);
-	ft_putstr_fd("\': not a valid identifier\n", 2);
-}
-
-char *valid_key(char *command, int *flag, char *what)
+char	*valid_key(char *command, int *flag, char *what)
 {
 	char	*key;
 	int		i;
@@ -99,7 +80,7 @@ int	ft_export(t_command *node, t_data *data)
 	flag = 0;
 	if (!(node->command[++i]))
 		printing_export(data->export);
-	add_exp(node, &data->export, &data->envies, flag);	
+	add_exp(node, &data->export, &data->envies, flag);
 	return (0);
 }
 
@@ -140,22 +121,4 @@ void	env_delete(t_envies **env, char	*node)
 		prev = current;
 		current = current->next;
 	}
-}
-
-int	ft_unset(t_command *node, t_envies *env, t_export *export)
-{
-	int	i;
-	char *key;
-
-	i = 1;
-	while (node->command[i])
-	{
-		key = valid_key(node->command[i], NULL, "unset");
-		if (!key)
-			return (1);
-		env_delete(&env, node->command[i]);
-		export_delete(&export, node->command[i]);
-		i++;
-	}
-	return (g_exit_statuss);
 }

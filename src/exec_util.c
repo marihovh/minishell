@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 10:55:59 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 12:48:49 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/07 10:12:12 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ char	*what_path(char **paths, char *command)
 	int		i;
 
 	i = -1;
-	if (access(command, F_OK) == 0)
+	if (access(command, F_OK | X_OK) == 0)
 		return (command);
 	while (paths[++i])
 	{
 		res = ft_strjoin(paths[i], "/");
 		res = ft_strjoin(res, command);
-		if (access(res, F_OK) == 0)
+		if (access(res, F_OK | X_OK) == 0)
 			return (res);
 		free(res);
 		res = NULL;

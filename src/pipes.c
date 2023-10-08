@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:40:12 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/29 10:55:33 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:24:41 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	pip_signal(int status)
 	}
 }
 
-void	exec_2(t_data *data, t_token *stream, t_command *com_stream)
+void	exec_2(t_data *data, t_token *stream, t_command *com_stream, int **pip)
 {
 	pid_t	f;
 
@@ -33,15 +33,19 @@ void	exec_2(t_data *data, t_token *stream, t_command *com_stream)
 	f = fork();
 	if (f == 0)
 	{
-			signals();
+		signals();
 		if (is_built_in(com_stream))
 		{
 			if (stream && stream->type == PIPE)
 				while (stream && stream->type == WORD)
 					stream = stream->next;
 			built_in(com_stream, data, data->envies);
-		}else
+		}
+		else
+		{
+			free_pip(pip, data->pip_cnt);
 			ft_run(data);
+		}
 		exit(g_exit_statuss);
 	}
 	if (stream && stream->type == PIPE)
@@ -68,15 +72,15 @@ int	**init_pipe(t_data *data)
 	return (pip);
 }
 
-void free_pip(int **pip, int pip_cnt)
+void	free_pip(int **pip, int pip_cnt)
 {
 	int	i;
 
 	i = -1;
 	while (++i < pip_cnt)
 	{
-		close(pip[i][0]);
 		close(pip[i][1]);
+		close(pip[i][0]);
 		free(pip[i]);
 	}
 	free(pip);
@@ -85,27 +89,36 @@ void free_pip(int **pip, int pip_cnt)
 int	piping(t_data *data)
 {
 	int	**pip;
-	int status;
-	
+	int	status;
+
 	status = 0;
 	pip = init_pipe(data);
 	if (!pip)
 		return (0);
 	data->index = 0;
-	while (data->index <= data->pip_cnt && data->com_stream->command[0])
+	while (data->index <= data->pip_cnt && data->com_stream->command)
 	{
-		dups(data->com_stream, pip, data);
-		exec_2(data, data->stream, data->com_stream);
-		dup2(data->in_c, 0);
-		dup2(data->out_c, 1);
-		if (data->index < data->pip_cnt)
-			close(pip[data->index][1]);
-		while (data->stream && data->stream->type != PIPE)
-			data->stream = data->stream->next;
+		if (data->com_stream->command[0])
+		{
+			dups(data->com_stream, pip, data);
+			exec_2(data, data->stream, data->com_stream, pip);
+			dup2(data->in_c, 0);
+			dup2(data->out_c, 1);
+			if (data->index < data->pip_cnt)
+				close(pip[data->index][1]);
+			// if (data->index - 1 >= 0)
+			// 	close(pip[data->index - 1][0]);
+			while (data->stream && data->stream->type != PIPE)
+				data->stream = data->stream->next;
+		}
 		data->index++;
 		data->com_stream = data->com_stream->next;
 	}
 	pip_signal(status);
+	// if (data->com_stream->in != STDIN)
+	// 	close(data->com_stream->in);
+	// if (data->com_stream->out != STDOUT)
+	// 	close(data->com_stream->out);
 	free_pip(pip, data->pip_cnt);
 	return (0);
 }

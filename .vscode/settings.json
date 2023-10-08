@@ -28,6 +28,7 @@
 		"typeinfo": "c",
 		"readline.h": "c",
 		"stdlib.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"__split_buffer": "c"
 	}
 }

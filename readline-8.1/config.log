@@ -30,8 +30,8 @@ Kernel configured for up to 6 processors.
 Processor type: x86_64h (Intel x86-64h Haswell)
 Processors active: 0 1 2 3 4 5
 Primary memory available: 8.00 gigabytes
-Default processor set: 330 tasks, 1395 threads, 6 processors
-Load average: 2.08, Mach factor: 4.19
+Default processor set: 312 tasks, 1311 threads, 6 processors
+Load average: 1.58, Mach factor: 4.40
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -42,6 +42,7 @@ PATH: /bin
 PATH: /usr/sbin
 PATH: /sbin
 PATH: /usr/local/munki
+PATH: /mnt/c/Users/vahe.yavrumyan/AppData/Local/Programs/Microsoft VS Code/bin/
 
 
 ## ----------- ##
@@ -2168,7 +2169,7 @@ configure:6129: checking for tgetent
 configure:6129: gcc -o conftest -g -O2   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_tgetent", referenced from:
-      _main in conftest-48ad42.o
+      _main in conftest-65be9b.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:6129: $? = 1
@@ -2554,7 +2555,7 @@ configure:6458: checking for mbscasecmp
 configure:6458: gcc -o conftest -g -O2   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_mbscasecmp", referenced from:
-      _main in conftest-c0a2a3.o
+      _main in conftest-1e23e3.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:6458: $? = 1
@@ -2685,7 +2686,7 @@ configure:6464: checking for mbscmp
 configure:6464: gcc -o conftest -g -O2   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_mbscmp", referenced from:
-      _main in conftest-096a1b.o
+      _main in conftest-19b7d7.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:6464: $? = 1
@@ -2824,7 +2825,7 @@ configure:6483: checking for mbschr
 configure:6483: gcc -o conftest -g -O2   conftest.c  >&5
 Undefined symbols for architecture x86_64:
   "_mbschr", referenced from:
-      _main in conftest-d2567e.o
+      _main in conftest-eb358f.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:6483: $? = 1

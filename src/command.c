@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 14:09:56 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 13:08:48 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 18:35:47 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,21 @@ void	free_spl(char **splited)
 
 void	to_struct(t_data *data, t_command **com_stream)
 {
-	int			pip_cnt;
 	t_token		*tmp;
 	char		**command;
 	t_command	*pre;
+	t_token		*aa;
 
 	pre = NULL;
-	pip_cnt = ft_com_len(data) + 1;
-	while (pip_cnt--)
+	data->pip_cnt = ft_com_len(data) + 1;
+	while (data->pip_cnt--)
 	{
+		aa = data->stream;
+		if (data->stream->type == PIPE)
+		{
+			if (aa->next && aa->next->type == SP)
+				aa = data->stream->next->next;
+		}
 		command = init_com(&data->stream);
 		if (!data->stream)
 		{
@@ -44,7 +50,10 @@ void	to_struct(t_data *data, t_command **com_stream)
 			tmp = tmp->prev;
 		else if (data->stream->next && data->stream->next->type == PIPE)
 			tmp = data->stream;
-		(*com_stream) = new_com(command, tmp->in, tmp->out);
+		if (tmp->in != STDIN || tmp->out != STDOUT)
+			(*com_stream) = new_com(command, tmp->in, tmp->out);
+		else
+			(*com_stream) = new_com(command, aa->in, aa->out);
 		if (data->stream)
 			data->stream = data->stream->next;
 		if (!(*com_stream))

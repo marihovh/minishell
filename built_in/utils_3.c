@@ -6,7 +6,7 @@
 /*   By: marihovh <marihovh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 08:28:26 by marihovh          #+#    #+#             */
-/*   Updated: 2023/09/28 12:54:37 by marihovh         ###   ########.fr       */
+/*   Updated: 2023/10/08 20:49:16 by marihovh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 unsigned long long int	for_llu(t_command *node)
 {
+	int					len;
 	unsigned long long	num;
-	int	len;
 
 	len = ft_strlen(node->command[1]);
 	printf("len:%i\n", len);
@@ -87,4 +87,15 @@ void	update_env_value(t_envies **env, char *key, char *value)
 		}
 		env = &(*env)->next;
 	}
+}
+
+char	*find_env(t_envies **env, char *key)
+{
+	while (*env)
+	{
+		if (!ft_strcmp((*env)->key, key))
+			return (ft_strdup((*env)->value));
+		env = &(*env)->next;
+	}
+	return (0);
 }
